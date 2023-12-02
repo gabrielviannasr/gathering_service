@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,15 @@ public class PlayerController {
 
 	@Autowired
 	private PlayerService service;
-	
+
 	@PostMapping
 	public Player save(@RequestBody Player player) {
+		System.out.println(player);
+		return service.save(player);
+	}
+
+	@PutMapping
+	public Player update(@RequestBody Player player) {
 		System.out.println(player);
 		return service.save(player);
 	}
