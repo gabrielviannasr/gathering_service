@@ -1,5 +1,15 @@
+-- Create sequences
+CREATE SEQUENCE gathering.sequence_player START 1;
+CREATE SEQUENCE gathering.sequence_payment START 1;
+CREATE SEQUENCE gathering.sequence_format START 1;
+CREATE SEQUENCE gathering.sequence_event START 1;
+CREATE SEQUENCE gathering.sequence_round START 1;
+CREATE SEQUENCE gathering.sequence_round_player START 1;
+CREATE SEQUENCE gathering.sequence_rank START 1;
+
+-- Create player table
 CREATE TABLE gathering.player (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_player'::regclass) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     username VARCHAR(20) UNIQUE,
     email VARCHAR(50) UNIQUE,
@@ -7,23 +17,26 @@ CREATE TABLE gathering.player (
     wallet NUMERIC NOT NULL DEFAULT 0
 );
 
+-- Create Payment table
 CREATE TABLE gathering.payment (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_payment'::regclass) PRIMARY KEY,
     id_player INT NOT NULL,
     created_at DATE NOT NULL,
     invoice NUMERIC NOT NULL DEFAULT 0,
     description VARCHAR(500),
-    CONSTRAINT fk_payment_player FOREIGN KEY (id_player) REFERENCES gathering.Player(id)
+    CONSTRAINT fk_payment_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
+-- Create format table
 CREATE TABLE gathering.format (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_format'::regclass) PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
     life_count INT NOT NULL
 );
 
+-- Create event table
 CREATE TABLE gathering.event (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
     id_format INT,
     created_at DATE NOT NULL,
     registration_fee NUMERIC NOT NULL DEFAULT 0,
@@ -35,11 +48,12 @@ CREATE TABLE gathering.event (
     loser_fee5 NUMERIC NOT NULL DEFAULT 0,
     loser_fee6 NUMERIC NOT NULL DEFAULT 0,
     loser_pot NUMERIC NOT NULL DEFAULT 0,
-    CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.Format(id)
+    CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.format(id)
 );
 
+-- Create Round table
 CREATE TABLE gathering.round (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_round'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
     id_format INT,
     id_player_winner INT,
@@ -48,13 +62,14 @@ CREATE TABLE gathering.round (
     players INT NOT NULL,
     boosters_prize INT NOT NULL DEFAULT 0,
     canceled BOOLEAN NOT NULL DEFAULT false,
-    CONSTRAINT fk_round_event FOREIGN KEY (id_event) REFERENCES gathering.Event(id),
-    CONSTRAINT fk_round_format FOREIGN KEY (id_format) REFERENCES gathering.Format(id),
-    CONSTRAINT fk_round_player_winner FOREIGN KEY (id_player_winner) REFERENCES gathering.Player(id)
+    CONSTRAINT fk_round_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
+    CONSTRAINT fk_round_format FOREIGN KEY (id_format) REFERENCES gathering.format(id),
+    CONSTRAINT fk_round_player_winner FOREIGN KEY (id_player_winner) REFERENCES gathering.player(id)
 );
 
+-- Create Round_player table
 CREATE TABLE gathering.round_player (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_round_player'::regclass) PRIMARY KEY,
     id_round INT NOT NULL,
     id_player INT NOT NULL,
     id_player_killed_by INT,
@@ -66,13 +81,13 @@ CREATE TABLE gathering.round_player (
     infect_count INT NOT NULL DEFAULT 0,
     life_count INT NOT NULL,
     CONSTRAINT fk_round_player FOREIGN KEY (id_round) REFERENCES gathering.Round(id),
-    CONSTRAINT fk_round_player_killed_by FOREIGN KEY (id_player_killed_by) REFERENCES gathering.Player(id),
-    CONSTRAINT fk_round_player_id FOREIGN KEY (id_player) REFERENCES gathering.Player(id)
+    CONSTRAINT fk_round_player_killed_by FOREIGN KEY (id_player_killed_by) REFERENCES gathering.player(id),
+    CONSTRAINT fk_round_player_id FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
--- Create rank table
+-- Create Rank table
 CREATE TABLE gathering.rank (
-    id INT PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_rank'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
     id_player INT NOT NULL,
     rank INT NOT NULL DEFAULT 1,
@@ -83,6 +98,6 @@ CREATE TABLE gathering.rank (
     boosters_prize INT NOT NULL DEFAULT 0,
     boosters_balance NUMERIC NOT NULL DEFAULT 0,
     wallet NUMERIC NOT NULL DEFAULT 0,
-    CONSTRAINT fk_rank_event FOREIGN KEY (id_event) REFERENCES gathering.Event(id),
-    CONSTRAINT fk_rank_player FOREIGN KEY (id_player) REFERENCES gathering.Player(id)
+    CONSTRAINT fk_rank_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
+    CONSTRAINT fk_rank_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
