@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.entity.Player;
@@ -24,6 +25,12 @@ public class PlayerController {
 	public List<Player> getList(Player player) {
 		System.out.println(player);
 		return service.getList(player);
+	}
+
+	@GetMapping("/id")
+	public Player getById(@RequestParam Long id) {
+		System.out.println("id: " + id);
+		return service.getById(id);
 	}
 
 	@PostMapping
