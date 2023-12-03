@@ -38,7 +38,6 @@ public class EventController {
 	public Event save(@RequestBody EventDTO dto) {
 		System.out.println(dto);
 		Event event = dto.toEvent();
-		event.init();
 		System.out.println(event);
 		return service.save(event);
 	}
@@ -48,7 +47,6 @@ public class EventController {
 		System.out.println(dto);
 		Event event = dto.toEvent();
 		event.setId(id);
-		event.init();
 		System.out.println(event);
 		return service.save(event);
 	}

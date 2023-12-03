@@ -37,7 +37,6 @@ public class RoundController {
 	public Round save(@RequestBody RoundDTO dto) {
 		System.out.println(dto);
 		Round round = dto.toRound();
-		round.init();
 		System.out.println(round);
 		return service.save(round);
 	}
@@ -47,7 +46,6 @@ public class RoundController {
 		System.out.println(dto);
 		Round round = dto.toRound();
 		round.setId(id);
-		round.init();
 		System.out.println(round);
 		return service.save(round);
 	}

@@ -38,7 +38,6 @@ public class PlayerController {
 	public Player save(@RequestBody PlayerDTO dto) {
 		System.out.println(dto);
 		Player player = dto.toPlayer();
-		player.init();
 		System.out.println(player);
 		return service.save(player);
 	}
@@ -48,7 +47,6 @@ public class PlayerController {
 		System.out.println(dto);
 		Player player = dto.toPlayer();
 		player.setId(id);
-		player.init();
 		System.out.println(player);
 		return service.save(player);
 	}

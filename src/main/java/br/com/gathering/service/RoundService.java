@@ -33,6 +33,7 @@ public class RoundService extends AbstractService<Round> {
 	}
 
 	public Round save(Round round) {
+		round.init();
 		return repository.save(round);
 	}
 

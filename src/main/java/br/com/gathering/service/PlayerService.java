@@ -33,6 +33,7 @@ public class PlayerService extends AbstractService<Player> {
 	}
 
 	public Player save(Player player) {
+		player.init();
 		return repository.save(player);
 	}
 

@@ -33,6 +33,7 @@ public class EventService extends AbstractService<Event> {
 	}
 
 	public Event save(Event event) {
+		event.init();
 		return repository.save(event);
 	}
 
