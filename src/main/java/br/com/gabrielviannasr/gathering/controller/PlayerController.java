@@ -21,8 +21,8 @@ public class PlayerController {
 	private PlayerService service;
 
 	@GetMapping
-	public List<Player> getList() {
-		return service.getList();
+	public List<Player> getList(Player player) {
+		return service.getList(player);
 	}
 
 	@PostMapping
