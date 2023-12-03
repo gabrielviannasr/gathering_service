@@ -20,7 +20,7 @@ public class RoundService extends AbstractService<Round> {
 	private RoundRepository repository;
 
 	public static Sort getSort() {
-		return Sort.by(Order.asc("name"));
+		return Sort.by(Order.asc("createdAt"));
 	}
 
 	public List<Round> getList(Round round) {
