@@ -28,8 +28,8 @@ public class Player {
 	public static final int USERNAME_LENGTH = 20;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_sequence")
-	@SequenceGenerator(name = "player_sequence", sequenceName = "player_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_player")
+	@SequenceGenerator(name = "gathering.sequence_player", sequenceName = "gathering.sequence_player", allocationSize = 1)
 	private Long id;
 
 	@Column(nullable = false, length = NAME_LENGTH)
