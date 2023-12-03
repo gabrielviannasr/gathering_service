@@ -65,7 +65,7 @@ CREATE TABLE gathering.round (
     id_player_winner INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     round INT NOT NULL,
-    players INT NOT NULL,
+    players INT NOT NULL DEFAULT 0,
     boosters_prize INT NOT NULL DEFAULT 0,
     canceled BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT fk_round_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
