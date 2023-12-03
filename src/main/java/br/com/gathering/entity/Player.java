@@ -44,8 +44,12 @@ public class Player {
 	@Column(length = PASSWORD_LENGTH)
     private String password;
 
-    @Builder.Default
-    private Double wallet = 0.0;
+    @Column(nullable = false)
+    private Double wallet;
+    
+	public void init() {
+	    this.wallet = (this.wallet == null) ? 0.0 : this.wallet;
+	}
 
     @Override
     public String toString() {

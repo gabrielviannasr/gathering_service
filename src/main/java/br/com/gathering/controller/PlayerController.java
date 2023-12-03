@@ -22,11 +22,13 @@ public class PlayerController {
 
 	@GetMapping
 	public List<Player> getList(Player player) {
+		System.out.println(player);
 		return service.getList(player);
 	}
 
 	@PostMapping
 	public Player save(@RequestBody Player player) {
+		player.init();
 		System.out.println(player);
 		return service.save(player);
 	}
