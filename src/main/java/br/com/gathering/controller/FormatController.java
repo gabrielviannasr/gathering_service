@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.gathering.dto.FormatDTO;
 import br.com.gathering.entity.Format;
 import br.com.gathering.service.FormatService;
 
@@ -33,13 +34,18 @@ public class FormatController {
 	}
 
 	@PostMapping
-	public Format save(@RequestBody Format format) {
+	public Format save(@RequestBody FormatDTO dto) {
+		System.out.println(dto);
+		Format format = dto.toFormat();
 		System.out.println(format);
 		return service.save(format);
 	}
 
 	@PutMapping
-	public Format update(@RequestBody Format format) {
+	public Format update(@RequestParam Long id, @RequestBody FormatDTO dto) {
+		System.out.println(dto);
+		Format format = dto.toFormat();
+		format.setId(id);
 		System.out.println(format);
 		return service.save(format);
 	}
