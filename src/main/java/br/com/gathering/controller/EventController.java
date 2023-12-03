@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.service.EventService;
 
@@ -34,14 +35,20 @@ public class EventController {
 	}
 
 	@PostMapping
-	public Event save(@RequestBody Event event) {
+	public Event save(@RequestBody EventDTO dto) {
+		System.out.println(dto);
+		Event event = dto.toEvent();
 		event.init();
 		System.out.println(event);
 		return service.save(event);
 	}
 
 	@PutMapping
-	public Event update(@RequestBody Event event) {
+	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
+		System.out.println(dto);
+		Event event = dto.toEvent();
+		event.setId(id);
+		event.init();
 		System.out.println(event);
 		return service.save(event);
 	}
