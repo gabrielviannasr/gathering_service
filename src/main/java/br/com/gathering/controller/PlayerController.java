@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering.controller;
+package br.com.gathering.controller;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gabrielviannasr.gathering.entity.Player;
-import br.com.gabrielviannasr.gathering.service.PlayerService;
+import br.com.gathering.entity.Player;
+import br.com.gathering.service.PlayerService;
 
 @RestController
 @RequestMapping("/player")

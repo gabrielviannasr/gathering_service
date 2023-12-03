@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering.entity;
+package br.com.gathering.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

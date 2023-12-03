@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering.service;
+package br.com.gathering.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
-import br.com.gabrielviannasr.gathering.entity.Player;
-import br.com.gabrielviannasr.gathering.repository.PlayerRepository;
+import br.com.gathering.entity.Player;
+import br.com.gathering.repository.PlayerRepository;
 
 @Service
 public class PlayerService extends AbstractService<Player> {

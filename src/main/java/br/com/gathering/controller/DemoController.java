@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering.controller;
+package br.com.gathering.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

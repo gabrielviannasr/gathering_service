@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering;
+package br.com.gathering;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

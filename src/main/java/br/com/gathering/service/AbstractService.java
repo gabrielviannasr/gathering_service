@@ -1,4 +1,4 @@
-package br.com.gabrielviannasr.gathering.service;
+package br.com.gathering.service;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
