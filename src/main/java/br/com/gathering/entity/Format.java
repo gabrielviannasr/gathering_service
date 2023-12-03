@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Format {
 
 	public static final int NAME_LENGTH = 20;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_format")
 	@SequenceGenerator(name = "gathering.sequence_format", sequenceName = "gathering.sequence_format", allocationSize = 1)

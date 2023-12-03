@@ -34,7 +34,7 @@ CREATE TABLE gathering.format (
     life_count INT NOT NULL
 );
 
--- Insert values into the format table
+-- Insert format table initial load
 INSERT INTO gathering.format (id, name, life_count) VALUES
 (1, 'Commander', 40),
 (2, 'Conquest', 30),

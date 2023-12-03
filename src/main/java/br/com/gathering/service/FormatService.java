@@ -15,7 +15,7 @@ public class FormatService extends AbstractService<Format> {
 
 	@Autowired
 	private FormatRepository repository;
-	
+
 	public static Sort getSort() {
 		return Sort.by(Order.asc("name"));
 	}

@@ -15,7 +15,7 @@ public class PlayerService extends AbstractService<Player> {
 
 	@Autowired
 	private PlayerRepository repository;
-	
+
 	public static Sort getSort() {
 		return Sort.by(Order.asc("name"), Order.asc("username"));
 	}
