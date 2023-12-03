@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.entity.Event;
@@ -24,6 +25,12 @@ public class EventController {
 	public List<Event> getList(Event event) {
 		System.out.println(event);
 		return service.getList(event);
+	}
+
+	@GetMapping("/id")
+	public Event getById(@RequestParam Long id) {
+		System.out.println("id: " + id);
+		return service.getById(id);
 	}
 
 	@PostMapping
