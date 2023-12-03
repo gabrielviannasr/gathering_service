@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.gathering.dto.PlayerDTO;
 import br.com.gathering.entity.Player;
 import br.com.gathering.service.PlayerService;
 
@@ -34,14 +35,20 @@ public class PlayerController {
 	}
 
 	@PostMapping
-	public Player save(@RequestBody Player player) {
+	public Player save(@RequestBody PlayerDTO dto) {
+		System.out.println(dto);
+		Player player = dto.toPlayer();
 		player.init();
 		System.out.println(player);
 		return service.save(player);
 	}
 
 	@PutMapping
-	public Player update(@RequestBody Player player) {
+	public Player update(@RequestParam Long id, @RequestBody PlayerDTO dto) {
+		System.out.println(dto);
+		Player player = dto.toPlayer();
+		player.setId(id);
+		player.init();
 		System.out.println(player);
 		return service.save(player);
 	}
