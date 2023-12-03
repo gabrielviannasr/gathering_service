@@ -44,7 +44,7 @@ INSERT INTO gathering.format (id, name, life_count) VALUES
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
     id_format INT,
-    created_at DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     registration_fee NUMERIC NOT NULL DEFAULT 0,
     players INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
@@ -63,7 +63,7 @@ CREATE TABLE gathering.round (
     id_event INT NOT NULL,
     id_format INT,
     id_player_winner INT,
-    created_at DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     round INT NOT NULL,
     players INT NOT NULL,
     boosters_prize INT NOT NULL DEFAULT 0,
