@@ -14,6 +14,10 @@ public class PlayerService {
 	@Autowired
 	private PlayerRepository repository;
 
+	public List<Player> getList() {
+		return repository.findAll();		
+	}
+	
 	public Player save(Player player) {
 		return repository.save(player);
 	}

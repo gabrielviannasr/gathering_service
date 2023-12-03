@@ -3,6 +3,7 @@ package br.com.gabrielviannasr.gathering.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,11 @@ public class PlayerController {
 
 	@Autowired
 	private PlayerService service;
+
+	@GetMapping
+	public List<Player> getList() {
+		return service.getList();
+	}
 
 	@PostMapping
 	public Player save(@RequestBody Player player) {
