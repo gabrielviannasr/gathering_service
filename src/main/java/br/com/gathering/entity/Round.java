@@ -77,7 +77,7 @@ public class Round {
 	@Override
 	public String toString() {
 	    return "Round: {\n"
-	            + "    id: " + this.id + ",\n"	            
+	            + "    id: " + this.id + ",\n"
 	            + "    idEvent: " + this.idEvent + ",\n"
 	            + "    idFormat: " + this.idFormat + ",\n"
 	            + "    idPlayerWinner: " + this.idPlayerWinner + ",\n"

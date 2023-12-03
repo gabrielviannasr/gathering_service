@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.gathering.dto.RoundDTO;
 import br.com.gathering.entity.Round;
 import br.com.gathering.service.RoundService;
 
@@ -33,14 +34,20 @@ public class RoundController {
 	}
 
 	@PostMapping
-	public Round save(@RequestBody Round round) {
+	public Round save(@RequestBody RoundDTO dto) {
+		System.out.println(dto);
+		Round round = dto.toRound();
 		round.init();
 		System.out.println(round);
 		return service.save(round);
 	}
 
 	@PutMapping
-	public Round update(@RequestBody Round round) {
+	public Round update(@RequestParam Long id, @RequestBody RoundDTO dto) {
+		System.out.println(dto);
+		Round round = dto.toRound();
+		round.setId(id);
+		round.init();
 		System.out.println(round);
 		return service.save(round);
 	}
