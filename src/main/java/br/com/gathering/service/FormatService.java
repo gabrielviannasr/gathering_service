@@ -1,11 +1,14 @@
 package br.com.gathering.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Format;
 import br.com.gathering.repository.FormatRepository;
@@ -20,12 +23,17 @@ public class FormatService extends AbstractService<Format> {
 		return Sort.by(Order.asc("name"));
 	}
 
-	public List<Format> getList(Format Format) {
-		return repository.findAll(getExample(Format), getSort());
+	public List<Format> getList(Format format) {
+		return repository.findAll(getExample(format), getSort());
 	}
 
-	public Format save(Format Format) {
-		return repository.save(Format);
+	public Format getById(Long id) {
+		Optional<Format> optional = repository.findById(id);
+		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
+
+	public Format save(Format format) {
+		return repository.save(format);
 	}
 
 }
