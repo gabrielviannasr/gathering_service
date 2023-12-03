@@ -22,18 +22,26 @@ import lombok.Setter;
 @Table(name = "player", schema = "gathering")
 public class Player {
 
+	public static final int EMAIL_LENGTH = 50;
+	public static final int NAME_LENGTH = 50;
+	public static final int PASSWORD_LENGTH = 20;
+	public static final int USERNAME_LENGTH = 20;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_sequence")
 	@SequenceGenerator(name = "player_sequence", sequenceName = "player_sequence", allocationSize = 1)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = NAME_LENGTH)
     private String name;
 
+	@Column(length = USERNAME_LENGTH)
     private String username;
 
+	@Column(length = EMAIL_LENGTH)
     private String email;
 
+	@Column(length = PASSWORD_LENGTH)
     private String password;
 
     @Builder.Default
