@@ -23,8 +23,8 @@ public class EventService extends AbstractService<Event> {
 		return Sort.by(Order.asc("createdAt"));
 	}
 
-	public List<Event> getList(Event event) {
-		return repository.findAll(getExample(event), getSort());
+	public List<Event> getList(Event model) {
+		return repository.findAll(getExample(model), getSort());
 	}
 
 	public Event getById(Long id) {
@@ -32,9 +32,9 @@ public class EventService extends AbstractService<Event> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public Event save(Event event) {
-		event.init();
-		return repository.save(event);
+	public Event save(Event model) {
+		model.init();
+		return repository.save(model);
 	}
 
 }

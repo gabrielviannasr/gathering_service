@@ -41,7 +41,7 @@ public class EventDTO {
 
     private Double loserPot;
 
-    public Event toEvent() {
+    public Event toModel() {
         Event event = new Event();
 //        event.setId(this.id);
         event.setIdFormat(this.idFormat);

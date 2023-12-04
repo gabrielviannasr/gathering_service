@@ -23,8 +23,8 @@ public class RoundPlayerService extends AbstractService<RoundPlayer> {
 		return Sort.by(Order.asc("id"));
 	}
 
-	public List<RoundPlayer> getList(RoundPlayer roundPlayer) {
-		return repository.findAll(getExample(roundPlayer), getSort());
+	public List<RoundPlayer> getList(RoundPlayer model) {
+		return repository.findAll(getExample(model), getSort());
 	}
 
 	public RoundPlayer getById(Long id) {
@@ -32,9 +32,9 @@ public class RoundPlayerService extends AbstractService<RoundPlayer> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public RoundPlayer save(RoundPlayer roundPlayer) {
-		roundPlayer.init();
-		return repository.save(roundPlayer);
+	public RoundPlayer save(RoundPlayer model) {
+		model.init();
+		return repository.save(model);
 	}
 
 }

@@ -23,8 +23,8 @@ public class RoundController {
 	private RoundService service;
 
 	@GetMapping
-	public List<Round> getList(Round round) {
-		return service.getList(round);
+	public List<Round> getList(Round model) {
+		return service.getList(model);
 	}
 
 	@GetMapping("/id")
@@ -36,18 +36,18 @@ public class RoundController {
 	@PostMapping
 	public Round save(@RequestBody RoundDTO dto) {
 		System.out.println(dto);
-		Round round = dto.toRound();
-		System.out.println(round);
-		return service.save(round);
+		Round model = dto.toModel();
+		System.out.println(model);
+		return service.save(model);
 	}
 
 	@PutMapping
 	public Round update(@RequestParam Long id, @RequestBody RoundDTO dto) {
 		System.out.println(dto);
-		Round round = dto.toRound();
-		round.setId(id);
-		System.out.println(round);
-		return service.save(round);
+		Round model = dto.toModel();
+		model.setId(id);
+		System.out.println(model);
+		return service.save(model);
 	}
 
 }

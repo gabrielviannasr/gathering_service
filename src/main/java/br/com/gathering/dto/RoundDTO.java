@@ -35,7 +35,7 @@ public class RoundDTO {
 
     private Boolean canceled;
 
-    public Round toRound() {
+    public Round toModel() {
         Round round = new Round();
 //        round.setId(this.id);
         round.setIdEvent(this.idEvent);

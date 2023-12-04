@@ -23,8 +23,8 @@ public class FormatService extends AbstractService<Format> {
 		return Sort.by(Order.asc("name"));
 	}
 
-	public List<Format> getList(Format format) {
-		return repository.findAll(getExample(format), getSort());
+	public List<Format> getList(Format model) {
+		return repository.findAll(getExample(model), getSort());
 	}
 
 	public Format getById(Long id) {
@@ -32,8 +32,8 @@ public class FormatService extends AbstractService<Format> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public Format save(Format format) {
-		return repository.save(format);
+	public Format save(Format model) {
+		return repository.save(model);
 	}
 
 }

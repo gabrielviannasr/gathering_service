@@ -23,9 +23,9 @@ public class EventController {
 	private EventService service;
 
 	@GetMapping
-	public List<Event> getList(Event event) {
-		System.out.println(event);
-		return service.getList(event);
+	public List<Event> getList(Event model) {
+		System.out.println(model);
+		return service.getList(model);
 	}
 
 	@GetMapping("/id")
@@ -37,18 +37,18 @@ public class EventController {
 	@PostMapping
 	public Event save(@RequestBody EventDTO dto) {
 		System.out.println(dto);
-		Event event = dto.toEvent();
-		System.out.println(event);
-		return service.save(event);
+		Event model = dto.toModel();
+		System.out.println(model);
+		return service.save(model);
 	}
 
 	@PutMapping
 	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
 		System.out.println(dto);
-		Event event = dto.toEvent();
-		event.setId(id);
-		System.out.println(event);
-		return service.save(event);
+		Event model = dto.toModel();
+		model.setId(id);
+		System.out.println(model);
+		return service.save(model);
 	}
 
 }

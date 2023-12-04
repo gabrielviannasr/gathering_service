@@ -31,7 +31,7 @@ public class PlayerDTO {
 	    this.wallet = (this.wallet == null) ? 0.0 : this.wallet;
 	}
 	
-	public Player toPlayer() {
+	public Player toModel() {
 	    Player player = new Player();
 //	    player.setId(this.id);
 	    player.setName(this.name);

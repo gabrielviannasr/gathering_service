@@ -23,8 +23,8 @@ public class PlayerService extends AbstractService<Player> {
 		return Sort.by(Order.asc("name"), Order.asc("username"));
 	}
 
-	public List<Player> getList(Player player) {
-		return repository.findAll(getExample(player), getSort());
+	public List<Player> getList(Player model) {
+		return repository.findAll(getExample(model), getSort());
 	}
 
 	public Player getById(Long id) {
@@ -32,9 +32,9 @@ public class PlayerService extends AbstractService<Player> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public Player save(Player player) {
-		player.init();
-		return repository.save(player);
+	public Player save(Player model) {
+		model.init();
+		return repository.save(model);
 	}
 
 }

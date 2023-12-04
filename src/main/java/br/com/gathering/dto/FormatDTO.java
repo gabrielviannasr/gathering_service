@@ -21,7 +21,7 @@ public class FormatDTO {
 
     private Integer lifeCount;
 
-    public Format toFormat() {
+    public Format toModel() {
     	Format format = new Format();
     	format.setName(this.name);
     	format.setLifeCount(this.lifeCount);

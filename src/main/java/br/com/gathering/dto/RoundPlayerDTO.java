@@ -37,7 +37,7 @@ public class RoundPlayerDTO {
 
     private Integer lifeCount;
     
-    public RoundPlayer toRoundPlayer() {
+    public RoundPlayer toModel() {
         RoundPlayer roundPlayer = new RoundPlayer();
 //        roundPlayer.setId(this.id);
         roundPlayer.setIdRound(this.idRound);

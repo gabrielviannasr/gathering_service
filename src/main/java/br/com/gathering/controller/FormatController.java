@@ -23,8 +23,8 @@ public class FormatController {
 	private FormatService service;
 
 	@GetMapping
-	public List<Format> getList(Format format) {
-		return service.getList(format);
+	public List<Format> getList(Format model) {
+		return service.getList(model);
 	}
 
 	@GetMapping("/id")
@@ -36,18 +36,18 @@ public class FormatController {
 	@PostMapping
 	public Format save(@RequestBody FormatDTO dto) {
 		System.out.println(dto);
-		Format format = dto.toFormat();
-		System.out.println(format);
-		return service.save(format);
+		Format model = dto.toModel();
+		System.out.println(model);
+		return service.save(model);
 	}
 
 	@PutMapping
 	public Format update(@RequestParam Long id, @RequestBody FormatDTO dto) {
 		System.out.println(dto);
-		Format format = dto.toFormat();
-		format.setId(id);
-		System.out.println(format);
-		return service.save(format);
+		Format model = dto.toModel();
+		model.setId(id);
+		System.out.println(model);
+		return service.save(model);
 	}
 
 }

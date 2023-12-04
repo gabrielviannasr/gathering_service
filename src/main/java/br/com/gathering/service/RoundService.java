@@ -23,8 +23,8 @@ public class RoundService extends AbstractService<Round> {
 		return Sort.by(Order.asc("createdAt"));
 	}
 
-	public List<Round> getList(Round round) {
-		return repository.findAll(getExample(round), getSort());
+	public List<Round> getList(Round model) {
+		return repository.findAll(getExample(model), getSort());
 	}
 
 	public Round getById(Long id) {
@@ -32,9 +32,9 @@ public class RoundService extends AbstractService<Round> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public Round save(Round round) {
-		round.init();
-		return repository.save(round);
+	public Round save(Round model) {
+		model.init();
+		return repository.save(model);
 	}
 
 }

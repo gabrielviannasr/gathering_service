@@ -23,9 +23,9 @@ public class PlayerController {
 	private PlayerService service;
 
 	@GetMapping
-	public List<Player> getList(Player player) {
-		System.out.println(player);
-		return service.getList(player);
+	public List<Player> getList(Player model) {
+		System.out.println(model);
+		return service.getList(model);
 	}
 
 	@GetMapping("/id")
@@ -37,18 +37,18 @@ public class PlayerController {
 	@PostMapping
 	public Player save(@RequestBody PlayerDTO dto) {
 		System.out.println(dto);
-		Player player = dto.toPlayer();
-		System.out.println(player);
-		return service.save(player);
+		Player model = dto.toModel();
+		System.out.println(model);
+		return service.save(model);
 	}
 
 	@PutMapping
 	public Player update(@RequestParam Long id, @RequestBody PlayerDTO dto) {
 		System.out.println(dto);
-		Player player = dto.toPlayer();
-		player.setId(id);
-		System.out.println(player);
-		return service.save(player);
+		Player model = dto.toModel();
+		model.setId(id);
+		System.out.println(model);
+		return service.save(model);
 	}
 
 }
