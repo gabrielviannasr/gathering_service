@@ -79,7 +79,7 @@ CREATE TABLE gathering.round_player (
     id_round INT NOT NULL,
     id_player INT NOT NULL,
     id_player_killed_by INT,
-    rank INT NOT NULL DEFAULT 1,
+    rank INT,
     primary_commander_name VARCHAR,
     primary_commander_count INT NOT NULL DEFAULT 0,
     secondary_commander_name VARCHAR,
