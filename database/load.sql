@@ -27,14 +27,14 @@ INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_
 
 -- Insert 8 rounds to event 2
 INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, boosters_prize, canceled) VALUES
-( 9, 2, 1, 6, CURRENT_TIMESTAMP, 1, 6, 0, false),
-(10, 2, 1, 2, CURRENT_TIMESTAMP, 2, 6, 0, false),
-(11, 2, 1, 4, CURRENT_TIMESTAMP, 3, 6, 0, false),
-(12, 2, 1, 7, CURRENT_TIMESTAMP, 4, 6, 0, false),
-(13, 2, 1, 8, CURRENT_TIMESTAMP, 5, 6, 0, false),
-(14, 2, 1, 4, CURRENT_TIMESTAMP, 6, 6, 0, false),
-(15, 2, 1, 4, CURRENT_TIMESTAMP, 7, 6, 0, true), -- ROUND 7 CANCELED
-(16, 2, 1, 2, CURRENT_TIMESTAMP, 8, 6, 0, false);
+( 9, 2, 1, 5, CURRENT_TIMESTAMP, 1, 6, 0, false),
+(10, 2, 1, 7, CURRENT_TIMESTAMP, 2, 6, 0, false),
+(11, 2, 1, 8, CURRENT_TIMESTAMP, 3, 6, 0, false),
+(12, 2, 1, 1, CURRENT_TIMESTAMP, 4, 6, 0, false),
+(13, 2, 1, 7, CURRENT_TIMESTAMP, 5, 6, 0, false),
+(14, 2, 1, 6, CURRENT_TIMESTAMP, 6, 6, 0, false),
+(15, 2, 1, 2, CURRENT_TIMESTAMP, 7, 6, 0, true), -- ROUND 7 CANCELED
+(16, 2, 1, 6, CURRENT_TIMESTAMP, 8, 6, 0, false);
 
 -- Insert 8 rounds to round_player of event 1
 INSERT INTO gathering.round_player (id_round, id_player, id_player_killed_by, rank, 
