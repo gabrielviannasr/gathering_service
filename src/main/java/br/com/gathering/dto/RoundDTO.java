@@ -31,7 +31,7 @@ public class RoundDTO {
 
     private Integer players;
 
-    private Integer boostersPrize;
+    private Double prizeTaken;
 
     private Boolean canceled;
 
@@ -44,7 +44,7 @@ public class RoundDTO {
         round.setCreatedAt(this.createdAt);
         round.setRound(this.round);
         round.setPlayers(this.players);
-        round.setBoostersPrize(this.boostersPrize);
+        round.setPrizeTaken(this.prizeTaken);
         round.setCanceled(this.canceled);
 
         return round;
@@ -60,7 +60,7 @@ public class RoundDTO {
 	            + "    createdAt: " + this.createdAt + ",\n"
 	            + "    round: " + this.round + ",\n"
 	            + "    players: " + this.players + ",\n"
-	            + "    boostersPrize: " + this.boostersPrize + ",\n"
+	            + "    prizeTaken: " + this.prizeTaken + ",\n"
 	            + "    canceled: " + this.canceled + ",\n"
 	            + "}";
 	}

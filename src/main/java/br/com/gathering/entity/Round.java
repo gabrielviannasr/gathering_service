@@ -61,8 +61,8 @@ public class Round {
 	@Column(nullable = false)
     private Integer players;
 
-	@Column(name = "boosters_prize", nullable = false)
-    private Integer boostersPrize;
+	@Column(name = "prize_taken", nullable = false)
+    private Double prizeTaken;
 
 	@Column(nullable = false)
     private Boolean canceled;
@@ -70,7 +70,7 @@ public class Round {
 	public void init() {
 	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
 	    this.players = (this.players == null) ? 0 : this.players;
-	    this.boostersPrize = (this.boostersPrize == null) ? 0 : this.boostersPrize;
+	    this.prizeTaken = (this.prizeTaken == null) ? 0 : this.prizeTaken;
 	    this.canceled = (this.canceled == null) ? false : this.canceled;
 	}
 
@@ -84,7 +84,7 @@ public class Round {
 	            + "    createdAt: " + this.createdAt + ",\n"
 	            + "    round: " + this.round + ",\n"
 	            + "    players: " + this.players + ",\n"
-	            + "    boostersPrize: " + this.boostersPrize + ",\n"
+	            + "    boostersPrize: " + this.prizeTaken + ",\n"
 	            + "    canceled: " + this.canceled + ",\n"
 	            + "}";
 	}
