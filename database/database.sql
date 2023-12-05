@@ -101,7 +101,7 @@ CREATE TABLE gathering.rank (
     rounds INT NOT NULL DEFAULT 0,
     balance NUMERIC NOT NULL DEFAULT 0,
     loser_pot NUMERIC NOT NULL DEFAULT 0,
-    boosters_prize INT NOT NULL DEFAULT 0,
+    boosters_prize NUMERIC NOT NULL DEFAULT 0,
     boosters_balance NUMERIC NOT NULL DEFAULT 0,
     wallet NUMERIC NOT NULL DEFAULT 0,
     CONSTRAINT fk_rank_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
