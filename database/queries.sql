@@ -54,7 +54,7 @@ SELECT
     positive - negative AS balance
 FROM (
     SELECT
-        p.id as id_player,
+        p.id AS id_player,
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
@@ -76,13 +76,13 @@ ORDER BY
 
 -- Select rank v4
 SELECT
-    p.id as id_player,
+    p.id AS id_player,
     p.username,
     COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
     COUNT(rp.id_player) AS rounds,
     COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
     COUNT(rp.id_player) * e.registration_fee AS negative,
-    SUM (CASE WHEN rp.rank = 1 THEN r.boosters_prize ELSE 0 END) AS boosters_prize
+    SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
 FROM
     gathering.round_player rp
     INNER JOIN gathering.round r ON r.id = rp.id_round
@@ -104,16 +104,16 @@ SELECT
     positive,
     negative,
     positive - negative AS balance,
-    boosters_prize
+    prize_taken
 FROM (
     SELECT
-        p.id as id_player,
+        p.id AS id_player,
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
         COUNT(rp.id_player) * e.registration_fee AS negative,
-        SUM (CASE WHEN rp.rank = 1 THEN r.boosters_prize ELSE 0 END) AS boosters_prize
+        SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
     FROM
         gathering.round_player rp
         INNER JOIN gathering.round r ON r.id = rp.id_round
@@ -136,19 +136,19 @@ SELECT
     wins,
     rounds,
     positive,
-    -negative as negative,
+    -negative AS negative,
     positive - negative AS balance,
-    -prize as prize,
-    positive - negative - prize as wallet
+    -prize_taken AS prize_taken,
+    positive - negative - prize_taken AS wallet
 FROM (
     SELECT
-        p.id as id_player,
+        p.id AS id_player,
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
         COUNT(rp.id_player) * e.registration_fee AS negative,
-        SUM (CASE WHEN rp.rank = 1 THEN r.boosters_prize ELSE 0 END) AS prize
+        SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
     FROM
         gathering.round_player rp
         INNER JOIN gathering.round r ON r.id = rp.id_round
@@ -162,3 +162,6 @@ FROM (
 ) AS subquery
 ORDER BY
     rank, username;
+   
+
+

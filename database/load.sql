@@ -15,7 +15,7 @@ INSERT INTO gathering.event (id, id_format, created_at, registration_fee, player
 (2, 2, CURRENT_TIMESTAMP, 20.0, 6, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0);
 
 -- Insert 8 rounds to event 1
-INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, boosters_prize, canceled) VALUES
+INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
 (1, 1, 1, 2, CURRENT_TIMESTAMP, 1, 6, 0, false),
 (2, 1, 1, 3, CURRENT_TIMESTAMP, 2, 6, 0, false),
 (3, 1, 1, 4, CURRENT_TIMESTAMP, 3, 6, 0, false),
@@ -26,7 +26,7 @@ INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_
 (8, 1, 1, 4, CURRENT_TIMESTAMP, 8, 6, 0, false);
 
 -- Insert 8 rounds to event 2
-INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, boosters_prize, canceled) VALUES
+INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
 ( 9, 2, 1, 5, CURRENT_TIMESTAMP, 1, 6,  0, false),
 (10, 2, 1, 7, CURRENT_TIMESTAMP, 2, 6, 80, false),
 (11, 2, 1, 8, CURRENT_TIMESTAMP, 3, 6,  0, false),
