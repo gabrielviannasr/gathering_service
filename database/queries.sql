@@ -137,9 +137,9 @@ SELECT
     rounds,
     positive,
     -negative AS negative,
-    positive - negative AS balance,
+    positive - negative AS rank_balance,
     -prize_taken AS prize_taken,
-    positive - negative - prize_taken AS wallet
+    positive - negative - prize_taken AS final_balance
 FROM (
     SELECT
         p.id AS id_player,
@@ -155,7 +155,7 @@ FROM (
         INNER JOIN gathering.event e ON e.id = r.id_event
         INNER JOIN gathering.player p ON p.id = rp.id_player
     WHERE
-        e.id = 2
+        e.id = :idEvent
         AND r.canceled = false
     GROUP BY
         p.id, p.username, e.registration_fee
