@@ -162,6 +162,23 @@ FROM (
 ) AS subquery
 ORDER BY
     rank, username;
-   
 
+-- Select confra_pot and loser_pot
+SELECT 
+	count5 * confra_fee5 + count6 * confra_fee6 AS confra_pot,
+	count5 * loser_fee5 + count6 * loser_fee6 AS loser_pot
 
+FROM (
+	SELECT 
+		COUNT(CASE WHEN r.players = 5 THEN 1 END) AS count5,
+		COUNT(CASE WHEN r.players = 6 THEN 1 END) AS count6,
+		e.confra_fee5,
+		e.confra_fee6,
+		e.loser_fee5,
+		e.loser_fee6
+		
+	FROM gathering.round r
+		INNER JOIN gathering.event e ON e.id = r.id_event
+	WHERE r.id_event = 2
+	GROUP BY e.confra_fee5, e.confra_fee6, loser_fee5, loser_fee6
+) AS subquery;
