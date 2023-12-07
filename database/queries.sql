@@ -165,8 +165,8 @@ ORDER BY
 
 -- Select confra_pot and loser_pot
 SELECT 
-	count5 * confra_fee5 + count6 * confra_fee6 AS confra_pot,
-	count5 * loser_fee5 + count6 * loser_fee6 AS loser_pot
+	count5 * confra_fee5 + count6 * confra_fee6 AS confraPot,
+	count5 * loser_fee5 + count6 * loser_fee6 AS loserPot
 
 FROM (
 	SELECT 
@@ -179,6 +179,9 @@ FROM (
 		
 	FROM gathering.round r
 		INNER JOIN gathering.event e ON e.id = r.id_event
-	WHERE r.id_event = 2
+	WHERE
+		r.id_event = 2
+		AND r.canceled = false
 	GROUP BY e.confra_fee5, e.confra_fee6, loser_fee5, loser_fee6
 ) AS subquery;
+
