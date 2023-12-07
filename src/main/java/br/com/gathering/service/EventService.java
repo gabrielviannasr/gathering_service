@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.PotProjection;
 import br.com.gathering.repository.EventRepository;
 
 @Service
@@ -31,6 +32,12 @@ public class EventService extends AbstractService<Event> {
 	public Event getById(Long id) {
 		Optional<Event> optional = repository.findById(id);
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
+	
+	public PotProjection getPot(Long idEvent) {
+		PotProjection pot = repository.getPot(idEvent);
+		System.out.println("pot: " + pot);
+		return pot;
 	}
 
 //	public List<RankProjection> getRank(Long idEvent) {

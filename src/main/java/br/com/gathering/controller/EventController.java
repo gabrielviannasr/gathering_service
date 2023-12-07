@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.PotProjection;
 import br.com.gathering.service.EventService;
 
 @RestController
@@ -35,6 +36,11 @@ public class EventController {
 		return service.getById(id);
 	}
 
+	@GetMapping("/id/pot")
+	public PotProjection getPot(Long idEvent) {
+		System.out.println("id: " + idEvent);
+		return service.getPot(idEvent);
+	}
 //	@GetMapping("/id/rank")
 //	public List<RankProjection> getRank(@RequestParam Long id) {
 //		System.out.println("id: " + id);

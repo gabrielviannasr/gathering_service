@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.PotProjection;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{
@@ -49,5 +50,29 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 	
 	@Query(name = "getRank")
 	List<Rank> getRank(Long idEvent);
+
+	@Query(nativeQuery = true, value = ""
+			+ "SELECT \r\n"
+			+ "	count5 * confra_fee5 + count6 * confra_fee6 AS confraPot,\r\n"
+			+ "	count5 * loser_fee5 + count6 * loser_fee6 AS loserPot\r\n"
+			+ "\r\n"
+			+ "FROM (\r\n"
+			+ "	SELECT \r\n"
+			+ "		COUNT(CASE WHEN r.players = 5 THEN 1 END) AS count5,\r\n"
+			+ "		COUNT(CASE WHEN r.players = 6 THEN 1 END) AS count6,\r\n"
+			+ "		e.confra_fee5,\r\n"
+			+ "		e.confra_fee6,\r\n"
+			+ "		e.loser_fee5,\r\n"
+			+ "		e.loser_fee6\r\n"
+			+ "		\r\n"
+			+ "	FROM gathering.round r\r\n"
+			+ "		INNER JOIN gathering.event e ON e.id = r.id_event\r\n"
+			+ "	WHERE\r\n"
+			+ "		r.id_event = :idEvent\r\n"
+			+ "		AND r.canceled = false\r\n"
+			+ "	GROUP BY e.confra_fee5, e.confra_fee6, loser_fee5, loser_fee6\r\n"
+			+ ") AS subquery;\r\n"
+			+ "")
+	PotProjection getPot(Long idEvent);
 
 }
