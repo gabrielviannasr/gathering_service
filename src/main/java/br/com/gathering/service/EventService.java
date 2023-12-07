@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.gathering.projection.RankProjection;
 import br.com.gathering.entity.Event;
+import br.com.gathering.entity.Rank;
 import br.com.gathering.repository.EventRepository;
 
 @Service
@@ -33,8 +33,14 @@ public class EventService extends AbstractService<Event> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public List<RankProjection> getRank(Long idEvent) {
-		return repository.getRank(idEvent);
+//	public List<RankProjection> getRank(Long idEvent) {
+//		return repository.getRank(idEvent);
+//	}
+
+	public List<Rank> getRank(Long idEvent) {
+		List<Rank> list = repository.getRank(idEvent);
+		list.forEach(item -> System.out.println(item));
+		return list;
 	}
 
 	public Event save(Event model) {
