@@ -19,6 +19,9 @@ import br.com.gathering.repository.EventRepository;
 @Service
 public class EventService extends AbstractService<Event> {
 
+	private static final double WORST_RANK_LOSER_POT_PERCENTAGE = 0.6;
+	private static final double SECOND_WORST_RANK_LOSER_POT_PERCENTAGE = 0.4;
+
 	@Autowired
 	private EventRepository repository;
 
@@ -52,51 +55,61 @@ public class EventService extends AbstractService<Event> {
 //	}
 
 	public List<Rank> getRank(Long idEvent) {
+		// Get loserPot and confraPot
 		PotProjection pot = repository.getPot(idEvent);
-		
+		// Get rank count to determine how many players will share the loserPot
 		List<RankCountProjection> rankCount = getRankCount(idEvent);
-		
+		// Get rank list to update the loserPot and finalBalance
 		List<Rank> list = repository.getRank(idEvent);
-//		100% of loserPot divided equally between the worst ranked players
+		// 100% of loserPot divided equally between the worst ranked players
 		if (rankCount.get(0).getCount() > 1) {
-			Double percetage = 1.0 / rankCount.get(0).getCount();
-
+			// 100% equally divided
+			Double percentage = 1.0 / rankCount.get(0).getCount();
+			// Loop to update loserPot and finalBalance
 			list.forEach(item -> {
+				// Non-worst players takes 0% of loserPot
 				Double loserPot = 0.0;
-
+				// If player rank is the (1st) worst rank, then updates finalBalance
 				if (item.getRank() == rankCount.get(0).getRank() ) {
-					loserPot = percetage * pot.getLoserPot();
-					item.setFinalBalance(item.getFinalBalance() + loserPot);
-				} 
-				item.setLoserPot(loserPot);
-				item.setIdEvent(idEvent);
-				System.out.println(item);
-			});
-		}
-//		60% of loserPot to the worst ranked player, and 40% divided equally between the second worst ranked players
-		else {
-			Double percetage = 0.4 / rankCount.get(1).getCount();
-
-			list.forEach(item -> {
-				Double loserPot = 0.0;
-
-				if (item.getRank() == rankCount.get(0).getRank() ) {
-					loserPot = 0.6 * pot.getLoserPot();
-					item.setFinalBalance(item.getFinalBalance() + loserPot);
-				} else if (item.getRank() == rankCount.get(1).getRank() ) {
-					loserPot = percetage * pot.getLoserPot();
+					loserPot = percentage * pot.getLoserPot();
 					item.setFinalBalance(item.getFinalBalance() + loserPot);
 				}
+				// Update loserPot
 				item.setLoserPot(loserPot);
+				// Update idEvent
 				item.setIdEvent(idEvent);
-				System.out.println(item);
 			});
-			
 		}
-		
+		// 60% of loserPot to the worst ranked player, and 40% divided equally between the second worst ranked players
+		else {
+			// 40% equally divided
+			Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
+			// Loop to update loserPot and finalBalance
+			list.forEach(item -> {
+				// Non-worst players takes 0% of loserPot
+				Double loserPot = 0.0;
+				// If player rank is the (1st) worst rank, then updates finalBalance
+				if (item.getRank() == rankCount.get(0).getRank() ) {
+					loserPot = WORST_RANK_LOSER_POT_PERCENTAGE * pot.getLoserPot();
+					item.setFinalBalance(item.getFinalBalance() + loserPot);
+				}
+				// If player rank is the 2nd worst rank, then updates finalBalance
+				else if (item.getRank() == rankCount.get(1).getRank() ) {
+					loserPot = percentage * pot.getLoserPot();
+					item.setFinalBalance(item.getFinalBalance() + loserPot);
+				}
+				// Update loserPot
+				item.setLoserPot(loserPot);
+				// Update idEvent
+				item.setIdEvent(idEvent);
+			});
+
+		}
+		// Log updated items
 		list.forEach(item -> {
 			System.out.println(item);
 		});
+		// Return the updated list
 		return list;
 	}
 
