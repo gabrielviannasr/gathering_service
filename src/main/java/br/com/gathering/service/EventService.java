@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.repository.EventRepository;
@@ -52,6 +53,12 @@ public class EventService extends AbstractService<Event> {
 		return list;
 	}
 
+	public PlayerRoundProjection getPlayerRound(Long idEvent) {
+		PlayerRoundProjection playerRound = repository.getPlayerRound(idEvent);
+		System.out.println("playerRound: " + playerRound);
+		return playerRound;
+	}
+
 //	public List<RankProjection> getRank(Long idEvent) {
 //		return repository.getRank(idEvent);
 //	}
@@ -88,6 +95,18 @@ public class EventService extends AbstractService<Event> {
 			System.out.println(item);
 		});
 
+		// Get players and rounds total
+		PlayerRoundProjection playerRound = getPlayerRound(idEvent);
+
+		// Update event
+		Event event = getById(idEvent);
+		event.setPlayers(playerRound.getPlayers());
+		event.setRounds(playerRound.getRounds());
+		event.setConfraPot(pot.getConfraPot());
+		event.setLoserPot(pot.getLoserPot());
+		event = save(event);
+		System.out.println(event);
+
 		// Return the updated list
 		return list;
 	}
@@ -118,7 +137,7 @@ public class EventService extends AbstractService<Event> {
 
 	// Helper method to distribute loserPot unequally
 	private void distributeLoserPotUnequally(Long idEvent, List<Rank> list, PotProjection pot, List<RankCountProjection> rankCount) {
-		// Smallest piece of loserPot equally divided between the 2nd worst-ranked players
+		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
 	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
 
 	    // Loop to update loserPot and finalBalance
