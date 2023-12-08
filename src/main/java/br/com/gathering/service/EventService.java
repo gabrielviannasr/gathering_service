@@ -52,8 +52,51 @@ public class EventService extends AbstractService<Event> {
 //	}
 
 	public List<Rank> getRank(Long idEvent) {
+		PotProjection pot = repository.getPot(idEvent);
+		
+		List<RankCountProjection> rankCount = getRankCount(idEvent);
+		
 		List<Rank> list = repository.getRank(idEvent);
-		list.forEach(item -> System.out.println(item));
+//		100% of loserPot divided equally between the worst ranked players
+		if (rankCount.get(0).getCount() > 1) {
+			Double percetage = 1.0 / rankCount.get(0).getCount();
+
+			list.forEach(item -> {
+				Double loserPot = 0.0;
+
+				if (item.getRank() == rankCount.get(0).getRank() ) {
+					loserPot = percetage * pot.getLoserPot();
+					item.setFinalBalance(item.getFinalBalance() + loserPot);
+				} 
+				item.setLoserPot(loserPot);
+				item.setIdEvent(idEvent);
+				System.out.println(item);
+			});
+		}
+//		60% of loserPot to the worst ranked player, and 40% divided equally between the second worst ranked players
+		else {
+			Double percetage = 0.4 / rankCount.get(1).getCount();
+
+			list.forEach(item -> {
+				Double loserPot = 0.0;
+
+				if (item.getRank() == rankCount.get(0).getRank() ) {
+					loserPot = 0.6 * pot.getLoserPot();
+					item.setFinalBalance(item.getFinalBalance() + loserPot);
+				} else if (item.getRank() == rankCount.get(1).getRank() ) {
+					loserPot = percetage * pot.getLoserPot();
+					item.setFinalBalance(item.getFinalBalance() + loserPot);
+				}
+				item.setLoserPot(loserPot);
+				item.setIdEvent(idEvent);
+				System.out.println(item);
+			});
+			
+		}
+		
+		list.forEach(item -> {
+			System.out.println(item);
+		});
 		return list;
 	}
 
