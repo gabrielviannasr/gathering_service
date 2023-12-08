@@ -59,10 +59,6 @@ public class EventService extends AbstractService<Event> {
 		return playerRound;
 	}
 
-//	public List<RankProjection> getRank(Long idEvent) {
-//		return repository.getRank(idEvent);
-//	}
-
 	/**
 	 * Calculate and update the final balance of players based on the distribution of loserPot.
 	 * 

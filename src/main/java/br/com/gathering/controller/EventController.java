@@ -42,11 +42,7 @@ public class EventController {
 		System.out.println("id: " + idEvent);
 		return service.getPot(idEvent);
 	}
-//	@GetMapping("/id/rank")
-//	public List<RankProjection> getRank(@RequestParam Long id) {
-//		System.out.println("id: " + id);
-//		return service.getRank(id);
-//	}
+
 	@GetMapping("/id/rank")
 	public List<Rank> getRank(@RequestParam Long id) {
 		System.out.println("id: " + id);

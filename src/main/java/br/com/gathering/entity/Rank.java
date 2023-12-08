@@ -69,7 +69,6 @@ import lombok.Setter;
             @ColumnResult(name = "positive", type = Double.class),
             @ColumnResult(name = "negative", type = Double.class),
             @ColumnResult(name = "rankBalance", type = Double.class),
-//            @ColumnResult(name = "loserPot", type = Double.class),
             @ColumnResult(name = "prizeTaken", type = Double.class),
             @ColumnResult(name = "finalBalance", type = Double.class)
         }
