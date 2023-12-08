@@ -223,3 +223,15 @@ SELECT rank, COUNT(*) FROM (
 ) AS rank_query
 GROUP BY rank
 ORDER BY rank DESC;
+
+-- Select total of players and roudns
+SELECT
+    COUNT(DISTINCT rp.id_player) AS players,
+    COUNT(DISTINCT rp.id_round) AS rounds
+FROM
+    gathering.round_player rp
+    JOIN gathering.round r ON r.id = rp.id_round
+    JOIN gathering.event e ON e.id = r.id_event
+WHERE
+    e.id = :idEvent
+    AND r.canceled = false;
