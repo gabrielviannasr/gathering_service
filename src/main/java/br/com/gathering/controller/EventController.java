@@ -43,7 +43,7 @@ public class EventController {
 		return service.getPot(idEvent);
 	}
 
-	@GetMapping("/id/rank")
+	@PutMapping("/id/rank")
 	public List<Rank> getRank(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getRank(id);
