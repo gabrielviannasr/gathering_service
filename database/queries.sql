@@ -185,3 +185,41 @@ FROM (
 	GROUP BY e.confra_fee5, e.confra_fee6, loser_fee5, loser_fee6
 ) AS subquery;
 
+-- Select rank count to determine how many players will share the loserPot
+SELECT rank, COUNT(*) FROM (
+    SELECT
+        RANK() OVER (ORDER BY wins DESC, rounds) AS rank,
+        id_player,
+        username,
+        wins,
+        rounds,
+        positive,
+        -negative AS negative,
+        positive - negative AS rank_balance,
+        -prize_taken AS prize_taken,
+        positive - negative - prize_taken AS final_balance
+	FROM (
+        SELECT
+            p.id AS id_player,
+            p.username,
+            COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
+            COUNT(rp.id_player) AS rounds,
+            COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+            COUNT(rp.id_player) * e.registration_fee AS negative,
+            SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
+        FROM
+            gathering.round_player rp
+            INNER JOIN gathering.round r ON r.id = rp.id_round
+            INNER JOIN gathering.event e ON e.id = r.id_event
+            INNER JOIN gathering.player p ON p.id = rp.id_player
+        WHERE
+            e.id = :idEvent
+            AND r.canceled = false
+        GROUP BY
+            p.id, p.username, e.registration_fee
+	) AS subquery
+	ORDER BY
+        rank, username
+) AS rank_query
+GROUP BY rank
+ORDER BY rank DESC;
