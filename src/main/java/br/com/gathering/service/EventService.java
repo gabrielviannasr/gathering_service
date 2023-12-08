@@ -28,6 +28,9 @@ public class EventService extends AbstractService<Event> {
 	@Autowired
 	private EventRepository repository;
 
+	@Autowired
+	private PlayerService playerService;
+
 	public static Sort getSort() {
 		return Sort.by(Order.asc("createdAt"));
 	}
@@ -90,15 +93,15 @@ public class EventService extends AbstractService<Event> {
 	        distributeLoserPotUnequally(idEvent, list, pot, rankCount);
 	    }
 
-		// Log updated items
-		list.forEach(item -> {
-			System.out.println(item);
-		});
-
 		// Get players and rounds total
 		PlayerRoundProjection playerRound = getPlayerRound(idEvent);
 
-		// Update event
+	    // Log updated items		
+		list.forEach(item -> {
+		    System.out.println(item);
+		});
+
+		/* Update event */
 		Event event = getById(idEvent);
 		event.setPlayers(playerRound.getPlayers());
 		event.setRounds(playerRound.getRounds());
@@ -111,6 +114,7 @@ public class EventService extends AbstractService<Event> {
 
 		event = save(event);
 		System.out.println(event);
+		/* Update event */
 
 		// Return the updated list
 		return event.getRanks();
@@ -137,6 +141,9 @@ public class EventService extends AbstractService<Event> {
 
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
+
+	        // Ensure each item in the list has the correct Player set
+			item.setPlayer(playerService.getById(item.getIdPlayer()));
 	    });
 	}
 
@@ -166,6 +173,9 @@ public class EventService extends AbstractService<Event> {
 
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
+
+	        // Ensure each item in the list has the correct Player set
+			item.setPlayer(playerService.getById(item.getIdPlayer()));
 	    });
 	}
 
