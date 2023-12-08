@@ -1,5 +1,7 @@
 package br.com.gathering.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +43,7 @@ public class Player {
 	@Column(length = EMAIL_LENGTH)
     private String email;
 
+	@JsonIgnore
 	@Column(length = PASSWORD_LENGTH)
     private String password;
 
