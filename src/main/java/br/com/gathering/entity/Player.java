@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class Player {
 	@Column(length = EMAIL_LENGTH)
     private String email;
 
+	@Transient
 	@JsonIgnore
 	@Column(length = PASSWORD_LENGTH)
     private String password;
