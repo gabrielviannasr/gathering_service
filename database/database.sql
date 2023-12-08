@@ -95,10 +95,12 @@ CREATE TABLE gathering.round_player (
 CREATE TABLE gathering.rank (
     id INT DEFAULT nextval('gathering.sequence_rank'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
-    rank INT,
 	id_player INT NOT NULL,
+	rank INT,
     wins INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
+	positive NUMERIC NOT NULL DEFAULT 0,
+	negative NUMERIC NOT NULL DEFAULT 0,
     rank_balance NUMERIC NOT NULL DEFAULT 0,
     loser_pot NUMERIC NOT NULL DEFAULT 0,
     prize_taken NUMERIC NOT NULL DEFAULT 0,
