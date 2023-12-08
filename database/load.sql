@@ -11,8 +11,9 @@ INSERT INTO gathering.player (id, name, username, email, password, wallet) VALUE
 
 -- Insert 2 events
 INSERT INTO gathering.event (id, id_format, created_at, registration_fee, players, rounds, confra_fee5, confra_fee6, confra_pot, loser_fee5, loser_fee6, loser_pot) VALUES
-(1, 1, CURRENT_TIMESTAMP, 20.0, 6, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
-(2, 2, CURRENT_TIMESTAMP, 20.0, 6, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0);
+(1, 1, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
+(2, 2, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
+(3, 3, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0);
 
 -- Insert 8 rounds to event 1
 INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
@@ -27,14 +28,23 @@ INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_
 
 -- Insert 8 rounds to event 2
 INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
-( 9, 2, 1, 5, CURRENT_TIMESTAMP, 1, 6,  0, false),
-(10, 2, 1, 7, CURRENT_TIMESTAMP, 2, 6, 80, false),
-(11, 2, 1, 8, CURRENT_TIMESTAMP, 3, 6,  0, false),
-(12, 2, 1, 1, CURRENT_TIMESTAMP, 4, 6, 80, false),
-(13, 2, 1, 7, CURRENT_TIMESTAMP, 5, 6, 80, false),
-(14, 2, 1, 6, CURRENT_TIMESTAMP, 6, 6,  0, false),
-(15, 2, 1, 2, CURRENT_TIMESTAMP, 7, 6,  0, true), -- ROUND 7 CANCELED
-(16, 2, 1, 6, CURRENT_TIMESTAMP, 8, 6,  0, false);
+( 9, 2, 2, 5, CURRENT_TIMESTAMP, 1, 6,  0, false),
+(10, 2, 2, 7, CURRENT_TIMESTAMP, 2, 6, 80, false),
+(11, 2, 2, 8, CURRENT_TIMESTAMP, 3, 6,  0, false),
+(12, 2, 2, 1, CURRENT_TIMESTAMP, 4, 6, 80, false),
+(13, 2, 2, 7, CURRENT_TIMESTAMP, 5, 6, 80, false),
+(14, 2, 2, 6, CURRENT_TIMESTAMP, 6, 6,  0, false),
+(15, 2, 2, 2, CURRENT_TIMESTAMP, 7, 6,  0, true), -- ROUND 7 CANCELED
+(16, 2, 2, 6, CURRENT_TIMESTAMP, 8, 6,  0, false);
+
+-- Insert 6 rounds to event 3
+INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
+(17, 3, 3, 1, CURRENT_TIMESTAMP, 1, 6, 0, false),
+(18, 3, 3, 2, CURRENT_TIMESTAMP, 2, 6, 0, false),
+(19, 3, 3, 3, CURRENT_TIMESTAMP, 3, 6, 0, false),
+(20, 3, 3, 4, CURRENT_TIMESTAMP, 4, 6, 0, false),
+(21, 3, 3, 5, CURRENT_TIMESTAMP, 5, 6, 0, false),
+(22, 3, 3, 6, CURRENT_TIMESTAMP, 6, 6, 0, false);
 
 -- Insert 8 rounds to round_player of event 1
 INSERT INTO gathering.round_player (id_round, id_player, id_player_killed_by, rank, 
@@ -100,58 +110,104 @@ primary_commander_name, primary_commander_count, secondary_commander_name, secon
 INSERT INTO gathering.round_player (id_round, id_player, id_player_killed_by, rank, 
 primary_commander_name, primary_commander_count, secondary_commander_name, secondary_commander_count, infect_count, life_count) VALUES
 -- round 1
-(9, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(9, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(9, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(9, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(9, 5, NULL, 	1, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(9, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
+(9, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(9, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(9, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(9, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(9, 5, NULL, 	1, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(9, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
 -- round 2
-(10, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(10, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(10, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(10, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(10, 7, NULL, 	 1, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(10, 8, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
+(10, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(10, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(10, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(10, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(10, 7, NULL, 	 1, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(10, 8, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
 -- round 3
-(11, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(11, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(11, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(11, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(11, 7, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(11, 8, NULL, 	 1, 'Primary3', 0, 'Secondary3', 0, 0, 40),
+(11, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(11, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(11, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(11, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(11, 7, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(11, 8, NULL, 	 1, 'Primary3', 0, 'Secondary3', 0, 0, 30),
 -- round 4
-(12, 1, NULL, 	 1, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(12, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(12, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(12, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(12, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(12, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
+(12, 1, NULL, 	 1, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(12, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(12, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(12, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(12, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(12, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
 -- round 5
-(13, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(13, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(13, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(13, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(13, 7, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(13, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
+(13, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(13, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(13, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(13, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(13, 7, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(13, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
 -- round 6
-(14, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(14, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(14, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(14, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(14, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(14, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 40),
+(14, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(14, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(14, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(14, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(14, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(14, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30),
 -- round 7
-(15, 2, NULL, 	 1, 'Primary2', 0, 'Secondary2', 0, 0, 40),
-(15, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 40),
-(15, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(15, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(15, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(15, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
+(15, 2, NULL, 	 1, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(15, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(15, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(15, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(15, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(15, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
 -- round 8
-(16, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 40),
-(16, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 40),
-(16, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 40),
-(16, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(16, 7, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40),
-(16, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 40);
+(16, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(16, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(16, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(16, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(16, 7, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+(16, 8, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30);
+
+-- Insert 8 rounds to round_player of event 3
+INSERT INTO gathering.round_player (id_round, id_player, id_player_killed_by, rank, 
+primary_commander_name, primary_commander_count, secondary_commander_name, secondary_commander_count, infect_count, life_count) VALUES
+-- round 1
+(17, 1, NULL, 	 1, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(17, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(17, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(17, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(17, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(17, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+-- round 2
+(18, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(18, 2, NULL, 	 1, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(18, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(18, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(18, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(18, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+-- round 3
+(19, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(19, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(19, 3, NULL, 	 1, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(19, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(19, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(19, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+-- round 4
+(20, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(20, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(20, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(20, 4, NULL, 	 1, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(20, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(20, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+-- round 5
+(21, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(21, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(21, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(21, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(21, 5, NULL, 	 1, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(21, 6, NULL, NULL, 'Primary6', 0, 'Secondary6', 0, 0, 30),
+-- round 6
+(22, 1, NULL, NULL, 'Primary1', 0, 'Secondary1', 0, 0, 30),
+(22, 2, NULL, NULL, 'Primary2', 0, 'Secondary2', 0, 0, 30),
+(22, 3, NULL, NULL, 'Primary3', 0, 'Secondary3', 0, 0, 30),
+(22, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
+(22, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
+(22, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30);
