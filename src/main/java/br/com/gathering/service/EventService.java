@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
 import br.com.gathering.projection.PotProjection;
+import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.repository.EventRepository;
 
 @Service
@@ -38,6 +39,12 @@ public class EventService extends AbstractService<Event> {
 		PotProjection pot = repository.getPot(idEvent);
 		System.out.println("pot: " + pot);
 		return pot;
+	}
+
+	public List<RankCountProjection> getRankCount(Long idEvent) {
+		List<RankCountProjection> list = repository.getRankCount(idEvent);
+		list.forEach(item -> System.out.println(item));
+		return list;
 	}
 
 //	public List<RankProjection> getRank(Long idEvent) {

@@ -15,6 +15,7 @@ import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
 import br.com.gathering.projection.PotProjection;
+import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.service.EventService;
 
 @RestController
@@ -50,6 +51,12 @@ public class EventController {
 	public List<Rank> getRank(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getRank(id);
+	}
+
+	@GetMapping("/id/rank/count")
+	public List<RankCountProjection> getRankCount(@RequestParam Long id) {
+		System.out.println("id: " + id);
+		return service.getRankCount(id);
 	}
 
 	@PostMapping
