@@ -43,19 +43,23 @@ public class EventService extends AbstractService<Event> {
 
 	public PotProjection getPot(Long idEvent) {
 		PotProjection pot = repository.getPot(idEvent);
-		System.out.println("pot: " + pot);
+		System.out.println("Pot: { confraPot: " + pot.getConfraPot() + ", loserPot: " + pot.getLoserPot() + " }");
 		return pot;
 	}
 
 	public List<RankCountProjection> getRankCount(Long idEvent) {
 		List<RankCountProjection> list = repository.getRankCount(idEvent);
-		list.forEach(item -> System.out.println(item));
+		System.out.println("RankCount: [");
+		list.forEach(item -> {
+			System.out.println("\t{ rank: " + item.getRank() + ", count: " + item.getCount() + " },");
+		});
+		System.out.println("]");
 		return list;
 	}
 
 	public PlayerRoundProjection getPlayerRound(Long idEvent) {
 		PlayerRoundProjection playerRound = repository.getPlayerRound(idEvent);
-		System.out.println("playerRound: " + playerRound);
+		System.out.println("PlayerRound: { players: " + playerRound.getPlayers() + ", rounds: " + playerRound.getRounds() + " }");
 		return playerRound;
 	}
 
