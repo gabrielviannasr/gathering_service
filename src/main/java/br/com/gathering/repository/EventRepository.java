@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
-import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
+import br.com.gathering.projection.RankCountProjection;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{

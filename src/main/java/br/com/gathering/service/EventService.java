@@ -100,11 +100,16 @@ public class EventService extends AbstractService<Event> {
 		event.setRounds(playerRound.getRounds());
 		event.setConfraPot(pot.getConfraPot());
 		event.setLoserPot(pot.getLoserPot());
+
+		// Synchronize the ranks collection with the current state of the list
+		event.getRanks().clear();
+		event.getRanks().addAll(list);
+
 		event = save(event);
 		System.out.println(event);
 
 		// Return the updated list
-		return list;
+		return event.getRanks();
 	}
 
 	// Helper method to distribute loserPot equally

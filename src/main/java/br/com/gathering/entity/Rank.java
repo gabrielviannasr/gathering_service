@@ -1,5 +1,7 @@
 package br.com.gathering.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
@@ -13,7 +15,6 @@ import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -91,6 +92,7 @@ public class Rank {
 	@Column(name = "id_event", nullable = false)
 	private Long idEvent;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_event", nullable = true, insertable = false, updatable = false)
 	private Event event;
@@ -100,7 +102,6 @@ public class Rank {
 
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
-	@Transient
 	private Player player;	
 
 	@Column(nullable = false)
