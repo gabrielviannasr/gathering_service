@@ -211,3 +211,9 @@ primary_commander_name, primary_commander_count, secondary_commander_name, secon
 (22, 4, NULL, NULL, 'Primary4', 0, 'Secondary4', 0, 0, 30),
 (22, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
 (22, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30);
+
+-- Insert values in payment
+INSERT INTO gathering.payment (id, id_player, created_at, invoice, description) VALUES
+(1, 7, '2023-12-08', 20, NULL),
+(2, 1, '2023-12-08', 72, NULL),
+(3, 2, '2023-12-08', 20, NULL);
