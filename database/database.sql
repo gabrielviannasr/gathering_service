@@ -1,4 +1,5 @@
 -- Create sequences
+CREATE SEQUENCE gathering.sequence_gathering START 1;
 CREATE SEQUENCE gathering.sequence_player START 1;
 CREATE SEQUENCE gathering.sequence_payment START 1;
 CREATE SEQUENCE gathering.sequence_format START 1;
@@ -6,6 +7,12 @@ CREATE SEQUENCE gathering.sequence_event START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_round_player START 1;
 CREATE SEQUENCE gathering.sequence_rank START 1;
+
+-- Create gathering table
+CREATE TABLE gathering.gathering (
+    id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
+    name VARCHAR(20) UNIQUE
+);
 
 -- Create player table
 CREATE TABLE gathering.player (
@@ -43,6 +50,7 @@ INSERT INTO gathering.format (id, name, life_count) VALUES
 -- Create event table
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
+    id_gathering NOT NULL,
     id_format INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     registration_fee NUMERIC NOT NULL DEFAULT 0,
@@ -54,6 +62,7 @@ CREATE TABLE gathering.event (
     loser_fee5 NUMERIC NOT NULL DEFAULT 0,
     loser_fee6 NUMERIC NOT NULL DEFAULT 0,
     loser_pot NUMERIC NOT NULL DEFAULT 0,
+	CONSTRAINT fk_event_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
     CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.format(id)
 );
 
