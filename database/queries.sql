@@ -131,15 +131,15 @@ ORDER BY
 -- Select rank v6
 SELECT
     RANK() OVER (ORDER BY wins DESC, rounds) AS rank,
-    id_player,
+    id_player AS idPlayer,
     username,
     wins,
     rounds,
     positive,
     -negative AS negative,
-    positive - negative AS rank_balance,
-    -prize_taken AS prize_taken,
-    positive - negative - prize_taken AS final_balance
+    positive - negative AS rankBalance,
+    -prize_taken AS prizeTaken,
+    positive - negative - prize_taken AS finalBalance
 FROM (
     SELECT
         p.id AS id_player,
