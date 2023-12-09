@@ -34,6 +34,13 @@ public class Event {
 	@SequenceGenerator(name = "gathering.sequence_event", sequenceName = "gathering.sequence_event", allocationSize = 1)
 	private Long id;
 
+	@Column(name = "id_gathering", nullable = false)
+	private Long idGathering;
+
+	@ManyToOne
+	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
+	private Gathering gathering;
+
 	@Column(name = "id_format", nullable = false)
 	private Long idFormat;
 
