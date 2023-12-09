@@ -26,10 +26,6 @@ public class PlayerDTO {
     private String password;
 
     private Double wallet;
-    
-	public void init() {
-	    this.wallet = (this.wallet == null) ? 0.0 : this.wallet;
-	}
 	
 	public Player toModel() {
 	    Player player = new Player();
