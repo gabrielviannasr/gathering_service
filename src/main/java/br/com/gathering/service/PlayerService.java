@@ -37,4 +37,8 @@ public class PlayerService extends AbstractService<Player> {
 		return repository.save(model);
 	}
 
+	public Player updateWallet(Long id) {
+		return repository.updateWallet(id);
+	}
+
 }

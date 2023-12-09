@@ -142,8 +142,8 @@ public class EventService extends AbstractService<Event> {
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
 
-	        // Ensure each item in the list has the correct Player set
-			item.setPlayer(playerService.getById(item.getIdPlayer()));
+	        // Ensure each item in the list has the correct Player set and update the wallet
+			item.setPlayer(playerService.updateWallet(item.getIdPlayer()));
 	    });
 	}
 
@@ -174,8 +174,8 @@ public class EventService extends AbstractService<Event> {
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
 
-	        // Ensure each item in the list has the correct Player set
-			item.setPlayer(playerService.getById(item.getIdPlayer()));
+	        // Ensure each item in the list has the correct Player set and update the wallet
+			item.setPlayer(playerService.updateWallet(item.getIdPlayer()));
 	    });
 	}
 
