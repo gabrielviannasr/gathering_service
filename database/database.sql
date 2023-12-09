@@ -109,3 +109,32 @@ CREATE TABLE gathering.rank (
     CONSTRAINT fk_rank_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
+-- Create function to update wallet and return player
+DROP FUNCTION IF EXISTS gathering.update_wallet;
+CREATE OR REPLACE FUNCTION gathering.update_wallet(id_player_param BIGINT)
+RETURNS SETOF gathering.player AS $$
+DECLARE
+    updated_player gathering.player%ROWTYPE;
+BEGIN
+    UPDATE gathering.player
+    SET wallet = (
+        COALESCE(
+            (SELECT SUM(DISTINCT CASE WHEN payment.invoice IS NOT NULL THEN payment.invoice ELSE 0 END)
+             FROM gathering.payment
+             WHERE payment.id_player = id_player_param),
+            0
+        ) +
+        COALESCE(
+            (SELECT SUM(DISTINCT CASE WHEN rank.final_balance IS NOT NULL THEN rank.final_balance ELSE 0 END)
+             FROM gathering.rank
+             WHERE rank.id_player = id_player_param),
+            0
+        )
+    )
+    WHERE id = id_player_param
+    RETURNING * INTO updated_player;
+
+    RETURN NEXT updated_player;
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
