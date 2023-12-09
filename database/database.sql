@@ -119,13 +119,13 @@ BEGIN
     UPDATE gathering.player
     SET wallet = (
         COALESCE(
-            (SELECT SUM(DISTINCT CASE WHEN payment.invoice IS NOT NULL THEN payment.invoice ELSE 0 END)
+            (SELECT SUM(DISTINCT payment.invoice)
              FROM gathering.payment
              WHERE payment.id_player = id_player_param),
             0
         ) +
         COALESCE(
-            (SELECT SUM(DISTINCT CASE WHEN rank.final_balance IS NOT NULL THEN rank.final_balance ELSE 0 END)
+            (SELECT SUM(DISTINCT rank.final_balance)
              FROM gathering.rank
              WHERE rank.id_player = id_player_param),
             0

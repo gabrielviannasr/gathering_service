@@ -235,3 +235,53 @@ FROM
 WHERE
     e.id = :idEvent
     AND r.canceled = false;
+
+-- Select wallet v1
+SELECT
+	id_player,
+	username,
+	invoice,
+	final_balance,
+	invoice + final_balance AS wallet
+FROM (
+	SELECT
+		player.id AS id_player,
+		player.username,
+		SUM(DISTINCT payment.invoice IS NOT NULL THEN payment.invoice ELSE 0 END) AS invoice,
+		SUM(DISTINCT CASE WHEN rank.final_balance IS NOT NULL THEN rank.final_balance ELSE 0 END) AS final_balance,
+		player.wallet
+	FROM
+		gathering.player player
+		FULL OUTER JOIN gathering.payment payment ON player.id = payment.id_player
+		FULL OUTER JOIN gathering.rank rank ON player.id = rank.id_player
+	--WHERE
+	--	id_player = :idPlayer
+	--	id_player IN :idPlayerList
+	GROUP BY player.username, player.id
+	ORDER BY player.username
+) AS subquery
+
+-- Select wallet v2
+SELECT
+	id_player,
+	username,
+	invoice,
+	final_balance,
+	invoice + final_balance AS wallet
+FROM (
+	SELECT
+		player.id AS id_player,
+		player.username,
+		COALESCE(SUM(DISTINCT payment.invoice), 0) AS invoice,
+		COALESCE(SUM(DISTINCT rank.final_balance), 0) AS final_balance,
+		player.wallet
+	FROM
+		gathering.player player
+		FULL OUTER JOIN gathering.payment payment ON player.id = payment.id_player
+		FULL OUTER JOIN gathering.rank rank ON player.id = rank.id_player
+	--WHERE
+	--	id_player = :idPlayer
+	--	id_player IN :idPlayerList
+	GROUP BY player.username, player.id
+	ORDER BY player.username
+) AS subquery
