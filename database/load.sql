@@ -9,11 +9,16 @@ INSERT INTO gathering.player (id, name, username, email, password, wallet) VALUE
 (7, 'Player7', 'player7', 'player7@example.com', 'password7', 0.0),
 (8, 'Player8', 'player8', 'player8@example.com', 'password8', 0.0);
 
+-- Insert values into gathering
+INSERT INTO gathering.gathering (id, name) VALUES
+(1, 'Gathering'),
+(2, 'Dias House');
+
 -- Insert 2 events
 INSERT INTO gathering.event (id, id_gathering, id_format, created_at, registration_fee, players, rounds, confra_fee5, confra_fee6, confra_pot, loser_fee5, loser_fee6, loser_pot) VALUES
 (1, 1, 1, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
-(2, 1, 2, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
-(3, 1, 3, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0);
+(2, 2, 2, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
+(3, 2, 3, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0);
 
 -- Insert 8 rounds to event 1
 INSERT INTO gathering.round (id, id_event, id_format, id_player_winner, created_at, round, players, prize_taken, canceled) VALUES
@@ -218,7 +223,3 @@ INSERT INTO gathering.payment (id, id_player, created_at, invoice, description) 
 (2, 1, '2023-12-08', 72, NULL),
 (3, 2, '2023-12-08', 20, NULL);
 
--- Insert values into gathering
-INSERT INTO gathering.gathering (id, name) VALUES
-(1, 'Gathering'),
-(2, 'Dias House');
