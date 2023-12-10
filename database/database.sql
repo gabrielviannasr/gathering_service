@@ -50,7 +50,7 @@ INSERT INTO gathering.format (id, name, life_count) VALUES
 -- Create event table
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
-    id_gathering NOT NULL,
+    id_gathering INT NOT NULL,
     id_format INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     registration_fee NUMERIC NOT NULL DEFAULT 0,
