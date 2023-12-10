@@ -28,9 +28,6 @@ public class EventService extends AbstractService<Event> {
 	@Autowired
 	private EventRepository repository;
 
-	@Autowired
-	private PlayerService playerService;
-
 	public static Sort getSort() {
 		return Sort.by(Order.asc("createdAt"));
 	}
@@ -76,7 +73,7 @@ public class EventService extends AbstractService<Event> {
 	 * @param idEvent The ID of the event.
 	 * @return The updated list of ranks.
 	 */
-	public List<Rank> getRank(Long idEvent) {
+	public Event getRank(Long idEvent) {
 		// Get loserPot and confraPot
 		PotProjection pot = repository.getPot(idEvent);
 
@@ -84,25 +81,20 @@ public class EventService extends AbstractService<Event> {
 		List<RankCountProjection> rankCount = getRankCount(idEvent);
 
 		// Get rank list to update the loserPot and finalBalance
-		List<Rank> list = repository.getRank(idEvent);
+		List<Rank> ranks = repository.getRank(idEvent);
 
 		// Distribute loserPot based on the rankCount
 	    if (rankCount.get(0).getCount() > 1) {
-	        distributeLoserPotEqually(idEvent, list, pot, rankCount);
+	        distributeLoserPotEqually(idEvent, ranks, pot, rankCount);
 	    } else {
-	        distributeLoserPotUnequally(idEvent, list, pot, rankCount);
+	        distributeLoserPotUnequally(idEvent, ranks, pot, rankCount);
 	    }
 
 		// Get players and rounds total
 		PlayerRoundProjection playerRound = getPlayerRound(idEvent);
 
-	    // Log updated items		
-		list.forEach(item -> {
-		    System.out.println(item);
-		});
-
 		/* Update event */
-		Event event = getById(idEvent);
+		Event event = getById(idEvent);		
 		event.setPlayers(playerRound.getPlayers());
 		event.setRounds(playerRound.getRounds());
 		event.setConfraPot(pot.getConfraPot());
@@ -110,23 +102,20 @@ public class EventService extends AbstractService<Event> {
 
 		// Synchronize the ranks collection with the current state of the list
 		event.getRanks().clear();
-		event.getRanks().addAll(list);
+		event.getRanks().addAll(ranks);
 
 		event = save(event);
 		System.out.println(event);
-		/* Update event */
-
-		// Return the updated list
-		return event.getRanks();
+		return event;
 	}
 
 	// Helper method to distribute loserPot equally
-	private void distributeLoserPotEqually(Long idEvent, List<Rank> list, PotProjection pot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotEqually(Long idEvent, List<Rank> ranks, PotProjection pot, List<RankCountProjection> rankCount) {
 	    // LoserPot equally divided among the worst-ranked players
 	    Double percentage = 1.0 / rankCount.get(0).getCount();
 
 	    // Loop to update loserPot and finalBalance
-	    list.forEach(item -> {
+	    ranks.forEach(item -> {
 	        // Non-worst-ranked players take 0% of loserPot
 	        Double loserPot = 0.0;
 
@@ -141,19 +130,16 @@ public class EventService extends AbstractService<Event> {
 
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
-
-	        // Ensure each item in the list has the correct Player set and update the wallet
-			item.setPlayer(playerService.updateWallet(item.getIdPlayer()));
 	    });
 	}
 
 	// Helper method to distribute loserPot unequally
-	private void distributeLoserPotUnequally(Long idEvent, List<Rank> list, PotProjection pot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotUnequally(Long idEvent, List<Rank> ranks, PotProjection pot, List<RankCountProjection> rankCount) {
 		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
 	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
 
 	    // Loop to update loserPot and finalBalance
-	    list.forEach(item -> {
+	    ranks.forEach(item -> {
 	        // Non-worst-ranked players take 0% of loserPot
 	        Double loserPot = 0.0;
 
@@ -173,9 +159,6 @@ public class EventService extends AbstractService<Event> {
 
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
-
-	        // Ensure each item in the list has the correct Player set and update the wallet
-			item.setPlayer(playerService.updateWallet(item.getIdPlayer()));
 	    });
 	}
 

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
-import br.com.gathering.entity.Rank;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.service.EventService;
+import br.com.gathering.service.PlayerService;
 
 @RestController
 @RequestMapping("/event")
@@ -24,6 +24,9 @@ public class EventController {
 
 	@Autowired
 	private EventService service;
+
+	@Autowired
+	private PlayerService playerService;
 
 	@GetMapping
 	public List<Event> getList(Event model) {
@@ -44,9 +47,13 @@ public class EventController {
 	}
 
 	@PutMapping("/id/rank")
-	public List<Rank> getRank(@RequestParam Long id) {
+	public void getRank(@RequestParam Long id) {
 		System.out.println("id: " + id);
-		return service.getRank(id);
+		Event event = service.getRank(id);
+		event.getRanks().forEach(rank -> {
+			playerService.updateWallet(rank.getIdPlayer());
+		});
+//		return service.getRank(id);
 	}
 
 	@GetMapping("/id/rank/count")

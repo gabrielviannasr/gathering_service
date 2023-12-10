@@ -38,7 +38,9 @@ public class PlayerService extends AbstractService<Player> {
 	}
 
 	public Player updateWallet(Long id) {
-		return repository.updateWallet(id);
+		Player player = repository.updateWallet(id);
+		System.out.println("updateWallet: " + player);
+		return player;
 	}
 
 }
