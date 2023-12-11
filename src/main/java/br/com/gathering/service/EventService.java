@@ -43,6 +43,9 @@ public class EventService extends AbstractService<Event> {
 
 	public PotProjection getPot(Long idEvent) {
 		PotProjection pot = repository.getPot(idEvent);
+		if (pot == null) {
+			return null;
+		}
 		System.out.println("Pot: { confraPot: " + pot.getConfraPot() + ", loserPot: " + pot.getLoserPot() + " }");
 		return pot;
 	}
@@ -76,6 +79,10 @@ public class EventService extends AbstractService<Event> {
 	public Event getRank(Long idEvent) {
 		// Get loserPot and confraPot
 		PotProjection pot = repository.getPot(idEvent);
+		
+		if (pot == null) {
+			return null;
+		}
 
 		// Get rank count to determine how many players will share the loserPot
 		List<RankCountProjection> rankCount = getRankCount(idEvent);

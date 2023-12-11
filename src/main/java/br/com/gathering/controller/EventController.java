@@ -50,9 +50,11 @@ public class EventController {
 	public void getRank(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		Event event = service.getRank(id);
-		event.getRanks().forEach(rank -> {
-			playerService.updateWallet(rank.getIdPlayer());
-		});
+		if (event != null) {
+			event.getRanks().forEach(rank -> {
+				playerService.updateWallet(rank.getIdPlayer());
+			});
+		}		
 //		return service.getRank(id);
 	}
 
