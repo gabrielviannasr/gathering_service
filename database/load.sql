@@ -14,7 +14,7 @@ INSERT INTO gathering.gathering (id, name) VALUES
 (1, 'Gathering'),
 (2, 'Dias House');
 
--- Insert 2 events
+-- Insert 3 events
 INSERT INTO gathering.event (id, id_gathering, id_format, created_at, registration_fee, players, rounds, confra_fee5, confra_fee6, confra_pot, loser_fee5, loser_fee6, loser_pot) VALUES
 (1, 1, 1, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
 (2, 2, 2, CURRENT_TIMESTAMP, 20.0, 0, 0, 0.0, 10.0, 0.0, 20.0, 30.0, 0.0),
@@ -217,9 +217,9 @@ primary_commander_name, primary_commander_count, secondary_commander_name, secon
 (22, 5, NULL, NULL, 'Primary5', 0, 'Secondary5', 0, 0, 30),
 (22, 6, NULL, 	 1, 'Primary6', 0, 'Secondary6', 0, 0, 30);
 
--- Insert values in payment
-INSERT INTO gathering.payment (id, id_player, created_at, invoice, description) VALUES
-(1, 7, '2023-12-08', 20, NULL),
-(2, 1, '2023-12-08', 72, NULL),
-(3, 2, '2023-12-08', 20, NULL);
+-- Insert values in transaction
+INSERT INTO gathering.transaction (id, id_player, id_gathering, id_transaction_type, created_at, amount, description) VALUES
+(1, 7, 1, 1, CURRENT_TIMESTAMP, 20, NULL),
+(2, 1, 1, 1, CURRENT_TIMESTAMP, 72, NULL),
+(3, 2, 1, 1, CURRENT_TIMESTAMP, 20, NULL);
 

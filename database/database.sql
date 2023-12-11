@@ -1,7 +1,8 @@
 -- Create sequences
 CREATE SEQUENCE gathering.sequence_gathering START 1;
 CREATE SEQUENCE gathering.sequence_player START 1;
-CREATE SEQUENCE gathering.sequence_payment START 1;
+CREATE SEQUENCE gathering.sequence_transaction_type START 1;
+CREATE SEQUENCE gathering.sequence_transaction START 1;
 CREATE SEQUENCE gathering.sequence_format START 1;
 CREATE SEQUENCE gathering.sequence_event START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
@@ -24,14 +25,29 @@ CREATE TABLE gathering.player (
     wallet NUMERIC NOT NULL DEFAULT 0
 );
 
--- Create Payment table
-CREATE TABLE gathering.payment (
-    id INT DEFAULT nextval('gathering.sequence_payment'::regclass) PRIMARY KEY,
+-- Create transaction_type table
+CREATE TABLE gathering.transaction_type (
+    id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Insert transaction_type table initial load
+INSERT INTO gathering.transaction_type (id, name) VALUES
+(1, 'Payment'),
+(2, 'Withdrawal');
+
+-- Create transaction table
+CREATE TABLE gathering.transaction (
+    id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
     id_player INT NOT NULL,
-    created_at DATE NOT NULL,
-    invoice NUMERIC NOT NULL DEFAULT 0,
-    description VARCHAR(500),
-    CONSTRAINT fk_payment_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
+    id_gathering INT,
+    id_transaction_type INT NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount NUMERIC NOT NULL,    
+	description VARCHAR(500),
+    CONSTRAINT fk_transaction_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
+    CONSTRAINT fk_transaction_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
+    CONSTRAINT fk_transaction_transaction_type FOREIGN KEY (id_transaction_type) REFERENCES gathering.transaction_type(id)
 );
 
 -- Create format table
