@@ -144,9 +144,10 @@ BEGIN
     UPDATE gathering.player
     SET wallet = (
         COALESCE(
-            (SELECT SUM(DISTINCT payment.invoice)
-             FROM gathering.payment
-             WHERE payment.id_player = id_player_param),
+            (SELECT SUM(DISTINCT transaction.amount)
+             FROM gathering.transaction
+             WHERE 
+             	transaction.id_player = id_player_param),
             0
         ) +
         COALESCE(
@@ -162,4 +163,3 @@ BEGIN
     RETURN NEXT updated_player;
     RETURN;
 END;
-$$ LANGUAGE plpgsql;
