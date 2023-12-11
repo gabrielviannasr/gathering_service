@@ -11,41 +11,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gathering.dto.PaymentDTO;
-import br.com.gathering.entity.Payment;
-import br.com.gathering.service.PaymentService;
+import br.com.gathering.dto.TransactionDTO;
+import br.com.gathering.entity.Transaction;
+import br.com.gathering.service.TransactionService;
 
 @RestController
-@RequestMapping("/payment")
-public class PaymentController {
+@RequestMapping("/transaction")
+public class TransactionController {
 
 	@Autowired
-	private PaymentService service;
+	private TransactionService service;
 
 	@GetMapping
-	public List<Payment> getList(Payment model) {
+	public List<Transaction> getList(Transaction model) {
 		System.out.println(model);
 		return service.getList(model);
 	}
 
 	@GetMapping("/id")
-	public Payment getById(@RequestParam Long id) {
+	public Transaction getById(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getById(id);
 	}
 
 	@PostMapping
-	public Payment save(@RequestBody PaymentDTO dto) {
+	public Transaction save(@RequestBody TransactionDTO dto) {
 		System.out.println(dto);
-		Payment model = dto.toModel();
+		Transaction model = dto.toModel();
 		System.out.println(model);
 		return service.save(model); 
 	}
 
 	@PutMapping
-	public Payment update(@RequestParam Long id, @RequestBody PaymentDTO dto) {
+	public Transaction update(@RequestParam Long id, @RequestBody TransactionDTO dto) {
 		System.out.println(dto);
-		Payment model = dto.toModel();
+		Transaction model = dto.toModel();
 		model.setId(id);
 		System.out.println(model);
 		return service.save(model);
