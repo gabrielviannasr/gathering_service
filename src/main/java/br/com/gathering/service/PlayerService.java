@@ -12,12 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Player;
 import br.com.gathering.repository.PlayerRepository;
+import jakarta.persistence.EntityManager;
 
 @Service
 public class PlayerService extends AbstractService<Player> {
 
 	@Autowired
 	private PlayerRepository repository;
+
+	@Autowired
+	private EntityManager entityManager;
 
 	public static Sort getSort() {
 		return Sort.by(Order.asc("name"), Order.asc("username"));
@@ -39,6 +43,13 @@ public class PlayerService extends AbstractService<Player> {
 
 	public Player updateWallet(Long id) {
 		Player player = repository.updateWallet(id);
+
+		// Clear the persistence context
+	    entityManager.clear();
+	    
+	    // Fetch the managed entity to ensure it's in the persistence context
+	    player = getById(id);
+
 		System.out.println("updateWallet: " + player);
 		return player;
 	}
