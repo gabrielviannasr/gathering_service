@@ -144,14 +144,14 @@ BEGIN
     UPDATE gathering.player
     SET wallet = (
         COALESCE(
-            (SELECT SUM(DISTINCT transaction.amount)
+            (SELECT SUM(transaction.amount)
              FROM gathering.transaction
              WHERE 
              	transaction.id_player = id_player_param),
             0
         ) +
         COALESCE(
-            (SELECT SUM(DISTINCT rank.final_balance)
+            (SELECT SUM(rank.final_balance)
              FROM gathering.rank
              WHERE rank.id_player = id_player_param),
             0
@@ -163,3 +163,4 @@ BEGIN
     RETURN NEXT updated_player;
     RETURN;
 END;
+$$ LANGUAGE plpgsql;
