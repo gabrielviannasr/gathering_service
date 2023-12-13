@@ -286,30 +286,63 @@ FROM (
 	ORDER BY player.username
 ) AS subquery
 
--- Select wallet v3 (gathering dashboard)
+-- DASHBOARD PART 1: SUM OF FINAL BALANCE BY GATHERING
+SELECT 
+	player.id AS id_player,
+	player.username,
+	COALESCE(SUM(rank.final_balance), 0) AS events_balance
+FROM gathering.player player		
+	INNER JOIN gathering.rank rank ON player.id = rank.id_player
+	INNER JOIN gathering.event event ON event.id = rank.id_event
+WHERE
+ 	event.id_gathering = 2
+GROUP BY player.id, player.username
+ORDER BY player.username;
+
+-- DASHBOARD PART 2: SELECT SUM OF TRANSACTIONS BY GATHERING
+SELECT 
+	player.id AS id_player,
+	player.username,
+	COALESCE(SUM(CASE WHEN transaction.id_gathering = 2 THEN transaction.amount ELSE 0 END), 0) AS transactions_balance
+FROM gathering.player player		
+	FULL OUTER JOIN gathering.transaction transaction ON player.id = transaction.id_player
+GROUP BY player.id, player.username
+ORDER BY player.username;
+
+-- DASHBOARD PART 3: events_balance AND transactions_balance
+SELECT 
+	player.id AS id_player,
+	player.username,
+	COALESCE(SUM(rank.final_balance), 0) AS events_balance,
+	COALESCE(SUM(CASE WHEN transaction.id_gathering = 2 THEN transaction.amount END), 0) AS transactions_balance
+FROM gathering.player player		
+	INNER JOIN gathering.rank rank ON player.id = rank.id_player
+	INNER JOIN gathering.event event ON event.id = rank.id_event
+	FULL OUTER JOIN gathering.transaction transaction ON player.id = transaction.id_player
+WHERE
+ 	event.id_gathering = 2
+GROUP BY player.id, player.username
+ORDER BY player.username;
+
+-- DASHBOARD
 SELECT
 	id_player,
 	username,
-	invoice,
-	final_balance,
-	invoice + final_balance AS wallet
+	events_balance,
+	transactions_balance,
+	events_balance + transactions_balance AS final_balance
 FROM (
 	SELECT
 		player.id AS id_player,
 		player.username,
-		COALESCE(SUM(DISTINCT payment.invoice), 0) AS invoice,
-		COALESCE(SUM(DISTINCT rank.final_balance), 0) AS final_balance,
-		player.wallet
-	FROM
-		gathering.player player
-		FULL OUTER JOIN gathering.payment payment ON player.id = payment.id_player
-		FULL OUTER JOIN gathering.rank rank ON player.id = rank.id_player
+		COALESCE(SUM(rank.final_balance), 0) AS events_balance,
+		COALESCE(SUM(CASE WHEN transaction.id_gathering = 2 THEN transaction.amount END), 0) AS transactions_balance
+	FROM gathering.player player		
+		INNER JOIN gathering.rank rank ON player.id = rank.id_player
 		INNER JOIN gathering.event event ON event.id = rank.id_event
-		INNER JOIN gathering.gathering gathering ON gathering.id = event.id_gathering
+		FULL OUTER JOIN gathering.transaction transaction ON player.id = transaction.id_player
 	WHERE
-		gathering.id = 1
-	--	id_player = :idPlayer
-	--	id_player IN :idPlayerList
-	GROUP BY player.username, player.id
+	 	event.id_gathering = 2
+	GROUP BY player.id, player.username
 	ORDER BY player.username
-) AS subquery
+) AS subquery;
