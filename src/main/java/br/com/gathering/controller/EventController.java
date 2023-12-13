@@ -41,6 +41,23 @@ public class EventController {
 		return service.getById(id);
 	}
 
+	@PostMapping
+	public Event save(@RequestBody EventDTO dto) {
+		System.out.println(dto);
+		Event model = dto.toModel();
+		System.out.println(model);
+		return service.save(model);
+	}
+
+	@PutMapping
+	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
+		System.out.println(dto);
+		Event model = dto.toModel();
+		model.setId(id);
+		System.out.println(model);
+		return service.save(model);
+	}
+
 	@GetMapping("/id/pot")
 	public PotProjection getPot(Long idEvent) {
 		System.out.println("id: " + idEvent);
@@ -67,23 +84,6 @@ public class EventController {
 	public List<RankCountProjection> getRankCount(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getRankCount(id);
-	}
-
-	@PostMapping
-	public Event save(@RequestBody EventDTO dto) {
-		System.out.println(dto);
-		Event model = dto.toModel();
-		System.out.println(model);
-		return service.save(model);
-	}
-
-	@PutMapping
-	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
-		System.out.println(dto);
-		Event model = dto.toModel();
-		model.setId(id);
-		System.out.println(model);
-		return service.save(model);
 	}
 
 }

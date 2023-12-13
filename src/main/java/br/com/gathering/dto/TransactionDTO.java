@@ -18,8 +18,8 @@ public class TransactionDTO {
 
 	public static final int DESCRIPTION_LENGTH = 20;
 
-//	Not needed in post method
-//	private Long id;
+	// Not needed in post method
+	// private Long id;
 
 	private Long idPlayer;
 

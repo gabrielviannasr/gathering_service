@@ -15,9 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RankDTO {
 
-//	private Long id;
+	// Not needed in post method
+	// private Long id;
 
-//	private Long idEvent;
+	// private Long idEvent;
 
 	@Column(name = "id_player")
 	private Long idPlayer;
