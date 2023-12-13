@@ -19,11 +19,15 @@ public class EventDTO {
 	// Not needed in post method
 	// private Long id;
 
+	private Long idGathering;
+
 	private Long idFormat;
 
 	private LocalDateTime createdAt;
 
     private Double registrationFee;
+
+    private Double prize;
 
     private Integer players;
 
@@ -44,9 +48,11 @@ public class EventDTO {
     public Event toModel() {
         Event event = new Event();
 //        event.setId(this.id);
+        event.setIdGathering(this.idGathering);
         event.setIdFormat(this.idFormat);
         event.setCreatedAt(this.createdAt);
         event.setRegistrationFee(this.registrationFee);
+        event.setPrize(this.prize);
         event.setPlayers(this.players);
         event.setRounds(this.rounds);
         event.setConfraFee5(this.confraFee5);
@@ -63,9 +69,11 @@ public class EventDTO {
 	public String toString() {
 	    return "EventDTO: {\n"
 //	            + "    id: " + this.id + ",\n"
+				+ "    idGathering: " + this.idGathering + ",\n"
 	            + "    idFormat: " + this.idFormat + ",\n"
 	            + "    createdAt: " + this.createdAt + ",\n"
 	            + "    registrationFee: " + this.registrationFee + ",\n"
+	            + "    prize: " + this.prize + ",\n"
 	            + "    players: " + this.players + ",\n"
 	            + "    rounds: " + this.rounds + ",\n"
 	            + "    confraFee5: " + this.confraFee5 + ",\n"

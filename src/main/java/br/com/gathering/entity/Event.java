@@ -54,6 +54,9 @@ public class Event {
 	@Column(name = "registration_fee", nullable = false)
     private Double registrationFee;
 
+	@Column(name = "prize", nullable = false)
+    private Double prize;
+
 	@Column(nullable = false)
     private Integer players;
 
@@ -84,6 +87,7 @@ public class Event {
 	public void init() {
 	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
 	    this.registrationFee = (this.registrationFee == null) ? 0.0 : this.registrationFee;
+	    this.prize = (this.prize == null) ? 0.0 : this.prize;
 	    this.players = (this.players == null) ? 0 : this.players;
 	    this.rounds = (this.rounds == null) ? 0 : this.rounds;
 	    this.confraFee5 = (this.confraFee5 == null) ? 0.0 : this.confraFee5;
@@ -98,9 +102,11 @@ public class Event {
 	public String toString() {
 	    return "Event: {\n"
 	            + "    id: " + this.id + ",\n"
+	            + "    idGathering: " + this.idGathering + ",\n"
 	            + "    idFormat: " + this.idFormat + ",\n"
 	            + "    createdAt: " + this.createdAt + ",\n"
 	            + "    registrationFee: " + this.registrationFee + ",\n"
+	            + "    prize: " + this.prize + ",\n"
 	            + "    players: " + this.players + ",\n"
 	            + "    rounds: " + this.rounds + ",\n"
 	            + "    confraFee5: " + this.confraFee5 + ",\n"

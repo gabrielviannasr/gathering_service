@@ -52,8 +52,13 @@ public class EventController {
 	@PutMapping
 	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
 		System.out.println(dto);
+		
+		Event event = getById(id);
+		
 		Event model = dto.toModel();
 		model.setId(id);
+		model.setRanks(event.getRanks());
+		
 		System.out.println(model);
 		return service.save(model);
 	}

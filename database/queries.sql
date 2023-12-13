@@ -5,12 +5,10 @@ SELECT
 	p.username,
     COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
     COUNT(rp.id_player) AS rounds
-
 FROM gathering.round_player rp
     INNER JOIN gathering.round r ON r.id = rp.id_round
     INNER JOIN gathering.event e ON e.id = r.id_event
     INNER JOIN gathering.player p ON p.id = rp.id_player
-
 WHERE
     e.id = 2
     AND r.canceled = false
@@ -26,19 +24,17 @@ SELECT
 	p.username,
     COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
     COUNT(rp.id_player) AS rounds,
-    COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+    COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
     COUNT(rp.id_player) * e.registration_fee AS negative
-
 FROM gathering.round_player rp
     INNER JOIN gathering.round r ON r.id = rp.id_round
     INNER JOIN gathering.event e ON e.id = r.id_event
     INNER JOIN gathering.player p ON p.id = rp.id_player
-
 WHERE
     e.id = 2
     AND r.canceled = false
 GROUP BY
-    p.id, p.username, e.registration_fee
+    p.id, p.username, e.registration_fee, e.prize
 ORDER BY
     rank, p.username;
 	
@@ -58,7 +54,7 @@ FROM (
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
-        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
         COUNT(rp.id_player) * e.registration_fee AS negative
     FROM
         gathering.round_player rp
@@ -69,7 +65,7 @@ FROM (
         e.id = 2
         AND r.canceled = false
     GROUP BY
-        p.id, p.username, e.registration_fee
+        p.id, p.username, e.registration_fee, e.prize
 ) AS subquery
 ORDER BY
     rank, username;
@@ -80,7 +76,7 @@ SELECT
     p.username,
     COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
     COUNT(rp.id_player) AS rounds,
-    COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+    COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
     COUNT(rp.id_player) * e.registration_fee AS negative,
     SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
 FROM
@@ -92,7 +88,7 @@ WHERE
     e.id = 2
     AND r.canceled = false
 GROUP BY
-    p.id, p.username, e.registration_fee;
+    p.id, p.username, e.registration_fee, e.prize;
 	
 -- Select rank v5
 SELECT
@@ -111,7 +107,7 @@ FROM (
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
-        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
         COUNT(rp.id_player) * e.registration_fee AS negative,
         SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
     FROM
@@ -123,7 +119,7 @@ FROM (
         e.id = 2
         AND r.canceled = false
     GROUP BY
-        p.id, p.username, e.registration_fee
+        p.id, p.username, e.registration_fee, e.prize
 ) AS subquery
 ORDER BY
     rank, username;
@@ -146,7 +142,7 @@ FROM (
         p.username,
         COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
         COUNT(rp.id_player) AS rounds,
-        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
         COUNT(rp.id_player) * e.registration_fee AS negative,
         SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
     FROM
@@ -158,7 +154,7 @@ FROM (
         e.id = :idEvent
         AND r.canceled = false
     GROUP BY
-        p.id, p.username, e.registration_fee
+        p.id, p.username, e.registration_fee, e.prize
 ) AS subquery
 ORDER BY
     rank, username;

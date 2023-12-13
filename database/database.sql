@@ -70,6 +70,7 @@ CREATE TABLE gathering.event (
     id_format INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     registration_fee NUMERIC NOT NULL DEFAULT 0,
+	prize NUMERIC NOT NULL DEFAULT 0,
     players INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
     confra_fee5 NUMERIC NOT NULL DEFAULT 0,
