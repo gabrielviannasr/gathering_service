@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Gathering;
+import br.com.gathering.projection.DashboardProjection;
 import br.com.gathering.repository.GatheringRepository;
 
 @Service
@@ -35,6 +36,10 @@ public class GatheringService extends AbstractService<Gathering> {
 	public Gathering save(Gathering model) {
 		model.init();
 		return repository.save(model);
+	}
+	
+	public List<DashboardProjection> getDashboard(Long idGathering) {
+		return repository.getDashboard(idGathering);
 	}
 
 }

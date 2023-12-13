@@ -326,23 +326,23 @@ ORDER BY player.username;
 
 -- DASHBOARD
 SELECT
-	id_player,
+	id_player AS idPlayer,
 	username,
-	events_balance,
-	transactions_balance,
-	events_balance + transactions_balance AS final_balance
+	events_balance AS eventsBalance,
+	transactions_balance AS transactionsBalance,
+	events_balance + transactions_balance AS finalBalance
 FROM (
 	SELECT
 		player.id AS id_player,
 		player.username,
 		COALESCE(SUM(rank.final_balance), 0) AS events_balance,
-		COALESCE(SUM(CASE WHEN transaction.id_gathering = 2 THEN transaction.amount END), 0) AS transactions_balance
+		COALESCE(SUM(CASE WHEN transaction.id_gathering = :idGathering THEN transaction.amount END), 0) AS transactions_balance
 	FROM gathering.player player		
 		INNER JOIN gathering.rank rank ON player.id = rank.id_player
 		INNER JOIN gathering.event event ON event.id = rank.id_event
 		FULL OUTER JOIN gathering.transaction transaction ON player.id = transaction.id_player
 	WHERE
-	 	event.id_gathering = 2
+	 	event.id_gathering = :idGathering
 	GROUP BY player.id, player.username
 	ORDER BY player.username
 ) AS subquery;

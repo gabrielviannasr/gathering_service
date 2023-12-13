@@ -41,6 +41,11 @@ public class EventService extends AbstractService<Event> {
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
+	public Event save(Event model) {
+		model.init();
+		return repository.save(model);
+	}
+
 	public PotProjection getPot(Long idEvent) {
 		PotProjection pot = repository.getPot(idEvent);
 		if (pot == null) {
@@ -167,11 +172,6 @@ public class EventService extends AbstractService<Event> {
 	        // Update idEvent
 	        item.setIdEvent(idEvent);
 	    });
-	}
-
-	public Event save(Event model) {
-		model.init();
-		return repository.save(model);
 	}
 
 }
