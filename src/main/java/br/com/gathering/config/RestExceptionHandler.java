@@ -17,7 +17,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 //    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
 //        return handleExceptionInternal(ex, ex.getReason(), null, ex.getStatusCode(), request);
 //    }
-    
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
