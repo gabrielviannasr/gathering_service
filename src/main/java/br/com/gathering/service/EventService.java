@@ -43,7 +43,17 @@ public class EventService extends AbstractService<Event> {
 
 	public Event save(Event model) {
 		model.init();
+		validate(model);
 		return repository.save(model);
+	}
+	
+	private void validate(Event model) {
+	    Double total5 = model.getPrize() + model.getConfraFee5() + model.getLoserFee5();
+	    Double total6 = model.getPrize() + model.getConfraFee6() + model.getLoserFee6();
+
+	    if (total5 != model.getRegistrationFee() * 5 || total6 != model.getRegistrationFee() * 6) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The distribution of values (prize, confraFee5 or confraFee6, and loserFee5 or loserFee6) does not match the total registrationFee collected");
+	    }
 	}
 
 	public PotProjection getPot(Long idEvent) {
