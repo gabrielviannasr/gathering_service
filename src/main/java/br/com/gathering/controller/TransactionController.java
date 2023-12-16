@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.TransactionDTO;
+import br.com.gathering.entity.Player;
 import br.com.gathering.entity.Transaction;
+import br.com.gathering.service.PlayerService;
 import br.com.gathering.service.TransactionService;
 
 @RestController
@@ -21,6 +23,9 @@ public class TransactionController {
 
 	@Autowired
 	private TransactionService service;
+
+	@Autowired
+	private PlayerService playerService;
 
 	@GetMapping
 	public List<Transaction> getList(Transaction model) {
@@ -39,7 +44,12 @@ public class TransactionController {
 		System.out.println(dto);
 		Transaction model = dto.toModel();
 		System.out.println(model);
-		return service.save(model); 
+		model = service.save(model);
+
+		playerService.updateWallet(model.getIdPlayer());
+
+		// Fetch the managed entity to ensure it's in the persistence context
+		return getById(model.getId());
 	}
 
 	@PutMapping
@@ -47,8 +57,13 @@ public class TransactionController {
 		System.out.println(dto);
 		Transaction model = dto.toModel();
 		model.setId(id);
-		System.out.println(model);
-		return service.save(model);
+		System.out.println(model);		
+		model = service.save(model);
+
+		playerService.updateWallet(model.getIdPlayer());
+
+		// Fetch the managed entity to ensure it's in the persistence context
+		return getById(model.getId());
 	}
 
 }

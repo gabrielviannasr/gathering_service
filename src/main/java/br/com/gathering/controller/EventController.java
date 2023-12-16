@@ -78,6 +78,7 @@ public class EventController {
 			return null;
 		}
 
+		// Update returned player
 		event.getRanks().forEach(rank -> {
 			rank.setPlayer(playerService.updateWallet(rank.getIdPlayer()));
 		});
