@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.TransactionDTO;
-import br.com.gathering.entity.Player;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.service.PlayerService;
 import br.com.gathering.service.TransactionService;
