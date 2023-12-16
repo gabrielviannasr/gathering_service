@@ -38,6 +38,7 @@ public class TransactionService extends AbstractService<Transaction> {
 
 	public Transaction save(Transaction model) {
 		model.init();
+		validate(model);
 
 		Transaction transaction = repository.save(model);
 		// Clear the persistence context
@@ -47,5 +48,15 @@ public class TransactionService extends AbstractService<Transaction> {
 		transaction = getById(transaction.getId());
 		return transaction;		
 	}
+
+	private void validate(Transaction model) {
+		if (model.getIdTransactionType() == 1 && model.getAmount() < 0) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment amount must be positive");
+		}
+		else if (model.getIdTransactionType() == 2 && model.getAmount() > 0) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Withdrawal amount must be negative");
+		}
+	}
+	
 
 }
