@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
@@ -29,11 +31,15 @@ public class EventService extends AbstractService<Event> {
 	private EventRepository repository;
 
 	public static Sort getSort() {
-		return Sort.by(Order.asc("createdAt"));
+		return Sort.by(Order.asc("idGathering"), Order.asc("createdAt"));
 	}
 
 	public List<Event> getList(Event model) {
 		return repository.findAll(getExample(model), getSort());
+	}
+
+	public Page<Event> getPage(Event model, Sort sort, int page, int size) {
+		return repository.findAll(getExample(model), PageRequest.of(page, size, sort));
 	}
 
 	public Event getById(Long id) {
