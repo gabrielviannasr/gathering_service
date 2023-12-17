@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,10 @@ public class PlayerService extends AbstractService<Player> {
 
 	public List<Player> getList(Player model) {
 		return repository.findAll(getExample(model), getSort());
+	}
+
+	public Page<Player> getPage(Player model, Sort sort, int page, int size) {
+		return repository.findAll(getExample(model), PageRequest.of(page, size, sort));
 	}
 
 	public Player getById(Long id) {
