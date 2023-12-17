@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,10 @@ public class GatheringService extends AbstractService<Gathering> {
 
 	public List<Gathering> getList(Gathering model) {
 		return repository.findAll(getExample(model), getSort());
+	}
+
+	public Page<Gathering> getPage(Gathering model, Sort sort, int page, int size) {
+		return repository.findAll(getExample(model), PageRequest.of(page, size, sort));
 	}
 
 	public Gathering getById(Long id) {
