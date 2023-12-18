@@ -17,6 +17,10 @@ public class GatheringDTO {
 	// Not needed in post method
 	// private Long id;
 
+	private Long idPlayer;
+
+	private Integer year;
+
     private String name;
     
 	public void init() {
@@ -24,6 +28,8 @@ public class GatheringDTO {
 
 	public Gathering toModel() {
 		Gathering gathering = new Gathering();
+		gathering.setIdPlayer(this.idPlayer);
+		gathering.setYear(this.year);
 		gathering.setName(this.name);
 
 		return gathering;
@@ -31,9 +37,11 @@ public class GatheringDTO {
 	
     @Override
     public String toString() {
-		return "Gathering: {\n"
-//				+ "	id: " + this.id + ",\n"
-				+ "	name: " + this.name + ",\n"
+		return "GatheringDTO: {\n"
+				// + "\tid: " + this.id + ",\n"
+				+ "\tidPlayer: " + this.idPlayer + ",\n"
+				+ "\tyear: " + this.year + ",\n"
+				+ "\tname: " + this.name + ",\n"
 				+ "}";
     }
 

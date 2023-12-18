@@ -12,7 +12,10 @@ CREATE SEQUENCE gathering.sequence_rank START 1;
 -- Create gathering table
 CREATE TABLE gathering.gathering (
     id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
-    name VARCHAR(20) UNIQUE
+	id_player INT NOT NULL, -- createdBy
+	year INT DEFAULT EXTRACT(YEAR FROM CURRENT_DATE),
+    name VARCHAR(20),
+	CONSTRAINT fk_gathering_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
 -- Create player table
