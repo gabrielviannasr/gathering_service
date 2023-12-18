@@ -27,6 +27,7 @@ import lombok.Setter;
 			+ "SELECT\r\n"
 			+ "    RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,\r\n"
 			+ "    id_player AS idPlayer,\r\n"
+			+ "    name,\r\n"
 			+ "    username,\r\n"
 			+ "    wins,\r\n"
 			+ "    rounds,\r\n"
@@ -38,6 +39,7 @@ import lombok.Setter;
 			+ "FROM (\r\n"
 			+ "    SELECT\r\n"
 			+ "        p.id AS id_player,\r\n"
+			+ "        p.name,\r\n"
 			+ "        p.username,\r\n"
 			+ "        COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,\r\n"
 			+ "        COUNT(rp.id_player) AS rounds,\r\n"
@@ -53,10 +55,10 @@ import lombok.Setter;
 			+ "        e.id = :idEvent\r\n"
 			+ "        AND r.canceled = false\r\n"
 			+ "    GROUP BY\r\n"
-			+ "        p.id, p.username, e.registration_fee, e.prize\r\n"
+			+ "        p.id, p.name, p.username, e.registration_fee, e.prize\r\n"
 			+ ") AS subquery\r\n"
 			+ "ORDER BY\r\n"
-			+ "    rank, username;",
+			+ "    rank, name, username;",
 	resultSetMapping = "Rank"
 )
 @SqlResultSetMapping(

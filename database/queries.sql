@@ -186,6 +186,7 @@ SELECT rank, COUNT(*) FROM (
     SELECT
         RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,
         id_player,
+		name,
         username,
         wins,
         rounds,
@@ -197,6 +198,7 @@ SELECT rank, COUNT(*) FROM (
 	FROM (
         SELECT
             p.id AS id_player,
+			p.name,
             p.username,
             COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
             COUNT(rp.id_player) AS rounds,
@@ -215,7 +217,7 @@ SELECT rank, COUNT(*) FROM (
             p.id, p.username, e.registration_fee, e.prize
 	) AS subquery
 	ORDER BY
-        rank, username
+        rank, name, username
 ) AS rank_query
 GROUP BY rank
 ORDER BY rank DESC;
@@ -342,3 +344,20 @@ FROM (
 	GROUP BY player.id, player.username
 	ORDER BY player.username
 ) AS subquery;
+
+-- RankProjection
+SELECT
+	RANK() OVER (ORDER BY rank_balance desc, wins desc) AS rank,
+	p.name,
+	p.username,
+	r.wins,
+	r.rounds,
+	r.positive,
+	r.negative,
+	r.rank_balance,
+	r.loser_pot,
+	r.final_balance
+FROM gathering.player p, gathering.rank r
+WHERE 
+	r.id_player = p.id and r.id_event = :idEvent
+ORDER BY rank, name, username;
