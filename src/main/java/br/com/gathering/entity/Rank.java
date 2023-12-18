@@ -25,7 +25,7 @@ import lombok.Setter;
 	name = "getRank",
 	query = ""
 			+ "SELECT\r\n"
-			+ "    RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,\r\n"
+			+ "    RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,\r\n"
 			+ "    id_player AS idPlayer,\r\n"
 			+ "    name,\r\n"
 			+ "    username,\r\n"

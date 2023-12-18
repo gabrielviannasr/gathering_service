@@ -126,7 +126,7 @@ ORDER BY
 
 -- Rank
 SELECT
-    RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,
+    RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player AS idPlayer,
     username,
     wins,
@@ -184,7 +184,7 @@ FROM (
 -- RankCountProjection: Select rank count to determine how many players will share the loserPot
 SELECT rank, COUNT(*) FROM (
     SELECT
-        RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,
+        RANK() OVER (ORDER BY (positive - negative) DESC, rounds DESC) AS rank,
         id_player,
 		name,
         username,
@@ -347,7 +347,7 @@ FROM (
 
 -- RankProjection
 SELECT
-	RANK() OVER (ORDER BY rank_balance desc, wins desc) AS rank,
+	RANK() OVER (ORDER BY rank_balance DESC, rounds ASC) AS rank,
 	p.name,
 	p.username,
 	r.wins,
