@@ -124,9 +124,9 @@ FROM (
 ORDER BY
     rank, username;
 
--- Select rank v6
+-- Rank
 SELECT
-    RANK() OVER (ORDER BY wins DESC, rounds) AS rank,
+    RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,
     id_player AS idPlayer,
     username,
     wins,
@@ -181,10 +181,10 @@ FROM (
 	GROUP BY e.confra_fee5, e.confra_fee6, loser_fee5, loser_fee6
 ) AS subquery;
 
--- Select rank count to determine how many players will share the loserPot
+-- RankCountProjection: Select rank count to determine how many players will share the loserPot
 SELECT rank, COUNT(*) FROM (
     SELECT
-        RANK() OVER (ORDER BY wins DESC, rounds) AS rank,
+        RANK() OVER (ORDER BY (positive - negative) DESC, wins DESC) AS rank,
         id_player,
         username,
         wins,
@@ -200,7 +200,7 @@ SELECT rank, COUNT(*) FROM (
             p.username,
             COUNT(CASE WHEN rp.rank = 1 THEN 1 END) AS wins,
             COUNT(rp.id_player) AS rounds,
-            COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.registration_fee * 4 AS positive,
+            COUNT(CASE WHEN rp.rank = 1 THEN 1 END) * e.prize AS positive,
             COUNT(rp.id_player) * e.registration_fee AS negative,
             SUM (CASE WHEN rp.rank = 1 THEN r.prize_taken ELSE 0 END) AS prize_taken
         FROM
@@ -212,7 +212,7 @@ SELECT rank, COUNT(*) FROM (
             e.id = :idEvent
             AND r.canceled = false
         GROUP BY
-            p.id, p.username, e.registration_fee
+            p.id, p.username, e.registration_fee, e.prize
 	) AS subquery
 	ORDER BY
         rank, username
@@ -220,7 +220,7 @@ SELECT rank, COUNT(*) FROM (
 GROUP BY rank
 ORDER BY rank DESC;
 
--- Select total of players and roudns
+-- PlayerRoundProjection: Select total of players and roudns
 SELECT
     COUNT(DISTINCT rp.id_player) AS players,
     COUNT(DISTINCT rp.id_round) AS rounds
@@ -320,7 +320,7 @@ WHERE
 GROUP BY player.id, player.username
 ORDER BY player.username;
 
--- DASHBOARD
+-- DashboardProjection
 SELECT
 	id_player AS idPlayer,
 	username,
