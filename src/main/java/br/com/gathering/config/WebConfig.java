@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebConfig {
 
-    @Value("${ENV_GATHERING_ALLOWED_ORIGINS}")
+    @Value("${ENV_GATHERING_ALLOWED_ORIGINS : *}")
     private String allowOrigins;
 
     @Bean
