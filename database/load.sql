@@ -13,8 +13,8 @@ INSERT INTO gathering.player (id, name, username, email, password, wallet) VALUE
 (11, 'Valmir Vicente', 			'valmir', 			'valmir@example.com', 			'password', 0.0);
 
 -- Insert values into gathering
-INSERT INTO gathering.gathering (id, name, year) VALUES
-(1, 'Dias House', 2023);
+INSERT INTO gathering.gathering (id, "id_player", name, year) VALUES
+(1, 7, 'Dias House', 2023);
 
 -- Insert values into event
 INSERT INTO gathering.event (id, id_gathering, id_format, created_at, registration_fee, prize, players, rounds, confra_fee5, confra_fee6, confra_pot, loser_fee5, loser_fee6, loser_pot) VALUES

@@ -1,22 +1,13 @@
 -- Create sequences
-CREATE SEQUENCE gathering.sequence_gathering START 1;
-CREATE SEQUENCE gathering.sequence_player START 1;
-CREATE SEQUENCE gathering.sequence_transaction_type START 1;
+CREATE SEQUENCE gathering.sequence_gathering START 2;
+CREATE SEQUENCE gathering.sequence_player START 12;
+CREATE SEQUENCE gathering.sequence_transaction_type START 3;
 CREATE SEQUENCE gathering.sequence_transaction START 1;
-CREATE SEQUENCE gathering.sequence_format START 1;
-CREATE SEQUENCE gathering.sequence_event START 1;
-CREATE SEQUENCE gathering.sequence_round START 1;
+CREATE SEQUENCE gathering.sequence_format START 4;
+CREATE SEQUENCE gathering.sequence_event START 2;
+CREATE SEQUENCE gathering.sequence_round START 14;
 CREATE SEQUENCE gathering.sequence_round_player START 1;
 CREATE SEQUENCE gathering.sequence_rank START 1;
-
--- Create gathering table
-CREATE TABLE gathering.gathering (
-    id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
-	id_player INT NOT NULL, -- createdBy
-	year INT DEFAULT EXTRACT(YEAR FROM CURRENT_DATE),
-    name VARCHAR(20),
-	CONSTRAINT fk_gathering_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
-);
 
 -- Create player table
 CREATE TABLE gathering.player (
@@ -26,6 +17,15 @@ CREATE TABLE gathering.player (
     email VARCHAR(50) UNIQUE,
     password VARCHAR(20),
     wallet NUMERIC NOT NULL DEFAULT 0
+);
+
+-- Create gathering table
+CREATE TABLE gathering.gathering (
+    id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
+	id_player INT NOT NULL, -- createdBy
+	year INT DEFAULT EXTRACT(YEAR FROM CURRENT_DATE),
+    name VARCHAR(20),
+	CONSTRAINT fk_gathering_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
 -- Create transaction_type table
