@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +28,8 @@ public class RoundController {
 		return service.getList(model);
 	}
 
-	@GetMapping("/id")
-	public Round getById(@RequestParam Long id) {
+	@GetMapping("/{id}")
+	public Round getById(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getById(id);
 	}
