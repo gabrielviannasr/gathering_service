@@ -64,8 +64,8 @@ public class GatheringController {
 		return service.save(model);
 	}
 
-	@GetMapping("/id/dashboard")
-	public List<DashboardProjection> getDashboard(Long idGathering) {
-		return service.getDashboard(idGathering);
+	@GetMapping("/{id}/dashboard")
+	public List<DashboardProjection> getDashboard(@PathVariable Long id) {
+		return service.getDashboard(id);
 	}
 }
