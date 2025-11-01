@@ -6,7 +6,7 @@ CREATE SEQUENCE gathering.sequence_player START 1;
 CREATE SEQUENCE gathering.sequence_transaction START 1;
 CREATE SEQUENCE gathering.sequence_rank START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
-CREATE SEQUENCE gathering.sequence_round_player START 1;
+CREATE SEQUENCE gathering.sequence_score START 1;
 CREATE SEQUENCE gathering.sequence_transaction_type START 1;
 
 -- Create player table
@@ -91,7 +91,7 @@ CREATE TABLE gathering.round (
 
 -- Create Score (Round_Player) NxN table
 CREATE TABLE gathering.score (
-    id INT DEFAULT nextval('gathering.sequence_round_player'::regclass) PRIMARY KEY,
+    id INT DEFAULT nextval('gathering.sequence_score'::regclass) PRIMARY KEY,
     id_round INT NOT NULL,
     id_player INT NOT NULL,
     id_player_killed_by INT,
@@ -101,7 +101,7 @@ CREATE TABLE gathering.score (
     secondary_commander_name VARCHAR,
     secondary_commander_count INT,
     infect_count INT NOT NULL DEFAULT 0,
-    life_count INT NOT NULL,
+    life_count INT NOT NULL DEFAULT 0,
     CONSTRAINT fk_score_round FOREIGN KEY (id_round) REFERENCES gathering.round(id),
     CONSTRAINT fk_score_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
     CONSTRAINT fk_score_player_killed_by FOREIGN KEY (id_player_killed_by) REFERENCES gathering.player(id)
