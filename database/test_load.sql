@@ -15,7 +15,7 @@ INSERT INTO gathering.gathering
 
 INSERT INTO gathering.event
 (id, id_gathering, id_format, created_at, players, rounds, confra_fee, round_fee, loser_fee4, loser_fee5, loser_fee6, loser_pot, confra_pot) VALUES
-(1, 1, 1, CURRENT_TIMESTAMP, 8, 8, 20.0, 10.0, 0.0, 5.0, 15.0, 120.0, 160.0);
+(1, 1, 1, CURRENT_TIMESTAMP, 8, 8, 20.0, 10.0, 0.0, 10.0, 15.0, 120.0, 160.0);
 
 INSERT INTO gathering.round
 (id, id_event, id_format, id_player_winner, created_at, round, players, canceled) VALUES
