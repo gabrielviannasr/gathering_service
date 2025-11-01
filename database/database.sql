@@ -58,8 +58,8 @@ CREATE TABLE gathering.format (
 -- Create event table
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
-    id_format INT,
     id_gathering INT NOT NULL,
+    id_format INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     players INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
@@ -81,7 +81,7 @@ CREATE TABLE gathering.round (
     id_format INT NOT NULL,
     id_player_winner INT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    round_number INT NOT NULL, -- renamed for clarity
+    round INT NOT NULL,
     players INT NOT NULL DEFAULT 0,
     canceled BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT fk_round_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
