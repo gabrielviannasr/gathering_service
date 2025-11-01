@@ -14,7 +14,8 @@ FROM (
         p.name,
         COUNT(CASE WHEN r.id_player_winner = p.id THEN 1 END) AS wins,
         COUNT(s.id_player) AS rounds,
-        SUM(CASE WHEN r.id_player_winner = p.id THEN r.prize ELSE 0 END) AS positive,
+        COALESCE(SUM(r.prize) FILTER (WHERE r.id_player_winner = p.id), 0) AS positive,
+        -- SUM(CASE WHEN r.id_player_winner = p.id THEN r.prize ELSE 0 END) AS positive,
         COUNT(s.id_player) * e.round_fee AS negative
     FROM
         gathering.score s
