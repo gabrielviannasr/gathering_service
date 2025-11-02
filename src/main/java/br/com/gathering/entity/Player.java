@@ -62,6 +62,7 @@ public class Player {
 				+ "	id: " + this.id + ",\n"
 				+ "	name: " + this.name + ",\n"
 				+ "	username: " + this.username + ",\n"
+				+ "	email: " + this.email + ",\n"
 				+ "	password: " + this.password + ",\n"
 				+ "	wallet: " + this.wallet + ",\n"
 				+ "}";
