@@ -6,9 +6,10 @@ SELECT
     wins,
     rounds,
     positive,
-    -negative AS negative,
+    negative,
     positive - negative AS rank_balance
-FROM gathering.vw_event_player_balance
+FROM
+    gathering.vw_event_player_balance
 WHERE
 	id_event = :idEvent
 ORDER BY
