@@ -48,9 +48,9 @@ public class Gathering {
 
 	@Column(nullable = false, length = NAME_LENGTH)
     private String name;
-	
-	public String getUsername() {
-		return this.player == null ? null : this.player.getUsername();
+
+	public String getPlayerName() {
+		return this.player == null ? null : this.player.getName();
 	}
 
 	public void init() {
@@ -64,6 +64,7 @@ public class Gathering {
 				+ "\tidPlayer: " + this.idPlayer + ",\n"
 				+ "\tyear: " + this.year + ",\n"
 				+ "\tname: " + this.name + ",\n"
+				+ "\tplayerName: " + getPlayerName() + "\n" 
 				+ "}";
     }
 
