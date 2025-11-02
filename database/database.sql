@@ -84,6 +84,7 @@ CREATE TABLE gathering.round (
     round INT NOT NULL,
     players INT NOT NULL DEFAULT 0 CHECK (players >= 0),
     prize NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (prize >= 0),
+    loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_pot >= 0),
     canceled BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT fk_round_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
     CONSTRAINT fk_round_format FOREIGN KEY (id_format) REFERENCES gathering.format(id),
