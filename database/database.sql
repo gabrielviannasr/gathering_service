@@ -22,10 +22,10 @@ CREATE TABLE gathering.player (
 -- Create gathering table
 CREATE TABLE gathering.gathering (
     id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
-	id_owner INT NOT NULL, -- createdBy and the person in charge of the event
+	id_player_owner INT NOT NULL, -- createdBy and the person in charge of the event
 	year INT DEFAULT EXTRACT(YEAR FROM CURRENT_DATE),
     name VARCHAR(20),
-	CONSTRAINT fk_gathering_player FOREIGN KEY (id_owner) REFERENCES gathering.player(id)
+	CONSTRAINT fk_gathering_player_owner FOREIGN KEY (id_player_owner) REFERENCES gathering.player(id)
 );
 
 -- Create transaction_type table
