@@ -12,4 +12,14 @@ WHERE
     r.canceled = false
     AND id_event = :idEvent
 GROUP BY
-    e.id
+    e.id;
+
+-- Confra Pot using view
+SELECT
+	id_event,
+	players,
+	confra_pot
+FROM
+	gathering.vw_event_confra_pot
+WHERE
+    id_event = :idEvent;

@@ -145,7 +145,7 @@ FROM
 WHERE
     r.canceled = false
 GROUP BY
-    e.id, p.id
+    e.id, p.id;
 
 -- View of event rank
 CREATE OR REPLACE VIEW gathering.vw_event_rank AS
@@ -164,6 +164,22 @@ FROM
 ORDER BY
     rank, name;
 
+-- View of confra pot by event
+CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
+SELECT
+    e.id AS id_event,
+    COUNT(DISTINCT s.id_player) AS players,
+    COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
+FROM
+    gathering.score s
+    INNER JOIN gathering.round r ON r.id = s.id_round
+    INNER JOIN gathering.player p ON p.id = s.id_player
+    INNER JOIN gathering.event e ON e.id = r.id_event
+WHERE
+    r.canceled = false
+GROUP BY
+    e.id;
+
 -- View of loser pot by event
 CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
 SELECT
@@ -177,7 +193,7 @@ WHERE
     r.canceled = false
 --    AND id_event = :idEvent
 GROUP BY
-    e.id
+    e.id;
 
 -- View to get rank count to determine how many players will share the loserPot
 CREATE OR REPLACE VIEW gathering.vw_event_loser_pot_rank_distribution AS
