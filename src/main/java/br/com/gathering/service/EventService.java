@@ -54,12 +54,24 @@ public class EventService extends AbstractService<Event> {
 	}
 	
 	private void validate(Event model) {
-	    Double total5 = model.getPrize() + model.getConfraFee5() + model.getLoserFee5();
-	    Double total6 = model.getPrize() + model.getConfraFee6() + model.getLoserFee6();
+		
+		for (int players = 4; players <= 6; players++) {
+		    Double total = players * model.getRoundFee();
+		    Double loserFee = switch (players) {
+		        case 4 -> model.getLoserFee4();
+		        case 5 -> model.getLoserFee5();
+		        case 6 -> model.getLoserFee6();
+		        default -> 0.0;
+		    };
+		    if (loserFee > total) {
+		        throw new ResponseStatusException(
+		            HttpStatus.BAD_REQUEST,
+		            String.format("LoserFee%d (%.2f) exceeds total amount available for a %d-player round (%.2f)",
+		                players, loserFee, players, total)
+		        );
+		    }
+		}
 
-	    if (total5 != model.getRegistrationFee() * 5 || total6 != model.getRegistrationFee() * 6) {
-	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The distribution of values (prize, confraFee5 or confraFee6, and loserFee5 or loserFee6) does not match the total registrationFee collected");
-	    }
 	}
 
 	public PotProjection getPot(Long idEvent) {
@@ -129,8 +141,8 @@ public class EventService extends AbstractService<Event> {
 		event.setLoserPot(pot.getLoserPot());
 
 		// Synchronize the ranks collection with the current state of the list
-		event.getRanks().clear();
-		event.getRanks().addAll(ranks);
+//		event.getRanks().clear();
+//		event.getRanks().addAll(ranks);
 
 		event = save(event);
 		System.out.println(event);

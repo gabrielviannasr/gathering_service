@@ -25,23 +25,21 @@ public class EventDTO {
 
 	private LocalDateTime createdAt;
 
-    private Double registrationFee;
-
-    private Double prize;
-
     private Integer players;
 
     private Integer rounds;
 
-    private Double confraFee5;
+    private Double confraFee;
 
-    private Double confraFee6;
+    private Double roundFee;
 
-    private Double confraPot;
+    private Double loserFee4;
 
     private Double loserFee5;
 
     private Double loserFee6;
+
+    private Double confraPot;
 
     private Double loserPot;
 
@@ -51,37 +49,35 @@ public class EventDTO {
         event.setIdGathering(this.idGathering);
         event.setIdFormat(this.idFormat);
         event.setCreatedAt(this.createdAt);
-        event.setRegistrationFee(this.registrationFee);
-        event.setPrize(this.prize);
         event.setPlayers(this.players);
         event.setRounds(this.rounds);
-        event.setConfraFee5(this.confraFee5);
-        event.setConfraFee6(this.confraFee6);
-        event.setConfraPot(this.confraPot);
+        event.setConfraFee(this.confraFee);
+        event.setRoundFee(this.roundFee);
+        event.setLoserFee5(this.loserFee4);
         event.setLoserFee5(this.loserFee5);
         event.setLoserFee6(this.loserFee6);
         event.setLoserPot(this.loserPot);
+        event.setConfraPot(this.confraPot);
 
         return event;
     }
 
 	@Override
 	public String toString() {
-	    return "EventDTO: {\n"
+	    return "Event: {\n"
 //	            + "    id: " + this.id + ",\n"
-				+ "    idGathering: " + this.idGathering + ",\n"
+	            + "    idGathering: " + this.idGathering + ",\n"
 	            + "    idFormat: " + this.idFormat + ",\n"
 	            + "    createdAt: " + this.createdAt + ",\n"
-	            + "    registrationFee: " + this.registrationFee + ",\n"
-	            + "    prize: " + this.prize + ",\n"
 	            + "    players: " + this.players + ",\n"
 	            + "    rounds: " + this.rounds + ",\n"
-	            + "    confraFee5: " + this.confraFee5 + ",\n"
-	            + "    confraFee6: " + this.confraFee6 + ",\n"
-	            + "    confraPot: " + this.confraPot + ",\n"
+	            + "    confraFee: " + this.confraFee + ",\n"
+	            + "    roundFee: " + this.roundFee + ",\n"
+	            + "    loserFee4: " + this.loserFee4 + ",\n"
 	            + "    loserFee5: " + this.loserFee5 + ",\n"
 	            + "    loserFee6: " + this.loserFee6 + ",\n"
 	            + "    loserPot: " + this.loserPot + ",\n"
+	            + "    confraPot: " + this.confraPot + ",\n"
 	            + "}";
 	}
 

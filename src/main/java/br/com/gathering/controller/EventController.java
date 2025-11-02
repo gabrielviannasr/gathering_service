@@ -69,7 +69,7 @@ public class EventController {
 		
 		Event model = dto.toModel();
 		model.setId(id);
-		model.setRanks(event.getRanks());
+//		model.setRanks(event.getRanks());
 		
 		System.out.println(model);
 		return service.save(model);
@@ -91,11 +91,12 @@ public class EventController {
 		}
 
 		// Update returned player
-		event.getRanks().forEach(rank -> {
-			rank.setPlayer(playerService.updateWallet(rank.getIdPlayer()));
-		});
-
-		return event.getRanks();
+//		event.getRanks().forEach(rank -> {
+//			rank.setPlayer(playerService.updateWallet(rank.getIdPlayer()));
+//		});
+//
+//		return event.getRanks();
+		return null;
 	}
 
 	@GetMapping("/id/rank/count")

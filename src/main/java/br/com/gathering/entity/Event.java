@@ -51,26 +51,20 @@ public class Event {
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "registration_fee", nullable = false)
-    private Double registrationFee;
-
-	@Column(name = "prize", nullable = false)
-    private Double prize;
-
 	@Column(nullable = false)
     private Integer players;
 
     @Column(nullable = false)
     private Integer rounds;
 
-	@Column(name = "confra_fee5", nullable = false)
-    private Double confraFee5;
+	@Column(name = "confra_fee", nullable = false)
+    private Double confraFee;
 
-	@Column(name = "confra_fee6", nullable = false)
-    private Double confraFee6;
+	@Column(name = "round_fee", nullable = false)
+    private Double roundFee;
 
-	@Column(name = "confra_pot", nullable = false)
-    private Double confraPot;
+	@Column(name = "loser_fee4", nullable = false)
+    private Double loserFee4;
 
 	@Column(name = "loser_fee5", nullable = false)
     private Double loserFee5;
@@ -81,21 +75,23 @@ public class Event {
 	@Column(name = "loser_pot", nullable = false)
     private Double loserPot;
 
-	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Rank> ranks;
+	@Column(name = "confra_pot", nullable = false)
+    private Double confraPot;
+
+//	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<Rank> ranks;
 
 	public void init() {
 	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
-	    this.registrationFee = (this.registrationFee == null) ? 0.0 : this.registrationFee;
-	    this.prize = (this.prize == null) ? 0.0 : this.prize;
 	    this.players = (this.players == null) ? 0 : this.players;
 	    this.rounds = (this.rounds == null) ? 0 : this.rounds;
-	    this.confraFee5 = (this.confraFee5 == null) ? 0.0 : this.confraFee5;
-	    this.confraFee6 = (this.confraFee6 == null) ? 0.0 : this.confraFee6;
-	    this.confraPot = (this.confraPot == null) ? 0.0 : this.confraPot;
+	    this.confraFee = (this.confraFee == null) ? 0.0 : this.confraFee;
+	    this.roundFee = (this.roundFee == null) ? 0.0 : this.roundFee;
+	    this.loserFee4 = (this.loserFee4 == null) ? 0.0 : this.loserFee4;
 	    this.loserFee5 = (this.loserFee5 == null) ? 0.0 : this.loserFee5;
-	    this.loserFee6 = (this.loserFee6 == null) ? 0.0 : this.loserFee6;
+	    this.loserFee6 = (this.loserFee6 == null) ? 0.0 : this.loserFee6;    
 	    this.loserPot = (this.loserPot == null) ? 0.0 : this.loserPot;
+	    this.confraPot = (this.confraPot == null) ? 0.0 : this.confraPot;
 	}
 
 	@Override
@@ -105,16 +101,15 @@ public class Event {
 	            + "    idGathering: " + this.idGathering + ",\n"
 	            + "    idFormat: " + this.idFormat + ",\n"
 	            + "    createdAt: " + this.createdAt + ",\n"
-	            + "    registrationFee: " + this.registrationFee + ",\n"
-	            + "    prize: " + this.prize + ",\n"
 	            + "    players: " + this.players + ",\n"
 	            + "    rounds: " + this.rounds + ",\n"
-	            + "    confraFee5: " + this.confraFee5 + ",\n"
-	            + "    confraFee6: " + this.confraFee6 + ",\n"
-	            + "    confraPot: " + this.confraPot + ",\n"
+	            + "    confraFee: " + this.confraFee + ",\n"
+	            + "    roundFee: " + this.roundFee + ",\n"
+	            + "    loserFee4: " + this.loserFee4 + ",\n"
 	            + "    loserFee5: " + this.loserFee5 + ",\n"
 	            + "    loserFee6: " + this.loserFee6 + ",\n"
 	            + "    loserPot: " + this.loserPot + ",\n"
+	            + "    confraPot: " + this.confraPot + ",\n"
 	            + "}";
 	}
 
