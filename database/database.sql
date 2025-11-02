@@ -147,6 +147,23 @@ WHERE
 GROUP BY
     e.id, p.id
 
+-- View of event rank
+CREATE OR REPLACE VIEW gathering.vw_event_rank AS
+SELECT
+    id_event,
+	RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
+    id_player,
+    name,
+    wins,
+    rounds,
+    positive,
+    negative,
+    positive - negative AS rank_balance
+FROM
+    gathering.vw_event_player_balance
+ORDER BY
+    rank, name;
+
 -- View of balance
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
 SELECT
