@@ -3,9 +3,9 @@ package br.com.gathering.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.gathering.entity.RoundPlayer;
+import br.com.gathering.entity.Score;
 
 @Repository
-public interface RoundPlayerRepository extends JpaRepository<RoundPlayer, Long>{
+public interface ScoreRepository extends JpaRepository<Score, Long>{
 
 }

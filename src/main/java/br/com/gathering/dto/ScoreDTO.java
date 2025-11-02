@@ -1,6 +1,6 @@
 package br.com.gathering.dto;
 
-import br.com.gathering.entity.RoundPlayer;
+import br.com.gathering.entity.Score;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoundPlayerDTO {
+public class ScoreDTO {
 
 	// Not needed in post method
 	// private Long id;
@@ -23,7 +23,7 @@ public class RoundPlayerDTO {
 
 	private Long idPlayerKilledBy;
 
-    private Integer rank;
+	private Boolean isDead;
 
     private String primaryCommanderName;
 
@@ -37,13 +37,13 @@ public class RoundPlayerDTO {
 
     private Integer lifeCount;
     
-    public RoundPlayer toModel() {
-        RoundPlayer roundPlayer = new RoundPlayer();
+    public Score toModel() {
+        Score roundPlayer = new Score();
 //        roundPlayer.setId(this.id);
         roundPlayer.setIdRound(this.idRound);
         roundPlayer.setIdPlayer(this.idPlayer);
         roundPlayer.setIdPlayerKilledBy(this.idPlayerKilledBy);
-        roundPlayer.setRank(this.rank);
+        roundPlayer.setIsDead(this.isDead);
         roundPlayer.setPrimaryCommanderName(this.primaryCommanderName);
         roundPlayer.setPrimaryCommanderCount(this.primaryCommanderCount);
         roundPlayer.setSecondaryCommanderName(this.secondaryCommanderName);
@@ -61,7 +61,7 @@ public class RoundPlayerDTO {
 	            + "    idRound: " + this.idRound + ",\n"
 	            + "    idPlayer: " + this.idPlayer + ",\n"
 	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
-	            + "    rank: " + this.rank + ",\n"
+	            + "    isDead: " + this.isDead + ",\n"
 	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
 	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
 	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"

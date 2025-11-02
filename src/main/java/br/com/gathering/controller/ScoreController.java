@@ -12,41 +12,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gathering.dto.RoundPlayerDTO;
-import br.com.gathering.entity.RoundPlayer;
-import br.com.gathering.service.RoundPlayerService;
+import br.com.gathering.dto.ScoreDTO;
+import br.com.gathering.entity.Score;
+import br.com.gathering.service.ScoreService;
 
 @RestController
-@RequestMapping("/round-player")
-public class RoundPlayerController {
+@RequestMapping("/score")
+public class ScoreController {
 
 	@Autowired
-	private RoundPlayerService service;
+	private ScoreService service;
 
 	@GetMapping
-	public List<RoundPlayer> getList(RoundPlayer model) {
+	public List<Score> getList(Score model) {
 		return service.getList(model);
 	}
 
 	@GetMapping("/{id}")
-	public RoundPlayer getById(@PathVariable Long id) {
+	public Score getById(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getById(id);
 	}
 
 	@PostMapping
-	public RoundPlayer save(@RequestBody RoundPlayerDTO dto) {
+	public Score save(@RequestBody ScoreDTO dto) {
 		System.out.println(dto);
-		RoundPlayer model = dto.toModel();
+		Score model = dto.toModel();
 		model.init();
 		System.out.println(model);
 		return service.save(model);
 	}
 
 	@PutMapping
-	public RoundPlayer update(@RequestParam Long id, @RequestBody RoundPlayerDTO dto) {
+	public Score update(@RequestParam Long id, @RequestBody ScoreDTO dto) {
 		System.out.println(dto);
-		RoundPlayer model = dto.toModel();
+		Score model = dto.toModel();
 		model.setId(id);
 		model.init();
 		System.out.println(model);

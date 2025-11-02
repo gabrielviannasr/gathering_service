@@ -21,8 +21,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "round_player", schema = "gathering")
-public class RoundPlayer {
+@Table(name = "score", schema = "gathering")
+public class Score {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_round_player")
@@ -50,7 +50,8 @@ public class RoundPlayer {
 	@JoinColumn(name = "id_player_killed_by", nullable = true, insertable = false, updatable = false)
 	private Player playerKilledBy;
 
-    private Integer rank;
+	@Column(name="is_dead", nullable = false)
+    private Boolean isDead;
 
 	@Column(name = "primary_commander_name")
     private String primaryCommanderName;
@@ -71,6 +72,7 @@ public class RoundPlayer {
     private Integer lifeCount;
 
 	public void init() {
+		this.isDead = (this.isDead == null) ? false : this.isDead;
 	    this.primaryCommanderCount = (this.primaryCommanderCount == null) ? 0 : this.primaryCommanderCount;
 	    this.secondaryCommanderCount = (this.secondaryCommanderCount == null) ? 0 : this.secondaryCommanderCount;
 	    this.infectCount = (this.infectCount == null) ? 0 : this.infectCount;
@@ -83,7 +85,7 @@ public class RoundPlayer {
 	            + "    idRound: " + this.idRound + ",\n"
 	            + "    idPlayer: " + this.idPlayer + ",\n"
 	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
-	            + "    rank: " + this.rank + ",\n"
+	            + "    isDead: " + this.isDead + ",\n"
 	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
 	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
 	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"

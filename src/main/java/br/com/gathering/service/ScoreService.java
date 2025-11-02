@@ -10,29 +10,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.gathering.entity.RoundPlayer;
-import br.com.gathering.repository.RoundPlayerRepository;
+import br.com.gathering.entity.Score;
+import br.com.gathering.repository.ScoreRepository;
 
 @Service
-public class RoundPlayerService extends AbstractService<RoundPlayer> {
+public class ScoreService extends AbstractService<Score> {
 
 	@Autowired
-	private RoundPlayerRepository repository;
+	private ScoreRepository repository;
 
 	public static Sort getSort() {
 		return Sort.by(Order.asc("id"));
 	}
 
-	public List<RoundPlayer> getList(RoundPlayer model) {
+	public List<Score> getList(Score model) {
 		return repository.findAll(getExample(model), getSort());
 	}
 
-	public RoundPlayer getById(Long id) {
-		Optional<RoundPlayer> optional = repository.findById(id);
+	public Score getById(Long id) {
+		Optional<Score> optional = repository.findById(id);
 		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
-	public RoundPlayer save(RoundPlayer model) {
+	public Score save(Score model) {
 		model.init();
 		return repository.save(model);
 	}
