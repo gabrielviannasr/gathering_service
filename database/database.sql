@@ -202,7 +202,7 @@ SELECT
 	rank,
     COUNT(*)
 FROM
-    gathering.vw_event_rank
+    gathering.vw_event_player_rank
 GROUP BY
     id_event, rank
 ORDER BY
