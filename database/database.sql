@@ -1,4 +1,4 @@
--- Create sequences
+/* CREATE SEQUENCES */
 CREATE SEQUENCE gathering.sequence_event START 1;
 CREATE SEQUENCE gathering.sequence_format START 1;
 CREATE SEQUENCE gathering.sequence_gathering START 1;
@@ -8,8 +8,9 @@ CREATE SEQUENCE gathering.sequence_rank START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_score START 1;
 CREATE SEQUENCE gathering.sequence_transaction_type START 1;
+/* CREATE SEQUENCES */
 
--- Create player table
+/* CREATE TABLES */
 CREATE TABLE gathering.player (
     id INT DEFAULT nextval('gathering.sequence_player'::regclass) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -19,7 +20,6 @@ CREATE TABLE gathering.player (
     wallet NUMERIC NOT NULL DEFAULT 0
 );
 
--- Create gathering table
 CREATE TABLE gathering.gathering (
     id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
 	id_player INT NOT NULL, -- createdBy and the person in charge of the event
@@ -28,13 +28,11 @@ CREATE TABLE gathering.gathering (
 	CONSTRAINT fk_gathering_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
--- Create transaction_type table
 CREATE TABLE gathering.transaction_type (
     id INT DEFAULT nextval('gathering.sequence_transaction_type'::regclass) PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Create transaction table
 CREATE TABLE gathering.transaction (
     id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
     id_player INT NOT NULL,
@@ -48,14 +46,12 @@ CREATE TABLE gathering.transaction (
     CONSTRAINT fk_transaction_transaction_type FOREIGN KEY (id_transaction_type) REFERENCES gathering.transaction_type(id)
 );
 
--- Create format table
 CREATE TABLE gathering.format (
     id INT DEFAULT nextval('gathering.sequence_format'::regclass) PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
     life_count INT NOT NULL
 );
 
--- Create event table
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
     id_gathering INT NOT NULL,
@@ -74,7 +70,6 @@ CREATE TABLE gathering.event (
     CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.format(id)
 );
 
--- Create Round table
 CREATE TABLE gathering.round (
     id INT DEFAULT nextval('gathering.sequence_round'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
@@ -91,7 +86,7 @@ CREATE TABLE gathering.round (
     CONSTRAINT fk_round_player_winner FOREIGN KEY (id_player_winner) REFERENCES gathering.player(id)
 );
 
--- Create Score (Round_Player) NxN table
+-- Score (Round_Player)
 CREATE TABLE gathering.score (
     id INT DEFAULT nextval('gathering.sequence_score'::regclass) PRIMARY KEY,
     id_round INT NOT NULL,
@@ -109,7 +104,7 @@ CREATE TABLE gathering.score (
     CONSTRAINT fk_score_player_killed_by FOREIGN KEY (id_player_killed_by) REFERENCES gathering.player(id)
 );
 
--- Create Rank (Event_Player) NxN table
+-- Rank (Event_Player)
 CREATE TABLE gathering.rank (
     id INT DEFAULT nextval('gathering.sequence_rank'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
@@ -125,8 +120,43 @@ CREATE TABLE gathering.rank (
     CONSTRAINT fk_rank_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
     CONSTRAINT fk_rank_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
+/* CREATE TABLES */
 
--- View of player balance by event
+/* CREATE VIEWS */
+CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
+SELECT
+    e.id AS id_event,
+    COUNT(DISTINCT s.id_player) AS players,
+    COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
+FROM
+    gathering.score s
+    INNER JOIN gathering.round r ON r.id = s.id_round
+    INNER JOIN gathering.player p ON p.id = s.id_player
+    INNER JOIN gathering.event e ON e.id = r.id_event
+WHERE
+    r.canceled = false
+GROUP BY
+    e.id;
+
+COMMENT ON VIEW gathering.vw_event_confra_pot IS
+'Displays the total number of players and the total confra pot amount for each event.';
+
+CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
+SELECT
+	e.id AS id_event,
+    COUNT(r.id) AS rounds,
+    SUM(r.loser_pot) AS loser_pot
+FROM
+    gathering.round r
+    INNER JOIN gathering.event e ON e.id = r.id_event
+WHERE
+    r.canceled = false
+GROUP BY
+    e.id;
+
+COMMENT ON VIEW gathering.vw_event_loser_pot IS
+'Displays the total number of rounds and the accumulated loser pot per event.';
+
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
 SELECT
     e.id AS id_event,
@@ -147,7 +177,10 @@ WHERE
 GROUP BY
     e.id, p.id;
 
--- View of event rank
+COMMENT ON VIEW gathering.vw_event_player_balance IS
+'Provides the balance of each player per event.
+Used as the base view for event rank calculations.';
+
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
 SELECT
     id_event,
@@ -164,39 +197,10 @@ FROM
 ORDER BY
     rank, name;
 
--- View of confra pot by event
-CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
-SELECT
-    e.id AS id_event,
-    COUNT(DISTINCT s.id_player) AS players,
-    COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
-FROM
-    gathering.score s
-    INNER JOIN gathering.round r ON r.id = s.id_round
-    INNER JOIN gathering.player p ON p.id = s.id_player
-    INNER JOIN gathering.event e ON e.id = r.id_event
-WHERE
-    r.canceled = false
-GROUP BY
-    e.id;
+COMMENT ON VIEW gathering.vw_event_player_rank IS
+'Provides the player ranking for each event based on balance and performance.';
 
--- View of loser pot by event
-CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
-SELECT
-	e.id AS id_event,
-    COUNT(r.id) AS rounds,
-    SUM(r.loser_pot) AS loser_pot
-FROM
-    gathering.round r
-    INNER JOIN gathering.event e ON e.id = r.id_event
-WHERE
-    r.canceled = false
---    AND id_event = :idEvent
-GROUP BY
-    e.id;
-
--- View to get rank count to determine how many players will share the loserPot
-CREATE OR REPLACE VIEW gathering.vw_event_loser_pot_rank_distribution AS
+CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
 SELECT
 	id_event,
 	rank,
@@ -208,7 +212,10 @@ GROUP BY
 ORDER BY
     rank DESC;
 
--- View of balance
+COMMENT ON VIEW gathering.vw_event_rank_count IS
+'Indicates how many players share each rank, used to distribute the loser pot.';
+
+-- NOT USED YET
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
 SELECT
     p.id AS player_id,
@@ -224,6 +231,7 @@ SELECT
 FROM gathering.transaction t
 JOIN gathering.player p ON p.id = t.player_id
 GROUP BY p.id, p.name;
+/* CREATE VIEWS */
 
 -- Create function to update wallet and return player
 DROP FUNCTION IF EXISTS gathering.update_wallet;

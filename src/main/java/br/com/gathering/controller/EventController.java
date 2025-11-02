@@ -102,7 +102,7 @@ public class EventController {
 	}
 
 	@GetMapping("/id/rank/count")
-	public List<RankCountProjection> getRankCount(@RequestParam Long id) {
+	public List<RankCountProjection> getRankCount2(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getRankCount(id);
 	}
@@ -117,6 +117,12 @@ public class EventController {
 	public LoserPotProjection getLoserPot(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getLoserPot(id);
+	}
+	
+	@GetMapping("/{id}/rank-count")
+	public List<RankCountProjection> getRankCount(@PathVariable Long id) {
+		System.out.println("id: " + id);
+		return service.getRankCount(id);
 	}
 
 }

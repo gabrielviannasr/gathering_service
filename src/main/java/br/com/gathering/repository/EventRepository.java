@@ -84,7 +84,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 			+ ") AS rank_query\r\n"
 			+ "GROUP BY rank\r\n"
 			+ "ORDER BY rank DESC;\r\n")
-	List<RankCountProjection> getRankCount(Long idEvent);
+	List<RankCountProjection> getRankCount2(Long idEvent);
 
 	@Query(nativeQuery = true, value = ""
 			+ "SELECT\r\n"
@@ -122,5 +122,17 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 			    id_event = :idEvent
 			""")
 	LoserPotProjection getLoserPot(@Param("idEvent") Long idEvent);
+
+	@Query(nativeQuery = true, value = """
+			SELECT
+			    id_event,
+			    rank,
+			    count
+			FROM
+			    gathering.vw_event_rank_count
+			WHERE
+			    id_event = :idEvent
+			""")
+	List<RankCountProjection> getRankCount(Long idEvent);
 
 }
