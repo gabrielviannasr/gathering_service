@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
@@ -95,5 +97,17 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 			+ "    e.id = :idEvent\r\n"
 			+ "    AND r.canceled = false;\r\n")
 	PlayerRoundProjection getPlayerRound(Long idEvent);
+	
+	@Query(nativeQuery = true, value = """
+			SELECT
+				id_event,
+				players,
+				confra_pot AS confraPot
+			FROM
+				gathering.vw_event_confra_pot
+			WHERE
+			    id_event = :idEvent
+			""")
+	ConfraPotProjection getConfraPot(@Param("idEvent") Long idEvent);
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
@@ -97,6 +98,12 @@ public class EventService extends AbstractService<Event> {
 		PlayerRoundProjection playerRound = repository.getPlayerRound(idEvent);
 		System.out.println("PlayerRound: { players: " + playerRound.getPlayers() + ", rounds: " + playerRound.getRounds() + " }");
 		return playerRound;
+	}
+	
+	public ConfraPotProjection getConfraPot(Long idEvent) {
+		ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
+		System.out.println(String.format("ConfraPot: { players: %d, confraPot: %.2f }", confraPot.getPlayers(), confraPot.getConfraPot()));
+		return confraPot;
 	}
 
 	/**

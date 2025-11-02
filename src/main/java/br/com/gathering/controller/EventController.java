@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
+import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.service.EventService;
@@ -103,6 +104,12 @@ public class EventController {
 	public List<RankCountProjection> getRankCount(@RequestParam Long id) {
 		System.out.println("id: " + id);
 		return service.getRankCount(id);
+	}
+
+	@GetMapping("/confra-pot")
+	public ConfraPotProjection getConfraPot(Long idEvent) {
+		System.out.println("id: " + idEvent);
+		return service.getConfraPot(idEvent);
 	}
 
 }
