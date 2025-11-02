@@ -26,7 +26,7 @@ import lombok.Setter;
 @Table(name = "transaction", schema = "gathering")
 public class Transaction {
 
-	public static final int DESCRIPTION_LENGTH = 20;
+	public static final int DESCRIPTION_LENGTH = 500;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_transaction")
