@@ -181,6 +181,19 @@ FROM gathering.transaction t
 JOIN gathering.player p ON p.id = t.player_id
 GROUP BY p.id, p.name;
 
+-- View to get rank count to determine how many players will share the loserPot
+CREATE OR REPLACE VIEW gathering.vw_event_loser_pot_rank_distribution AS
+SELECT
+	id_event,
+	rank,
+    COUNT(*)
+FROM
+    gathering.vw_event_rank
+GROUP BY
+    id_event, rank
+ORDER BY
+    rank DESC;
+
 -- Create function to update wallet and return player
 DROP FUNCTION IF EXISTS gathering.update_wallet;
 CREATE OR REPLACE FUNCTION gathering.update_wallet(id_player_param BIGINT)
