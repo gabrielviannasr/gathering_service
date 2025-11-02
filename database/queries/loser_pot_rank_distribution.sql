@@ -15,4 +15,7 @@ SELECT
     id_event,
     rank,
     count
-FROM gathering.vw_event_loser_pot_rank_distribution;
+FROM
+    gathering.vw_event_loser_pot_rank_distribution
+WHERE
+    id_event = :idEvent;

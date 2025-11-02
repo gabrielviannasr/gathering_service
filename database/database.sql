@@ -164,6 +164,34 @@ FROM
 ORDER BY
     rank, name;
 
+-- View of loser pot by event
+CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
+SELECT
+	e.id AS id_event,
+    COUNT(r.id) AS rounds,
+    SUM(r.loser_pot) AS loser_pot
+FROM
+    gathering.round r
+    INNER JOIN gathering.event e ON e.id = r.id_event
+WHERE
+    r.canceled = false
+--    AND id_event = :idEvent
+GROUP BY
+    e.id
+
+-- View to get rank count to determine how many players will share the loserPot
+CREATE OR REPLACE VIEW gathering.vw_event_loser_pot_rank_distribution AS
+SELECT
+	id_event,
+	rank,
+    COUNT(*)
+FROM
+    gathering.vw_event_rank
+GROUP BY
+    id_event, rank
+ORDER BY
+    rank DESC;
+
 -- View of balance
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
 SELECT
@@ -180,19 +208,6 @@ SELECT
 FROM gathering.transaction t
 JOIN gathering.player p ON p.id = t.player_id
 GROUP BY p.id, p.name;
-
--- View to get rank count to determine how many players will share the loserPot
-CREATE OR REPLACE VIEW gathering.vw_event_loser_pot_rank_distribution AS
-SELECT
-	id_event,
-	rank,
-    COUNT(*)
-FROM
-    gathering.vw_event_rank
-GROUP BY
-    id_event, rank
-ORDER BY
-    rank DESC;
 
 -- Create function to update wallet and return player
 DROP FUNCTION IF EXISTS gathering.update_wallet;
