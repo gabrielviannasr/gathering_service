@@ -19,6 +19,7 @@ import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
 import br.com.gathering.projection.ConfraPotProjection;
+import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.service.EventService;
@@ -110,6 +111,12 @@ public class EventController {
 	public ConfraPotProjection getConfraPot(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getConfraPot(id);
+	}
+
+	@GetMapping("/{id}/loser-pot")
+	public LoserPotProjection getLoserPot(@PathVariable Long id) {
+		System.out.println("id: " + id);
+		return service.getLoserPot(id);
 	}
 
 }

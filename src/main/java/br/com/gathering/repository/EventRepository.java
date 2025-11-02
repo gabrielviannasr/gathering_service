@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Rank;
 import br.com.gathering.projection.ConfraPotProjection;
+import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
@@ -109,5 +110,17 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 			    id_event = :idEvent
 			""")
 	ConfraPotProjection getConfraPot(@Param("idEvent") Long idEvent);
+
+	@Query(nativeQuery = true, value = """
+			SELECT
+			    id_event,
+			    rounds,
+			    loser_pot AS loserPot
+			FROM
+			    gathering.vw_event_loser_pot
+			WHERE
+			    id_event = :idEvent
+			""")
+	LoserPotProjection getLoserPot(@Param("idEvent") Long idEvent);
 
 }
