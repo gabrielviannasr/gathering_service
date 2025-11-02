@@ -148,7 +148,7 @@ GROUP BY
     e.id, p.id;
 
 -- View of event rank
-CREATE OR REPLACE VIEW gathering.vw_event_rank AS
+CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
 SELECT
     id_event,
 	RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,

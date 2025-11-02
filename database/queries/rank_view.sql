@@ -14,3 +14,19 @@ WHERE
 	id_event = :idEvent
 ORDER BY
     rank, name;
+
+-- Rank using view
+SELECT
+	id_event,
+	rank,
+	id_player,
+	name,
+	wins,
+	rounds,
+	positive,
+	negative,
+	rank_balance
+FROM
+    gathering.vw_event_player_rank
+WHERE
+	id_event = :idEvent;
