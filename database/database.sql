@@ -175,7 +175,9 @@ FROM
 WHERE
     r.canceled = false
 GROUP BY
-    e.id, p.id;
+    e.id, p.id
+ORDER BY
+	p.name;
 
 COMMENT ON VIEW gathering.vw_event_player_balance IS
 'Provides the balance of each player per event.
