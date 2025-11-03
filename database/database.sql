@@ -188,7 +188,7 @@ SELECT
     id_event,
 	RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player,
-    name AS player_name,
+    player_name,
     wins,
     rounds,
     positive,
@@ -197,7 +197,7 @@ SELECT
 FROM
     gathering.vw_event_player_balance
 ORDER BY
-    rank, name;
+    id_event, rank, player_name;
 
 COMMENT ON VIEW gathering.vw_event_player_rank IS
 'Provides the player ranking for each event based on balance and performance.';
