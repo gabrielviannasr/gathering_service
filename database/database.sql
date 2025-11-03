@@ -267,6 +267,8 @@ FROM
     INNER JOIN gathering.event e ON e.id_gathering = g.id
     INNER JOIN gathering.round r ON r.id_event = e.id
     INNER JOIN gathering.format f ON r.id_format = f.id
+WHERE
+    r.canceled = false
 GROUP BY
     g.id, f.id
 ORDER BY
