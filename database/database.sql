@@ -190,6 +190,8 @@ SELECT
     id_gathering,
     id_event,
     RANK() OVER (
+        -- PARTITION BY b.id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
+        -- (Sem isso, se houver várias gatherings, o RANK() pode comparar jogadores entre gatherings diferentes.)
         PARTITION BY id_event
         ORDER BY (positive - negative) DESC, rounds ASC
     ) AS rank,
@@ -303,6 +305,8 @@ WITH balance AS (
 SELECT
     id_gathering,
     RANK() OVER (
+        -- PARTITION BY b.id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
+        -- (Sem isso, se houver várias gatherings, o RANK() pode comparar jogadores entre gatherings diferentes.)
         PARTITION BY id_gathering
         ORDER BY rank_balance DESC, rounds ASC
     ) AS rank,
