@@ -233,6 +233,26 @@ ORDER BY
 COMMENT ON VIEW gathering.vw_gathering_confra_total IS
 'Displays the total accumulated confra pot, total rounds, and number of events for each gathering.';
 
+CREATE OR REPLACE VIEW gathering.vw_gathering_format_total AS
+SELECT
+    g.id AS id_gathering,
+    g.name AS gathering_name,
+    f.id AS id_format,
+    f.name AS format_name,
+    COUNT(r.id) AS total_rounds
+FROM
+    gathering.gathering g
+    INNER JOIN gathering.event e ON e.id_gathering = g.id
+    INNER JOIN gathering.round r ON r.id_event = e.id
+    INNER JOIN gathering.format f ON r.id_format = f.id
+GROUP BY
+    g.id, f.id
+ORDER BY
+    g.name, f.name;
+
+COMMENT ON VIEW gathering.vw_gathering_format_total IS
+'Displays the total number rounds for each format played in the gathering.';
+
 -- NOT USED YET
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
 SELECT
