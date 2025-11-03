@@ -2,7 +2,7 @@
 SELECT
     RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player,
-    name,
+    name AS player_name,
     wins,
     rounds,
     positive,
@@ -35,7 +35,7 @@ ORDER BY
 SELECT
     RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player,
-    name,
+    player_name,
     wins,
     rounds,
     positive,
@@ -46,14 +46,14 @@ FROM
 WHERE
 	id_event = :idEvent
 ORDER BY
-    rank, name;
+    rank, player_name;
 
 -- Rank using view (vw_event_player_rank)
 SELECT
 	id_event,
 	rank,
 	id_player,
-	name,
+	player_name,
 	wins,
 	rounds,
 	positive,

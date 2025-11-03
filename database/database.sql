@@ -161,7 +161,7 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
 SELECT
     e.id AS id_event,
     p.id AS id_player,
-    p.name,
+    p.name AS player_name,
     COUNT(CASE WHEN r.id_player_winner = p.id THEN 1 END) AS wins,
     COUNT(s.id_player) AS rounds,
     COALESCE(SUM(r.prize) FILTER (WHERE r.id_player_winner = p.id), 0) AS positive,
@@ -188,7 +188,7 @@ SELECT
     id_event,
 	RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player,
-    name,
+    name AS player_name,
     wins,
     rounds,
     positive,
