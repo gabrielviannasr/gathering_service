@@ -215,6 +215,22 @@ ORDER BY
 COMMENT ON VIEW gathering.vw_event_rank_count IS
 'Indicates how many players share each rank, used to distribute the loser pot.';
 
+CREATE OR REPLACE VIEW gathering.vw_gathering_confra_total AS
+SELECT
+    g.id AS id_gathering,
+    g.name,
+    SUM(e.confra_pot) AS total_confra_pot
+FROM
+    gathering.event e
+    INNER JOIN gathering.gathering g ON g.id = e.id_gathering
+GROUP BY
+    g.id
+ORDER BY
+    g.name;
+
+COMMENT ON VIEW gathering.vw_gathering_confra_total IS
+'Displays the total accumulated confra pot for each gathering, based on all related events.';
+
 -- NOT USED YET
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
 SELECT
