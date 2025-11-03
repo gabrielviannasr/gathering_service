@@ -3,7 +3,7 @@ package br.com.gathering.projection;
 public interface RankProjection {
 	Integer getRank();
 	Long getIdPlayer();
-    String getName();
+    String getPlayerName();
     Integer getWins();
     Integer getRounds();
     Double getPositive();

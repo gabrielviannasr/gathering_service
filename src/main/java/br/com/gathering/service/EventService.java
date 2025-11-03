@@ -118,7 +118,7 @@ public class EventService extends AbstractService<Event> {
 		List<RankProjection> list = repository.getRankProjection(idEvent);
 		System.out.println("Rank: [");
 		list.forEach(item -> {			
-			System.out.println(String.format("{ rank: %d, name: %s, rankBalance: %.2f }", item.getRank(), item.getName(), item.getRankBalance()));
+			System.out.println(String.format("{ rank: %d, name: %s, rankBalance: %.2f }", item.getRank(), item.getPlayerName(), item.getRankBalance()));
 		});
 		System.out.println("]");
 		return list;

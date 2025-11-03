@@ -141,7 +141,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 				id_event AS idEvent,
 				rank,
 				id_player AS idPlayer,
-				name,
+				player_name AS playerName,
 				wins,
 				rounds,
 				positive,
