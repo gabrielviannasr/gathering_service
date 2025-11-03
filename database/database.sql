@@ -223,8 +223,8 @@ SELECT
     COALESCE(SUM(e.rounds), 0) AS total_rounds,
     COALESCE(SUM(e.confra_pot), 0) AS total_confra_pot
 FROM
-    gathering.event e
-    INNER JOIN gathering.gathering g ON g.id = e.id_gathering
+    gathering.gathering g
+    INNER JOIN gathering.event e ON e.id_gathering = g.id
 GROUP BY
     g.id, g.name
 ORDER BY
