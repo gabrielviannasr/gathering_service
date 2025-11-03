@@ -125,7 +125,8 @@ CREATE TABLE gathering.rank (
 /* CREATE VIEWS */
 CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
 SELECT
-    e.id AS id_event,
+    e.id_gathering,
+	e.id AS id_event,
     COUNT(DISTINCT s.id_player) AS players,
     COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
 FROM
@@ -159,7 +160,8 @@ COMMENT ON VIEW gathering.vw_event_loser_pot IS
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
 SELECT
-    e.id AS id_event,
+	e.id_gathering,
+	e.id AS id_event,
     p.id AS id_player,
     p.name AS player_name,
     COUNT(CASE WHEN r.id_player_winner = p.id THEN 1 END) AS wins,
@@ -185,7 +187,8 @@ Used as the base view for event rank calculations.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
 SELECT
-    id_event,
+	id_gathering,
+	id_event,
 	RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
     id_player,
     player_name,
@@ -197,20 +200,21 @@ SELECT
 FROM
     gathering.vw_event_player_balance
 ORDER BY
-    id_event, rank, player_name;
+    rank, player_name;
 
 COMMENT ON VIEW gathering.vw_event_player_rank IS
 'Provides the player ranking for each event based on balance and performance.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
 SELECT
+	id_gathering,
 	id_event,
 	rank,
     COUNT(*)
 FROM
     gathering.vw_event_player_rank
 GROUP BY
-    id_event, rank
+    id_gathering, id_event, rank
 ORDER BY
     rank DESC;
 
