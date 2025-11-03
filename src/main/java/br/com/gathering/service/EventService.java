@@ -19,6 +19,7 @@ import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.repository.EventRepository;
 
 @Service
@@ -85,16 +86,6 @@ public class EventService extends AbstractService<Event> {
 		return pot;
 	}
 
-	public List<RankCountProjection> getRankCount(Long idEvent) {
-		List<RankCountProjection> list = repository.getRankCount(idEvent);
-		System.out.println("RankCount: [");
-		list.forEach(item -> {
-			System.out.println("\t{ rank: " + item.getRank() + ", count: " + item.getCount() + " },");
-		});
-		System.out.println("]");
-		return list;
-	}
-
 	public PlayerRoundProjection getPlayerRound(Long idEvent) {
 		PlayerRoundProjection playerRound = repository.getPlayerRound(idEvent);
 		System.out.println("PlayerRound: { players: " + playerRound.getPlayers() + ", rounds: " + playerRound.getRounds() + " }");
@@ -111,6 +102,26 @@ public class EventService extends AbstractService<Event> {
 		LoserPotProjection loserPot = repository.getLoserPot(idEvent);
 		System.out.println(String.format("LoserPot: { rounds: %d, loserPot: %.2f }", loserPot.getRounds(), loserPot.getLoserPot()));
 		return loserPot;
+	}
+	
+	public List<RankCountProjection> getRankCount(Long idEvent) {
+		List<RankCountProjection> list = repository.getRankCount(idEvent);
+		System.out.println("RankCount: [");
+		list.forEach(item -> {
+			System.out.println("\t{ rank: " + item.getRank() + ", count: " + item.getCount() + " },");
+		});
+		System.out.println("]");
+		return list;
+	}
+
+	public List<RankProjection> getRankProjection(Long idEvent) {
+		List<RankProjection> list = repository.getRankProjection(idEvent);
+		System.out.println("Rank: [");
+		list.forEach(item -> {			
+			System.out.println(String.format("{ rank: %d, name: %s, rankBalance: %.2f }", item.getRank(), item.getName(), item.getRankBalance()));
+		});
+		System.out.println("]");
+		return list;
 	}
 
 	/**

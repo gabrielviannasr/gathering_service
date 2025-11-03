@@ -22,6 +22,7 @@ import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.service.EventService;
 import br.com.gathering.service.PlayerService;
 
@@ -123,6 +124,12 @@ public class EventController {
 	public List<RankCountProjection> getRankCount(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getRankCount(id);
+	}
+
+	@GetMapping("/{id}/rank")
+	public List<RankProjection> getRankProjection(@PathVariable Long id) {
+		System.out.println("id: " + id);
+		return service.getRankProjection(id);
 	}
 
 }

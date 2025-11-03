@@ -30,3 +30,36 @@ FROM (
 ) AS subquery
 ORDER BY
     rank, name;
+
+-- Rank using view (vw_event_player_balance)
+SELECT
+    RANK() OVER (ORDER BY (positive - negative) DESC, rounds ASC) AS rank,
+    id_player,
+    name,
+    wins,
+    rounds,
+    positive,
+    negative,
+    positive - negative AS rank_balance
+FROM
+    gathering.vw_event_player_balance
+WHERE
+	id_event = :idEvent
+ORDER BY
+    rank, name;
+
+-- Rank using view (vw_event_player_rank)
+SELECT
+	id_event,
+	rank,
+	id_player,
+	name,
+	wins,
+	rounds,
+	positive,
+	negative,
+	rank_balance
+FROM
+    gathering.vw_event_player_rank
+WHERE
+	id_event = :idEvent;

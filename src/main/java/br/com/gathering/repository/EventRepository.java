@@ -14,6 +14,7 @@ import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
 import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
+import br.com.gathering.projection.RankProjection;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{
@@ -101,7 +102,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 	
 	@Query(nativeQuery = true, value = """
 			SELECT
-				id_event,
+				id_event AS idEvent,
 				players,
 				confra_pot AS confraPot
 			FROM
@@ -113,7 +114,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 
 	@Query(nativeQuery = true, value = """
 			SELECT
-			    id_event,
+			    id_event AS idEvent,
 			    rounds,
 			    loser_pot AS loserPot
 			FROM
@@ -125,7 +126,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 
 	@Query(nativeQuery = true, value = """
 			SELECT
-			    id_event,
+			    id_event AS idEvent,
 			    rank,
 			    count
 			FROM
@@ -134,5 +135,23 @@ public interface EventRepository extends JpaRepository<Event, Long>{
 			    id_event = :idEvent
 			""")
 	List<RankCountProjection> getRankCount(Long idEvent);
+
+	@Query(nativeQuery = true, value = """
+			SELECT
+				id_event AS idEvent,
+				rank,
+				id_player AS idPlayer,
+				name,
+				wins,
+				rounds,
+				positive,
+				negative,
+				rank_balance AS rankBalance
+			FROM
+			    gathering.vw_event_player_rank
+			WHERE
+				id_event = :idEvent
+			""")
+	List<RankProjection> getRankProjection(Long idEvent);
 
 }
