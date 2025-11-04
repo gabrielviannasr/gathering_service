@@ -124,39 +124,39 @@ CREATE TABLE gathering.rank (
 
 /* CREATE VIEWS */
 CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
-SELECT
-    e.id_gathering,
-	e.id AS id_event,
-    COUNT(DISTINCT s.id_player) AS players,
-    COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
-FROM
-    gathering.score s
-    INNER JOIN gathering.round r ON r.id = s.id_round
-    INNER JOIN gathering.player p ON p.id = s.id_player
-    INNER JOIN gathering.event e ON e.id = r.id_event
-WHERE
-    r.canceled = false
-GROUP BY
-    e.id;
+    SELECT
+        e.id_gathering,
+        e.id AS id_event,
+        COUNT(DISTINCT s.id_player) AS players,
+        COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot
+    FROM
+        gathering.score s
+        INNER JOIN gathering.round r ON r.id = s.id_round
+        INNER JOIN gathering.player p ON p.id = s.id_player
+        INNER JOIN gathering.event e ON e.id = r.id_event
+    WHERE
+        r.canceled = false
+    GROUP BY
+        e.id;
 
-COMMENT ON VIEW gathering.vw_event_confra_pot IS
-'Displays the total number of players and the total confra pot amount for each event.';
+    COMMENT ON VIEW gathering.vw_event_confra_pot IS
+    'Displays the total number of players and the total confra pot amount for each event.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
-SELECT
-	e.id AS id_event,
-    COUNT(r.id) AS rounds,
-    SUM(r.loser_pot) AS loser_pot
-FROM
-    gathering.round r
-    INNER JOIN gathering.event e ON e.id = r.id_event
-WHERE
-    r.canceled = false
-GROUP BY
-    e.id;
+    SELECT
+        e.id AS id_event,
+        COUNT(r.id) AS rounds,
+        SUM(r.loser_pot) AS loser_pot
+    FROM
+        gathering.round r
+        INNER JOIN gathering.event e ON e.id = r.id_event
+    WHERE
+        r.canceled = false
+    GROUP BY
+        e.id;
 
-COMMENT ON VIEW gathering.vw_event_loser_pot IS
-'Displays the total number of rounds and the accumulated loser pot per event.';
+    COMMENT ON VIEW gathering.vw_event_loser_pot IS
+    'Displays the total number of rounds and the accumulated loser pot per event.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     WITH player_balance AS (
@@ -197,9 +197,9 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     ORDER BY
         player_name;
 
-COMMENT ON VIEW gathering.vw_event_player_balance IS
-'Displays the performance and balance of each player per event, 
-including total wins, rounds, prizes, fees, and the resulting rank balance.';
+    COMMENT ON VIEW gathering.vw_event_player_balance IS
+    'Displays the performance and balance of each player per event, 
+    including total wins, rounds, prizes, fees, and the resulting rank balance.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
     SELECT
@@ -222,8 +222,8 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
     ORDER BY
         id_event, rank, player_name;
 
-COMMENT ON VIEW gathering.vw_event_player_rank IS
-'Provides the player ranking for each event based on rank balance and performance, ensuring ranks are calculated independently per event.';
+    COMMENT ON VIEW gathering.vw_event_player_rank IS
+    'Provides the player ranking for each event based on rank balance and performance, ensuring ranks are calculated independently per event.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
     SELECT
@@ -238,8 +238,8 @@ CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
     ORDER BY
         rank DESC;
 
-COMMENT ON VIEW gathering.vw_event_rank_count IS
-'Indicates how many players share each rank, used to distribute the loser pot.';
+    COMMENT ON VIEW gathering.vw_event_rank_count IS
+    'Indicates how many players share each rank, used to distribute the loser pot.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot_total AS
     SELECT
@@ -256,8 +256,8 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot_total AS
     ORDER BY
         g.name;
 
-COMMENT ON VIEW gathering.vw_gathering_confra_pot_total IS
-'Displays the total accumulated confra pot, total rounds, and number of events for each gathering.';
+    COMMENT ON VIEW gathering.vw_gathering_confra_pot_total IS
+    'Displays the total accumulated confra pot, total rounds, and number of events for each gathering.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot_total AS
     SELECT
@@ -276,8 +276,8 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot_total AS
     ORDER BY
         g.name;
     
-COMMENT ON VIEW gathering.vw_gathering_loser_pot_total IS
-'Summarizes the total prizes and loser pots accumulated across all events within each gathering.';
+    COMMENT ON VIEW gathering.vw_gathering_loser_pot_total IS
+    'Summarizes the total prizes and loser pots accumulated across all events within each gathering.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_format_total AS
     SELECT
@@ -298,54 +298,54 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_format_total AS
     ORDER BY
         g.name, f.name;
 
-COMMENT ON VIEW gathering.vw_gathering_format_total IS
-'Displays the total number rounds for each format played in the gathering.';
+    COMMENT ON VIEW gathering.vw_gathering_format_total IS
+    'Displays the total number rounds for each format played in the gathering.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
-SELECT
-    id_gathering,
-    id_player,
-    player_name,
-    COUNT(id_event) AS events,
-    COALESCE(SUM(wins), 0) AS wins,
-    COALESCE(SUM(rounds), 0) AS rounds,
-    COALESCE(SUM(positive), 0) AS positive,
-    COALESCE(SUM(negative), 0) AS negative,
-    COALESCE(SUM(rank_balance), 0) AS rank_balance
-FROM
-    gathering.vw_event_player_balance
-GROUP BY
-    id_gathering, id_player, player_name
-ORDER BY
-    id_gathering, player_name;
+    SELECT
+        id_gathering,
+        id_player,
+        player_name,
+        COUNT(id_event) AS events,
+        COALESCE(SUM(wins), 0) AS wins,
+        COALESCE(SUM(rounds), 0) AS rounds,
+        COALESCE(SUM(positive), 0) AS positive,
+        COALESCE(SUM(negative), 0) AS negative,
+        COALESCE(SUM(rank_balance), 0) AS rank_balance
+    FROM
+        gathering.vw_event_player_balance
+    GROUP BY
+        id_gathering, id_player, player_name
+    ORDER BY
+        id_gathering, player_name;
 
-COMMENT ON VIEW gathering.vw_gathering_player_balance IS
-'Aggregates player balances across all events within each gathering. 
-Serves as the base view for calculating the cumulative gathering-level rankings.';
+    COMMENT ON VIEW gathering.vw_gathering_player_balance IS
+    'Aggregates player balances across all events within each gathering. 
+    Serves as the base view for calculating the cumulative gathering-level rankings.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
-SELECT
-    id_gathering,
-    RANK() OVER (
-        -- PARTITION BY id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
-        PARTITION BY id_gathering
-        ORDER BY rank_balance DESC, rounds ASC
-    ) AS rank,
-    id_player,
-    player_name,
-    events,
-    wins,
-    rounds,
-    positive,
-    negative,
-    rank_balance
-FROM
-    gathering.vw_gathering_player_balance
-ORDER BY
-    id_gathering, rank, player_name;
+    SELECT
+        id_gathering,
+        RANK() OVER (
+            -- PARTITION BY id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
+            PARTITION BY id_gathering
+            ORDER BY rank_balance DESC, rounds ASC
+        ) AS rank,
+        id_player,
+        player_name,
+        events,
+        wins,
+        rounds,
+        positive,
+        negative,
+        rank_balance
+    FROM
+        gathering.vw_gathering_player_balance
+    ORDER BY
+        id_gathering, rank, player_name;
 
-COMMENT ON VIEW gathering.vw_gathering_player_rank IS
-'Provides the player ranking within each gathering based on cumulative performance and balance, built upon vw_gathering_player_balance.';
+    COMMENT ON VIEW gathering.vw_gathering_player_rank IS
+    'Provides the player ranking within each gathering based on cumulative performance and balance, built upon vw_gathering_player_balance.';
 
 -- NOT USED YET
 CREATE OR REPLACE VIEW gathering.vw_player_balance AS
