@@ -306,7 +306,7 @@ SELECT
     id_gathering,
     id_player,
     player_name,
-    COUNT(id_event) AS total_events,
+    COUNT(id_event) AS events,
     COALESCE(SUM(wins), 0) AS wins,
     COALESCE(SUM(rounds), 0) AS rounds,
     COALESCE(SUM(positive), 0) AS positive,
@@ -315,7 +315,7 @@ SELECT
 FROM
     gathering.vw_event_player_balance
 GROUP BY
-	id_gathering, id_player, player_name
+    id_gathering, id_player, player_name
 ORDER BY
     id_gathering, player_name;
 

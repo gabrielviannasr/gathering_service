@@ -3,7 +3,7 @@ SELECT
     id_gathering,
     id_player,
     player_name,
-    COUNT(id_event) AS total_events,
+    COUNT(id_event) AS events,
     COALESCE(SUM(wins), 0) AS wins,
     COALESCE(SUM(rounds), 0) AS rounds,
     COALESCE(SUM(positive), 0) AS positive,
