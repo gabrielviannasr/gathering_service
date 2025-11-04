@@ -84,23 +84,22 @@ public class EventController {
 		return service.getPot(idEvent);
 	}
 
-	@PutMapping("/id/rank")
-	public List<Rank> getRank(@RequestParam Long id) {
-		System.out.println("id: " + id);
-		Event event = service.getRank(id);
-
-		if (event == null) {
-			return null;
-		}
-
-		// Update returned player
+//	@PutMapping("/id/rank")
+//	public List<Rank> getRank(@RequestParam Long id) {
+//		System.out.println("id: " + id);
+//		Event event = service.getRank(id);
+//
+//		if (event == null) {
+//			return null;
+//		}
+//
+//		// Update returned player
 //		event.getRanks().forEach(rank -> {
 //			rank.setPlayer(playerService.updateWallet(rank.getIdPlayer()));
 //		});
 //
 //		return event.getRanks();
-		return null;
-	}
+//	}
 
 	@GetMapping("/id/rank/count")
 	public List<RankCountProjection> getRankCount2(@RequestParam Long id) {
@@ -130,6 +129,12 @@ public class EventController {
 	public List<RankProjection> getRankProjection(@PathVariable Long id) {
 		System.out.println("id: " + id);
 		return service.getRankProjection(id);
+	}
+	
+	@GetMapping("/{id}/balance")
+	public List<Rank> getBalance(@PathVariable Long id) {
+		System.out.println("id: " + id);
+		return service.getBalance(id);
 	}
 
 }

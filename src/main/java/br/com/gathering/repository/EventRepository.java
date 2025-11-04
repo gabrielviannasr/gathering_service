@@ -19,8 +19,8 @@ import br.com.gathering.projection.RankProjection;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{
 
-	@Query(name = "getRank")
-	List<Rank> getRank(Long idEvent);
+//	@Query(name = "getRank")
+//	List<Rank> getRank(Long idEvent);
 
 	@Query(nativeQuery = true, value = ""
 			+ "SELECT \r\n"

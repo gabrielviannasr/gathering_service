@@ -23,7 +23,8 @@ public class RankDTO {
 	@Column(name = "id_player")
 	private Long idPlayer;
 	
-	private String username;
+	@Column(name = "player_name")
+	private String playerName;
 	
 	private Integer rank;
 
@@ -41,8 +42,6 @@ public class RankDTO {
    	@Column(name = "loser_pot")
     private Double loserPot;
 
-   	@Column(name = "prize_taken")
-    private Double prizeTaken;
 
    	@Column(name = "final_balance")
     private Double finalBalance;
@@ -55,7 +54,6 @@ public class RankDTO {
 	    rank.setNegative(this.negative);
 	    rank.setRankBalance(this.rankBalance);
 	    rank.setLoserPot(this.loserPot);
-	    rank.setPrizeTaken(this.prizeTaken);
 	    rank.setFinalBalance(this.finalBalance);
 	    return rank;
 	}
@@ -73,7 +71,6 @@ public class RankDTO {
 	            + "    negative: " + this.negative + ",\n"
 	            + "    rankBalance: " + this.rankBalance + ",\n"
 	            + "    loserPot: " + this.loserPot + ",\n"
-	            + "    prizeTaken: " + this.prizeTaken + ",\n"
 	            + "    finalBalance: " + this.finalBalance + ",\n"
 	            + "}";
 	}
