@@ -159,53 +159,54 @@ COMMENT ON VIEW gathering.vw_event_loser_pot IS
 'Displays the total number of rounds and the accumulated loser pot per event.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
+WITH player_balance AS (
+	SELECT
+		e.id_gathering,
+		e.id AS id_event,
+	    p.id AS id_player,
+	    p.name AS player_name,
+	    COUNT(CASE WHEN r.id_player_winner = p.id THEN 1 END) AS wins,
+	    COUNT(s.id_player) AS rounds,
+	    COALESCE(SUM(r.prize) FILTER (WHERE r.id_player_winner = p.id), 0) AS positive,
+	    -- SUM(CASE WHEN r.id_player_winner = p.id THEN r.prize ELSE 0 END) AS positive,
+	    COUNT(s.id_player) * e.round_fee AS negative
+	FROM
+	    gathering.score s
+	    INNER JOIN gathering.round r ON r.id = s.id_round
+	    INNER JOIN gathering.player p ON p.id = s.id_player
+	    INNER JOIN gathering.event e ON e.id = r.id_event
+	WHERE
+	    r.canceled = false
+	GROUP BY
+--	    e.id, p.id
+--		Garante portabilidade e evita warning em versões futuras.
+		e.id_gathering, e.id, p.id, p.name, e.round_fee
+)
 SELECT
-	e.id_gathering,
-	e.id AS id_event,
-    p.id AS id_player,
-    p.name AS player_name,
-    COUNT(CASE WHEN r.id_player_winner = p.id THEN 1 END) AS wins,
-    COUNT(s.id_player) AS rounds,
-    COALESCE(SUM(r.prize) FILTER (WHERE r.id_player_winner = p.id), 0) AS positive,
-    -- SUM(CASE WHEN r.id_player_winner = p.id THEN r.prize ELSE 0 END) AS positive,
-    COUNT(s.id_player) * e.round_fee AS negative
+	id_gathering,
+	id_event,
+    id_player,
+    player_name,
+    wins,
+    rounds,
+    positive,
+    negative,
+    positive - negative AS rank_balance
 FROM
-    gathering.score s
-    INNER JOIN gathering.round r ON r.id = s.id_round
-    INNER JOIN gathering.player p ON p.id = s.id_player
-    INNER JOIN gathering.event e ON e.id = r.id_event
-WHERE
-    r.canceled = false
-GROUP BY
-    e.id, p.id
+    player_balance
 ORDER BY
-	p.name;
+	player_name;
 
 COMMENT ON VIEW gathering.vw_event_player_balance IS
-'Provides the balance of each player per event.
-Used as the base view for event rank calculations.';
+'Displays the performance and balance of each player per event, 
+including total wins, rounds, prizes, fees, and the resulting rank balance.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
-WITH player_balance AS (
-    SELECT
-        id_gathering,
-        id_event,
-        id_player,
-        player_name,
-        wins,
-        rounds,
-        positive,
-        negative,
-        (positive - negative) AS rank_balance
-    FROM
-        gathering.vw_event_player_balance
-)
 SELECT
     id_gathering,
     id_event,
     RANK() OVER (
         -- PARTITION BY id_event garante que o ranking é calculado dentro de cada evento individualmente.
-        -- (Sem isso, se houver vários eventos, o RANK() pode comparar jogadores entre eventos diferentes.)
         PARTITION BY id_event
         ORDER BY rank_balance DESC, rounds ASC
     ) AS rank,
@@ -217,12 +218,12 @@ SELECT
     negative,
     rank_balance
 FROM
-    player_balance
+    gathering.vw_event_player_balance
 ORDER BY
     id_event, rank, player_name;
 
 COMMENT ON VIEW gathering.vw_event_player_rank IS
-'Provides the player ranking for each event based on balance and performance.';
+'Provides the player ranking for each event based on rank balance and performance, ensuring ranks are calculated independently per event.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
 SELECT
@@ -300,7 +301,7 @@ ORDER BY
 COMMENT ON VIEW gathering.vw_gathering_format_total IS
 'Displays the total number rounds for each format played in the gathering.';
 
-CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank as
+CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
 -- O PostgreSQL calcula os agregados uma vez, e o RANK() só lê o resultado já resumido.
 WITH balance AS (
     SELECT
@@ -312,15 +313,14 @@ WITH balance AS (
         COALESCE(SUM(rounds), 0) AS rounds,
         COALESCE(SUM(positive), 0) AS positive,
         COALESCE(SUM(negative), 0) AS negative,
-        COALESCE(SUM(positive - negative), 0) AS rank_balance
+        COALESCE(SUM(rank_balance), 0) AS rank_balance
     FROM gathering.vw_event_player_balance
     GROUP BY id_gathering, id_player, player_name
 )
 SELECT
     id_gathering,
     RANK() OVER (
-        -- PARTITION BY b.id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
-        -- (Sem isso, se houver várias gatherings, o RANK() pode comparar jogadores entre gatherings diferentes.)
+        -- PARTITION BY id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
         PARTITION BY id_gathering
         ORDER BY rank_balance DESC, rounds ASC
     ) AS rank,
@@ -333,9 +333,9 @@ SELECT
     negative,
     rank_balance
 FROM
-	balance
+    balance
 ORDER BY
-	id_gathering, rank, player_name;
+    id_gathering, rank, player_name;
 
 COMMENT ON VIEW gathering.vw_gathering_player_rank IS
 'Provides the cumulative player ranking within each gathering, based on total balance and overall performance across all events.';
