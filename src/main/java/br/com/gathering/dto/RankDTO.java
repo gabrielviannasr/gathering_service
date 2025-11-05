@@ -1,6 +1,6 @@
 package br.com.gathering.dto;
 
-import br.com.gathering.entity.Rank;
+import br.com.gathering.entity.Result;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,8 +46,8 @@ public class RankDTO {
    	@Column(name = "final_balance")
     private Double finalBalance;
 
-	public Rank toModel() {
-		Rank rank = new Rank();
+	public Result toModel() {
+		Result rank = new Result();
 	    rank.setWins(this.wins);
 	    rank.setRounds(this.rounds);
 	    rank.setPositive(this.positive);

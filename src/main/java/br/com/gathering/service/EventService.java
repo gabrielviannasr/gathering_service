@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
-import br.com.gathering.entity.Rank;
+import br.com.gathering.entity.Result;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
@@ -124,12 +124,12 @@ public class EventService extends AbstractService<Event> {
 		return list;
 	}
 	
-	public List<Rank> getBalance(Long idEvent) {
+	public List<Result> getResult(Long idEvent) {
 
 		List<RankProjection> projections = repository.getRankProjection(idEvent);
 
-		List<Rank> balances = projections.stream()
-			    .map(p -> Rank.builder()
+		List<Result> balances = projections.stream()
+			    .map(p -> Result.builder()
 			        .idEvent(idEvent)
 			        .idPlayer(p.getIdPlayer())
 			        .playerName(p.getPlayerName())
@@ -278,7 +278,7 @@ public class EventService extends AbstractService<Event> {
 //	}
 //	
 	// Helper method to distribute loserPot equally
-	private void distributeLoserPotEqually(Long idEvent, List<Rank> ranks, Double loserPot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotEqually(Long idEvent, List<Result> ranks, Double loserPot, List<RankCountProjection> rankCount) {
 	    // LoserPot equally divided among the worst-ranked players
 	    Double percentage = 1.0 / rankCount.get(0).getCount();
 
@@ -302,7 +302,7 @@ public class EventService extends AbstractService<Event> {
 	}
 
 	// Helper method to distribute loserPot unequally
-	private void distributeLoserPotUnequally(Long idEvent, List<Rank> ranks, Double loserPot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotUnequally(Long idEvent, List<Result> ranks, Double loserPot, List<RankCountProjection> rankCount) {
 		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
 	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
 

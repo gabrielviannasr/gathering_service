@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Event;
-import br.com.gathering.entity.Rank;
+import br.com.gathering.entity.Result;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.PlayerRoundProjection;
