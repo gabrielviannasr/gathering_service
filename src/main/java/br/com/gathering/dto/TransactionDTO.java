@@ -21,9 +21,11 @@ public class TransactionDTO {
 	// Not needed in post method
 	// private Long id;
 
-	private Long idPlayer;
-
 	private Long idGathering;
+
+	private Long idEvent;
+
+	private Long idPlayer;
 	
 	private Long idTransactionType;
 
@@ -35,8 +37,9 @@ public class TransactionDTO {
 
     public Transaction toModel() {
     	Transaction transaction = new Transaction();
-    	transaction.setIdPlayer(this.idPlayer);
     	transaction.setIdGathering(this.idGathering);
+    	transaction.setIdEvent(this.idEvent);
+    	transaction.setIdPlayer(this.idPlayer);
     	transaction.setIdTransactionType(this.idTransactionType);
     	transaction.setCreatedAt(this.createdAt);
     	transaction.setAmount(this.amount);
@@ -48,9 +51,10 @@ public class TransactionDTO {
 	@Override
     public String toString() {
 		return "TransactionDTO: {\n"
-				// + "\tid: " + this.id + ",\n"
-				+ "\tidPlayer: " + this.idPlayer + ",\n"
+//				+ "\tid: " + this.id + ",\n"
 				+ "\tidGathering: " + this.idGathering + ",\n"
+				+ "\tidEvent: " + this.idEvent + ",\n"
+				+ "\tidPlayer: " + this.idPlayer + ",\n"
 				+ "\tidTransactionType: " + this.idTransactionType + ",\n"
 				+ "\tcreatedAt: " + this.createdAt + ",\n"
 				+ "\tamount: " + this.amount + ",\n"

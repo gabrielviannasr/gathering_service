@@ -22,6 +22,7 @@ import lombok.Setter;
 @Table(name = "transaction_type", schema = "gathering")
 public class TransactionType {
 
+	public static final int DESCRIPTION_LENGTH = 100;
 	public static final int NAME_LENGTH = 50;
 
 	@Id
@@ -32,6 +33,9 @@ public class TransactionType {
 	@Column(length = NAME_LENGTH)
     private String name;
 
+	@Column(length = DESCRIPTION_LENGTH)
+    private String description;
+
 	public void init() {
 	}
 
@@ -40,6 +44,7 @@ public class TransactionType {
 		return "TransactionType: {\n"
 				+ "\tid: " + this.id + ",\n"
 				+ "\tname: " + this.name + ",\n"
+				+ "\tdescription: " + this.description + ",\n"
 				+ "}";
     }
 }

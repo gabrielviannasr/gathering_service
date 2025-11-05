@@ -2,6 +2,8 @@ package br.com.gathering.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,19 +35,27 @@ public class Transaction {
 	@SequenceGenerator(name = "gathering.sequence_transaction", sequenceName = "gathering.sequence_transaction", allocationSize = 1)
 	private Long id;
 
+	@Column(name = "id_gathering", nullable = false)
+	private Long idGathering;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
+	private Gathering gathering;
+	
+	@Column(name = "id_event", nullable = false)
+	private Long idEvent;
+
+	@ManyToOne
+	@JoinColumn(name = "id_event", nullable = true, insertable = false, updatable = false)
+	private Event event;
+
 	@Column(name = "id_player", nullable = false)
 	private Long idPlayer;
 
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
-
-	@Column(name = "id_gathering", nullable = false)
-	private Long idGathering;
-
-	@ManyToOne
-	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
-	private Gathering gathering;
 	
 	@Column(name = "id_transaction_type", nullable = false)
 	private Long idTransactionType;
@@ -72,8 +82,9 @@ public class Transaction {
     public String toString() {
 		return "Transaction: {\n"
 				+ "\tid: " + this.id + ",\n"
-				+ "\tidPlayer: " + this.idPlayer + ",\n"
 				+ "\tidGathering: " + this.idGathering + ",\n"
+				+ "\tidEvent: " + this.idEvent + ",\n"
+				+ "\tidPlayer: " + this.idPlayer + ",\n"
 				+ "\tidTransactionType: " + this.idTransactionType + ",\n"
 				+ "\tcreatedAt: " + this.createdAt + ",\n"
 				+ "\tamount: " + this.amount + ",\n"
