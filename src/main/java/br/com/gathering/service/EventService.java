@@ -2,6 +2,7 @@ package br.com.gathering.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
+import br.com.gathering.entity.Player;
 import br.com.gathering.entity.Result;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
@@ -120,10 +122,20 @@ public class EventService extends AbstractService<Event> {
 	public List<RankProjection> getRankProjection(Long idEvent) {
 		List<RankProjection> list = repository.getRankProjection(idEvent);
 
+		int maxNameLength = list.stream()
+		    .map(RankProjection::getPlayerName)
+		    .filter(Objects::nonNull)
+		    .mapToInt(String::length)
+		    .max()
+		    .orElse(20); // fallback
+
+//		String format = "\t{ rank: %-2d | name: %-" + Player.NAME_LENGTH + "s | rankBalance: %8.2f }%n";
+		String format = "\t{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f }%n";
+		
 		// Log
 		list.forEach(item -> 
 	        System.out.printf(
-	            "\t{ rank: %-2d | name: %-25s | rankBalance: %8.2f }%n",
+	            format,
 	            item.getRank(),
 	            item.getPlayerName(),
 	            item.getRankBalance()
