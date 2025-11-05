@@ -1,7 +1,5 @@
 package br.com.gathering.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,8 +24,8 @@ public class Player {
 
 	public static final int EMAIL_LENGTH = 50;
 	public static final int NAME_LENGTH = 50;
-	public static final int PASSWORD_LENGTH = 20;
-	public static final int USERNAME_LENGTH = 20;
+//	public static final int PASSWORD_LENGTH = 20;
+//	public static final int USERNAME_LENGTH = 20;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_player")
@@ -38,22 +35,22 @@ public class Player {
 	@Column(nullable = false, length = NAME_LENGTH)
     private String name;
 
-	@Column(length = USERNAME_LENGTH)
-    private String username;
-
-	@Column(length = EMAIL_LENGTH)
-    private String email;
-
-	@Transient
-	@JsonIgnore
-	@Column(length = PASSWORD_LENGTH)
-    private String password;
-
-    @Column(nullable = false)
-    private Double wallet;
+//	@Column(length = USERNAME_LENGTH)
+//    private String username;
+//
+//	@Column(length = EMAIL_LENGTH)
+//    private String email;
+//
+//	@Transient
+//	@JsonIgnore
+//	@Column(length = PASSWORD_LENGTH)
+//    private String password;
+//
+//    @Column(nullable = false)
+//    private Double wallet;
     
 	public void init() {
-	    this.wallet = (this.wallet == null) ? 0.0 : this.wallet;
+//	    this.wallet = (this.wallet == null) ? 0.0 : this.wallet;
 	}
 
     @Override
@@ -61,10 +58,10 @@ public class Player {
 		return "Player: {\n"
 				+ "	id: " + this.id + ",\n"
 				+ "	name: " + this.name + ",\n"
-				+ "	username: " + this.username + ",\n"
-				+ "	email: " + this.email + ",\n"
-				+ "	password: " + this.password + ",\n"
-				+ "	wallet: " + this.wallet + ",\n"
+//				+ "	username: " + this.username + ",\n"
+//				+ "	email: " + this.email + ",\n"
+//				+ "	password: " + this.password + ",\n"
+//				+ "	wallet: " + this.wallet + ",\n"
 				+ "}";
     }
 

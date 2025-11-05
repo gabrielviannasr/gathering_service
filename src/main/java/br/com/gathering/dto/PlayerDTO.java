@@ -31,10 +31,10 @@ public class PlayerDTO {
 	    Player player = new Player();
 //	    player.setId(this.id);
 	    player.setName(this.name);
-	    player.setUsername(this.username);
-	    player.setEmail(this.email);
-	    player.setPassword(this.password);
-	    player.setWallet(this.wallet);
+//	    player.setUsername(this.username);
+//	    player.setEmail(this.email);
+//	    player.setPassword(this.password);
+//	    player.setWallet(this.wallet);
 
 	    return player;
 	}
@@ -44,9 +44,9 @@ public class PlayerDTO {
 		return "PlayerDTO: {\n"
 //				+ "	id: " + this.id + ",\n"
 				+ "	name: " + this.name + ",\n"
-				+ "	username: " + this.username + ",\n"
-				+ "	password: " + this.password + ",\n"
-				+ "	wallet: " + this.wallet + ",\n"
+//				+ "	username: " + this.username + ",\n"
+//				+ "	password: " + this.password + ",\n"
+//				+ "	wallet: " + this.wallet + ",\n"
 				+ "}";
     }
 

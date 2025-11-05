@@ -63,7 +63,7 @@ public class TransactionController {
 
 		model = service.save(model);
 
-		playerService.updateWallet(model.getIdPlayer());
+//		playerService.updateWallet(model.getIdPlayer());
 
 		// Fetch the managed entity to ensure it's in the persistence context
 		return getById(model.getId());
@@ -82,7 +82,7 @@ public class TransactionController {
 
 		model = service.save(model);
 
-		playerService.updateWallet(model.getIdPlayer());
+//		playerService.updateWallet(model.getIdPlayer());
 
 		// Fetch the managed entity to ensure it's in the persistence context
 		return getById(model.getId());

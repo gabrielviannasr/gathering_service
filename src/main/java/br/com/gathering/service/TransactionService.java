@@ -57,26 +57,25 @@ public class TransactionService extends AbstractService<Transaction> {
 
 	private void validate(Transaction model) {
 		// Payment
-		if (model.getIdTransactionType() == 1 && model.getAmount() < 0) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment amount must be positive");
-		}
-		// Withdrawal
-		if (model.getIdTransactionType() == 2) {
-			// Withdrawal amount must be negative
-		    if (model.getAmount() > 0) {
-		        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Withdrawal amount must be negative");
-		    }
-		    // New balance calculation
-		    Double newBalance = model.getPlayer().getWallet() + model.getAmount();
-		    // Subtract old amount if updating a transaction
-		    newBalance -= (model.getId() == null ? 0 : getById(model.getId()).getAmount());
-		    // Ensure sufficient balance for withdrawal transactions
-		    if (newBalance < 0) {
-		        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
-		    }
-
-		}
-
+//		if (model.getIdTransactionType() == 1 && model.getAmount() < 0) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment amount must be positive");
+//		}
+//		// Withdrawal
+//		if (model.getIdTransactionType() == 2) {
+//			// Withdrawal amount must be negative
+//		    if (model.getAmount() > 0) {
+//		        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Withdrawal amount must be negative");
+//		    }
+//		    // New balance calculation
+//		    Double newBalance = model.getPlayer().getWallet() + model.getAmount();
+//		    // Subtract old amount if updating a transaction
+//		    newBalance -= (model.getId() == null ? 0 : getById(model.getId()).getAmount());
+//		    // Ensure sufficient balance for withdrawal transactions
+//		    if (newBalance < 0) {
+//		        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
+//		    }
+//
+//		}
 	}
 
 }
