@@ -14,12 +14,11 @@ CREATE SEQUENCE gathering.sequence_transaction_type START 1;
 /* CREATE TABLES */
 CREATE TABLE gathering.player (
     id INT DEFAULT nextval('gathering.sequence_player'::regclass) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) UNIQUE,
-    email VARCHAR(50) UNIQUE,
-    password VARCHAR(20),
-    wallet NUMERIC NOT NULL DEFAULT 0
+    name VARCHAR(50) NOT NULL
 );
+
+COMMENT ON TABLE gathering.player IS
+'Represents a participant of a gathering. Personal and financial details are handled in related entities.';
 
 CREATE TABLE gathering.gathering (
     id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
