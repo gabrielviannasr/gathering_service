@@ -1,5 +1,6 @@
 package br.com.gathering.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,53 +109,60 @@ public class EventService extends AbstractService<Event> {
 	}
 	
 	public List<Result> getResult(Long idEvent) {
+	    // Rank data without loser pot distribution
+	    List<RankProjection> ranks = repository.getRankProjection(idEvent);
 
-		List<RankProjection> ranks = repository.getRankProjection(idEvent);
+	    if (ranks == null || ranks.isEmpty()) {
+	        System.out.printf("No ranks found for event ID %d%n", idEvent);
+	        return Collections.emptyList();
+	    }
 
-		List<Result> results = ranks.stream()
-			    .map(p -> Result.builder()
-			        .idEvent(idEvent)
-			        .idPlayer(p.getIdPlayer())
-			        .playerName(p.getPlayerName())
-			        .rank(p.getRank())
-			        .wins(p.getWins())
-			        .rounds(p.getRounds())
-			        .positive(p.getPositive())
-			        .negative(p.getNegative())
-			        .rankBalance(p.getRankBalance())
-			        .loserPot(0.0)
-			        .finalBalance(p.getRankBalance()) // inicial igual
-			        .build())
-			    .collect(Collectors.toList());
+	    // Cast rank projection to result
+	    List<Result> results = ranks.stream()
+	        .map(p -> Result.builder()
+	            .idEvent(idEvent)
+	            .idPlayer(p.getIdPlayer())
+	            .playerName(p.getPlayerName())
+	            .rank(p.getRank())
+	            .wins(p.getWins())
+	            .rounds(p.getRounds())
+	            .positive(p.getPositive())
+	            .negative(p.getNegative())
+	            .rankBalance(p.getRankBalance())
+	            .loserPot(0.0)
+	            .finalBalance(p.getRankBalance()) // inicial igual
+	            .build())
+	        .collect(Collectors.toList());
 
-		LoserPotProjection loserPot = repository.getLoserPot(idEvent);
+	    // Helper data
+	    LoserPotProjection loserPot = repository.getLoserPot(idEvent);
+	    List<RankCountProjection> rankCount = repository.getRankCount(idEvent);
 
-		List<RankCountProjection> rankCount = repository.getRankCount(idEvent);
+	    if (loserPot == null || rankCount == null || rankCount.isEmpty()) {
+	        System.err.printf("Missing data for loser pot distribution in event %d%n", idEvent);
+	        return results; // Return result without loser pot (useful yet)
+	    }
 
-		if(loserPot == null || rankCount == null) {
-			return null;
-		}
-
-		// Distribute loserPot based on the rankCount
+	    // Distribute loserPot based on the rankCount 
 	    if (rankCount.get(0).getCount() > 1) {
 	        distributeLoserPotEqually(idEvent, results, loserPot.getLoserPot(), rankCount);
 	    } else {
 	        distributeLoserPotUnequally(idEvent, results, loserPot.getLoserPot(), rankCount);
 	    }
 
-	    System.out.println("[");
-	    results.forEach(item -> {			
-			System.out.println(String.format(
-					"\t{ rank: %d, \tname: %-30s, \trankBalance: %8.2f, \tloserPot: %8.2f, \tfinalBalance: %8.2f }",
-					item.getRank(),
-					item.getPlayerName(),
-					item.getRankBalance(),
-					item.getLoserPot(),
-					item.getFinalBalance()));
-		});
-		System.out.println("]");
+	    // Log
+	    results.forEach(item -> 
+	        System.out.printf(
+	            "\t{ rank: %-2d | name: %-25s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
+	            item.getRank(),
+	            item.getPlayerName(),
+	            item.getRankBalance(),
+	            item.getLoserPot(),
+	            item.getFinalBalance()
+	        )
+	    );
 
-		return results;
+	    return results;
 	}
 
 	// Helper method to distribute loserPot equally
