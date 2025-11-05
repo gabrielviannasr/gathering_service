@@ -1,8 +1,9 @@
 -- Insert transaction_type table initial load
-INSERT INTO gathering.transaction_type (id, name) VALUES
-(1, 'Balance'),              -- Final value of the player in the event (positive = won / negative = owed)
-(2, 'Payment'),              -- When a player pays off a debt
-(3, 'Withdrawal')            -- When a player withdraws/receives a prize
+INSERT INTO gathering.transaction_type (id, name, description) VALUES
+(1, 'Depósito', 'Pagamento de inscrições e resultados'),
+(2, 'Saque', 'Recebimento de premiação'),
+(3, 'Inscrição', 'Taxa destinada à confra'),
+(4, 'Resultado', 'Saldo do evento')
 ON CONFLICT (id) DO NOTHING; -- Avoid duplicate if run twice
 
 -- Insert format table initial load

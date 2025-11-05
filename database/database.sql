@@ -3,11 +3,12 @@ CREATE SEQUENCE gathering.sequence_event START 1;
 CREATE SEQUENCE gathering.sequence_format START 1;
 CREATE SEQUENCE gathering.sequence_gathering START 1;
 CREATE SEQUENCE gathering.sequence_player START 1;
-CREATE SEQUENCE gathering.sequence_transaction START 1;
 CREATE SEQUENCE gathering.sequence_rank START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_score START 1;
+CREATE SEQUENCE gathering.sequence_transaction START 1;
 CREATE SEQUENCE gathering.sequence_transaction_type START 1;
+
 /* CREATE SEQUENCES */
 
 /* CREATE TABLES */
@@ -30,21 +31,32 @@ CREATE TABLE gathering.gathering (
 
 CREATE TABLE gathering.transaction_type (
     id INT DEFAULT nextval('gathering.sequence_transaction_type'::regclass) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(100)
 );
+
+COMMENT ON TABLE gathering.transaction_type IS
+'Defines the available financial transaction types used in the system. Each type represents a specific player operation, such as deposits, withdrawals, or event fees.';
 
 CREATE TABLE gathering.transaction (
     id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
-    id_player INT NOT NULL,
     id_gathering INT NOT NULL,
-    id_transaction_type INT NOT NULL,
+    id_event INT NULL,
+    id_player INT NOT NULL,    
+    id_transaction_type INT NOT NULL,    
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     amount NUMERIC(10,2) NOT NULL,
 	description VARCHAR(500),
-    CONSTRAINT fk_transaction_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
     CONSTRAINT fk_transaction_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
+    CONSTRAINT fk_transaction_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
+    CONSTRAINT fk_transaction_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
     CONSTRAINT fk_transaction_transaction_type FOREIGN KEY (id_transaction_type) REFERENCES gathering.transaction_type(id)
 );
+
+COMMENT ON TABLE gathering.transaction IS 
+'Stores all player financial transactions.
+A positive amount represents a credit, while a negative amount represents a debit.
+The id_event field is optional and indicates the event that originated the transaction, if applicable.';
 
 CREATE TABLE gathering.format (
     id INT DEFAULT nextval('gathering.sequence_format'::regclass) PRIMARY KEY,
