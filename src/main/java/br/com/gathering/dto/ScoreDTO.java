@@ -42,14 +42,14 @@ public class ScoreDTO {
 //        roundPlayer.setId(this.id);
         roundPlayer.setIdRound(this.idRound);
         roundPlayer.setIdPlayer(this.idPlayer);
-        roundPlayer.setIdPlayerKilledBy(this.idPlayerKilledBy);
-        roundPlayer.setIsDead(this.isDead);
-        roundPlayer.setPrimaryCommanderName(this.primaryCommanderName);
-        roundPlayer.setPrimaryCommanderCount(this.primaryCommanderCount);
-        roundPlayer.setSecondaryCommanderName(this.secondaryCommanderName);
-        roundPlayer.setSecondaryCommanderCount(this.secondaryCommanderCount);
-        roundPlayer.setInfectCount(this.infectCount);
-        roundPlayer.setLifeCount(this.lifeCount);
+//        roundPlayer.setIdPlayerKilledBy(this.idPlayerKilledBy);
+//        roundPlayer.setIsDead(this.isDead);
+//        roundPlayer.setPrimaryCommanderName(this.primaryCommanderName);
+//        roundPlayer.setPrimaryCommanderCount(this.primaryCommanderCount);
+//        roundPlayer.setSecondaryCommanderName(this.secondaryCommanderName);
+//        roundPlayer.setSecondaryCommanderCount(this.secondaryCommanderCount);
+//        roundPlayer.setInfectCount(this.infectCount);
+//        roundPlayer.setLifeCount(this.lifeCount);
        
         return roundPlayer;
     }
@@ -60,14 +60,14 @@ public class ScoreDTO {
 //	            + "    id: " + this.id + ",\n"
 	            + "    idRound: " + this.idRound + ",\n"
 	            + "    idPlayer: " + this.idPlayer + ",\n"
-	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
-	            + "    isDead: " + this.isDead + ",\n"
-	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
-	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
-	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"
-	            + "    secondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
-	            + "    infectCount: " + this.infectCount + ",\n"
-	            + "    lifeCount: " + this.lifeCount + ",\n"
+//	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
+//	            + "    isDead: " + this.isDead + ",\n"
+//	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
+//	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
+//	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"
+//	            + "    secondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
+//	            + "    infectCount: " + this.infectCount + ",\n"
+//	            + "    lifeCount: " + this.lifeCount + ",\n"
 	            + "}";
 	}
 
