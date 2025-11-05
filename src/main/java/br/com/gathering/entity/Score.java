@@ -43,39 +43,39 @@ public class Score {
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
 
-	@Column(name = "id_player_killed_by", nullable = true)
-	private Long idPlayerKilledBy;
-
-	@ManyToOne
-	@JoinColumn(name = "id_player_killed_by", nullable = true, insertable = false, updatable = false)
-	private Player playerKilledBy;
-
-	@Column(name="is_dead", nullable = false)
-    private Boolean isDead;
-
-	@Column(name = "primary_commander_name")
-    private String primaryCommanderName;
-    
-    @Column(name = "primary_commander_count", nullable = false)
-    private Integer primaryCommanderCount;
-
-    @Column(name = "secondary_commander_name")
-    private String secondaryCommanderName;
-
-    @Column(name = "secondary_commander_count")
-    private Integer secondaryCommanderCount;
-
-	@Column(name = "infect_count", nullable = false)
-    private Integer infectCount;
-
-	@Column(name = "life_count", nullable = false)
-    private Integer lifeCount;
+//	@Column(name = "id_player_killed_by", nullable = true)
+//	private Long idPlayerKilledBy;
+//
+//	@ManyToOne
+//	@JoinColumn(name = "id_player_killed_by", nullable = true, insertable = false, updatable = false)
+//	private Player playerKilledBy;
+//
+//	@Column(name="is_dead", nullable = false)
+//    private Boolean isDead;
+//
+//	@Column(name = "primary_commander_name")
+//    private String primaryCommanderName;
+//    
+//    @Column(name = "primary_commander_count", nullable = false)
+//    private Integer primaryCommanderCount;
+//
+//    @Column(name = "secondary_commander_name")
+//    private String secondaryCommanderName;
+//
+//    @Column(name = "secondary_commander_count")
+//    private Integer secondaryCommanderCount;
+//
+//	@Column(name = "infect_count", nullable = false)
+//    private Integer infectCount;
+//
+//	@Column(name = "life_count", nullable = false)
+//    private Integer lifeCount;
 
 	public void init() {
-		this.isDead = (this.isDead == null) ? false : this.isDead;
-	    this.primaryCommanderCount = (this.primaryCommanderCount == null) ? 0 : this.primaryCommanderCount;
-	    this.secondaryCommanderCount = (this.secondaryCommanderCount == null) ? 0 : this.secondaryCommanderCount;
-	    this.infectCount = (this.infectCount == null) ? 0 : this.infectCount;
+//		this.isDead = (this.isDead == null) ? false : this.isDead;
+//	    this.primaryCommanderCount = (this.primaryCommanderCount == null) ? 0 : this.primaryCommanderCount;
+//	    this.secondaryCommanderCount = (this.secondaryCommanderCount == null) ? 0 : this.secondaryCommanderCount;
+//	    this.infectCount = (this.infectCount == null) ? 0 : this.infectCount;
 	}
 
 	@Override
@@ -84,14 +84,14 @@ public class Score {
 	            + "    id: " + this.id + ",\n"
 	            + "    idRound: " + this.idRound + ",\n"
 	            + "    idPlayer: " + this.idPlayer + ",\n"
-	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
-	            + "    isDead: " + this.isDead + ",\n"
-	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
-	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
-	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"
-	            + "    secondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
-	            + "    infectCount: " + this.infectCount + ",\n"
-	            + "    lifeCount: " + this.lifeCount + ",\n"
+//	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
+//	            + "    isDead: " + this.isDead + ",\n"
+//	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
+//	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
+//	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"
+//	            + "    secondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
+//	            + "    infectCount: " + this.infectCount + ",\n"
+//	            + "    lifeCount: " + this.lifeCount + ",\n"
 	            + "}";
 	}
 
