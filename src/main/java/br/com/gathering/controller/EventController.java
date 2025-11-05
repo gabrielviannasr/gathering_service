@@ -20,7 +20,6 @@ import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Result;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
-import br.com.gathering.projection.PotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.projection.RankProjection;
 import br.com.gathering.service.EventService;
@@ -76,12 +75,6 @@ public class EventController {
 		
 		System.out.println(model);
 		return service.save(model);
-	}
-
-	@GetMapping("/id/pot")
-	public PotProjection getPot(Long idEvent) {
-		System.out.println("id: " + idEvent);
-		return service.getPot(idEvent);
 	}
 
 //	@PutMapping("/id/rank")
