@@ -109,9 +109,9 @@ public class EventService extends AbstractService<Event> {
 	
 	public List<Result> getResult(Long idEvent) {
 
-		List<RankProjection> projections = repository.getRankProjection(idEvent);
+		List<RankProjection> ranks = repository.getRankProjection(idEvent);
 
-		List<Result> balances = projections.stream()
+		List<Result> results = ranks.stream()
 			    .map(p -> Result.builder()
 			        .idEvent(idEvent)
 			        .idPlayer(p.getIdPlayer())
@@ -137,13 +137,13 @@ public class EventService extends AbstractService<Event> {
 
 		// Distribute loserPot based on the rankCount
 	    if (rankCount.get(0).getCount() > 1) {
-	        distributeLoserPotEqually(idEvent, balances, loserPot.getLoserPot(), rankCount);
+	        distributeLoserPotEqually(idEvent, results, loserPot.getLoserPot(), rankCount);
 	    } else {
-	        distributeLoserPotUnequally(idEvent, balances, loserPot.getLoserPot(), rankCount);
+	        distributeLoserPotUnequally(idEvent, results, loserPot.getLoserPot(), rankCount);
 	    }
 
 	    System.out.println("[");
-	    balances.forEach(item -> {			
+	    results.forEach(item -> {			
 			System.out.println(String.format(
 					"\t{ rank: %d, \tname: %-30s, \trankBalance: %8.2f, \tloserPot: %8.2f, \tfinalBalance: %8.2f }",
 					item.getRank(),
@@ -154,16 +154,16 @@ public class EventService extends AbstractService<Event> {
 		});
 		System.out.println("]");
 
-		return balances;
+		return results;
 	}
 
 	// Helper method to distribute loserPot equally
-	private void distributeLoserPotEqually(Long idEvent, List<Result> ranks, Double loserPot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotEqually(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
 	    // LoserPot equally divided among the worst-ranked players
 	    Double percentage = 1.0 / rankCount.get(0).getCount();
 
 	    // Loop to update loserPot and finalBalance
-	    ranks.forEach(item -> {
+	    results.forEach(item -> {
 	        // Non-worst-ranked players take 0% of loserPot
 	        Double pot = 0.0;
 
@@ -182,12 +182,12 @@ public class EventService extends AbstractService<Event> {
 	}
 
 	// Helper method to distribute loserPot unequally
-	private void distributeLoserPotUnequally(Long idEvent, List<Result> ranks, Double loserPot, List<RankCountProjection> rankCount) {
+	private void distributeLoserPotUnequally(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
 		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
 	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
 
 	    // Loop to update loserPot and finalBalance
-	    ranks.forEach(item -> {
+	    results.forEach(item -> {
 	        // Non-worst-ranked players take 0% of loserPot
 	        Double pot = 0.0;
 
