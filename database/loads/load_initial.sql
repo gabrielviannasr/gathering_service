@@ -3,7 +3,7 @@ INSERT INTO gathering.transaction_type (id, name, description) VALUES
 (1, 'Depósito', 'Pagamento de inscrições e resultados'),
 (2, 'Saque', 'Recebimento de premiação'),
 (3, 'Inscrição', 'Taxa destinada à confra'),
-(4, 'Resultado', 'Saldo do evento')
+(4, 'Resultado', 'Saldo final do evento')
 ON CONFLICT (id) DO NOTHING; -- Avoid duplicate if run twice
 
 -- Insert format table initial load
