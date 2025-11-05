@@ -127,7 +127,7 @@ public class EventService extends AbstractService<Event> {
 		    .filter(Objects::nonNull)
 		    .mapToInt(String::length)
 		    .max()
-		    .orElse(20); // fallback
+		    .orElse(25); // fallback
 
 //		String format = "\t{ rank: %-2d | name: %-" + Player.NAME_LENGTH + "s | rankBalance: %8.2f }%n";
 		String format = "\t{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f }%n";
@@ -187,10 +187,19 @@ public class EventService extends AbstractService<Event> {
 	        distributeLoserPotUnequally(idEvent, results, loserPot.getLoserPot(), rankCount);
 	    }
 
+		int maxNameLength = results.stream()
+		    .map(Result::getPlayerName)
+		    .filter(Objects::nonNull)
+		    .mapToInt(String::length)
+		    .max()
+		    .orElse(25); // fallback
+	    
 	    // Log
 	    results.forEach(item -> 
 	        System.out.printf(
-	            "\t{ rank: %-2d | name: %-25s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
+//        		"\t{ rank: %-2d | name: %-25s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
+//	            "\t{ rank: %-2d | name: %-" + Player.NAME_LENGTH + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
+	            "\t{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
 	            item.getRank(),
 	            item.getPlayerName(),
 	            item.getRankBalance(),
