@@ -94,12 +94,6 @@ public class EventController {
 //		return event.getRanks();
 //	}
 
-	@GetMapping("/id/rank/count")
-	public List<RankCountProjection> getRankCount2(@RequestParam Long id) {
-		System.out.println("id: " + id);
-		return service.getRankCount(id);
-	}
-
 	@GetMapping("/{id}/confra-pot")
 	public ConfraPotProjection getConfraPot(@PathVariable Long id) {
 		System.out.println("id: " + id);
