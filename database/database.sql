@@ -372,22 +372,26 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
     COMMENT ON VIEW gathering.vw_gathering_player_rank IS
     'Provides the player ranking within each gathering based on cumulative performance and balance, built upon vw_gathering_player_balance.';
 
--- NOT USED YET
-CREATE OR REPLACE VIEW gathering.vw_player_balance AS
+CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
 SELECT
-    p.id AS player_id,
+    g.id AS id_gathering,
+    g.name AS gathering_name,
+    p.id AS id_player,
     p.name AS player_name,
-    SUM(
-        CASE 
-            WHEN t.transaction_type_id = 1 THEN t.amount -- Balance
-            WHEN t.transaction_type_id = 2 THEN -t.amount -- Payment
-            WHEN t.transaction_type_id = 3 THEN t.amount -- Withdrawal
-            ELSE 0
-        END
-    ) AS balance
-FROM gathering.transaction t
-JOIN gathering.player p ON p.id = t.player_id
-GROUP BY p.id, p.name;
+    COALESCE(SUM(t.amount), 0) AS wallet
+FROM
+    gathering.player p
+LEFT JOIN
+    gathering.transaction t ON t.id_player = p.id
+LEFT JOIN
+    gathering.gathering g ON g.id = t.id_gathering
+GROUP BY
+    g.id, g.name, p.id, p.name
+ORDER BY
+    g.name, p.name;
+
+COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
+'Displays each player''s wallet (balance) grouped by gathering, based on all related transactions.';
 /* CREATE VIEWS */
 
 -- Create function to update wallet and return player
