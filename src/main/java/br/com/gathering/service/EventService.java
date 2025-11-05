@@ -78,33 +78,58 @@ public class EventService extends AbstractService<Event> {
 	
 	public ConfraPotProjection getConfraPot(Long idEvent) {
 		ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
-		System.out.println(String.format("ConfraPot: { players: %d, confraPot: %.2f }", confraPot.getPlayers(), confraPot.getConfraPot()));
+
+		// Log
+		System.out.printf(
+			"ConfraPot: { players: %-2d | confraPot: %.2f }%n",
+			confraPot.getPlayers(),
+			confraPot.getConfraPot()
+        );
+
 		return confraPot;
 	}
 
 	public LoserPotProjection getLoserPot(Long idEvent) {
 		LoserPotProjection loserPot = repository.getLoserPot(idEvent);
-		System.out.println(String.format("LoserPot: { rounds: %d, loserPot: %.2f }", loserPot.getRounds(), loserPot.getLoserPot()));
+
+		// Log
+		System.out.printf(
+			"LoserPot: { rounds: %-2d | loserPot: %.2f }%n",
+			loserPot.getRounds(),
+			loserPot.getLoserPot()
+        );
+
 		return loserPot;
 	}
 	
 	public List<RankCountProjection> getRankCount(Long idEvent) {
 		List<RankCountProjection> list = repository.getRankCount(idEvent);
-		System.out.println("RankCount: [");
-		list.forEach(item -> {
-			System.out.println("\t{ rank: " + item.getRank() + ", count: " + item.getCount() + " },");
-		});
-		System.out.println("]");
+
+		// Log
+		list.forEach(item -> 
+			System.out.printf(
+	            "\t{ rank: %-2d | count: %-2d }%n",
+	            item.getRank(),
+	            item.getCount()
+	        )
+		);
+
 		return list;
 	}
 
 	public List<RankProjection> getRankProjection(Long idEvent) {
 		List<RankProjection> list = repository.getRankProjection(idEvent);
-		System.out.println("Rank: [");
-		list.forEach(item -> {			
-			System.out.println(String.format("{ rank: %d, name: %s, rankBalance: %.2f }", item.getRank(), item.getPlayerName(), item.getRankBalance()));
-		});
-		System.out.println("]");
+
+		// Log
+		list.forEach(item -> 
+	        System.out.printf(
+	            "\t{ rank: %-2d | name: %-25s | rankBalance: %8.2f }%n",
+	            item.getRank(),
+	            item.getPlayerName(),
+	            item.getRankBalance()
+	        )
+	    );
+
 		return list;
 	}
 	
