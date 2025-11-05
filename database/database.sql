@@ -3,7 +3,7 @@ CREATE SEQUENCE gathering.sequence_event START 1;
 CREATE SEQUENCE gathering.sequence_format START 1;
 CREATE SEQUENCE gathering.sequence_gathering START 1;
 CREATE SEQUENCE gathering.sequence_player START 1;
-CREATE SEQUENCE gathering.sequence_rank START 1;
+CREATE SEQUENCE gathering.sequence_result START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_score START 1;
 CREATE SEQUENCE gathering.sequence_transaction START 1;
@@ -112,22 +112,40 @@ COMMENT ON TABLE gathering.score IS
 'Stores player participation in each round.
 Each record links a player to a specific round and ensures one unique entry per player per round.';
 
--- Rank (Event_Player)
-CREATE TABLE gathering.rank (
-    id INT DEFAULT nextval('gathering.sequence_rank'::regclass) PRIMARY KEY,
+-- ======================================================
+-- Result (Event_Player)
+-- Stores the final outcome of each player in an event,
+-- including ranking, round stats, and balance results.
+-- ======================================================
+CREATE TABLE gathering.result (
+    id INT DEFAULT nextval('gathering.sequence_result'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
-	id_player INT NOT NULL,
-	rank INT,
+    id_player INT NOT NULL,
+    rank INT,
     wins INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
-	positive NUMERIC(10,2) NOT NULL DEFAULT 0,
-	negative NUMERIC(10,2) NOT NULL DEFAULT 0,
-    rank_balance NUMERIC(10,2) NOT NULL DEFAULT 0,
-    loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0,
-    final_balance NUMERIC(10,2) NOT NULL DEFAULT 0,
-    CONSTRAINT fk_rank_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
-    CONSTRAINT fk_rank_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
+    positive NUMERIC(10,2) NOT NULL DEFAULT 0,  -- total earned
+    negative NUMERIC(10,2) NOT NULL DEFAULT 0,  -- total owed
+    rank_balance NUMERIC(10,2) NOT NULL DEFAULT 0, -- net result before pot distribution
+    loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0, -- share of loser pot
+    final_balance NUMERIC(10,2) NOT NULL DEFAULT 0, -- final result after pot distribution
+    CONSTRAINT fk_result_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
+    CONSTRAINT fk_result_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
+    CONSTRAINT uq_result_event_player UNIQUE (id_event, id_player) -- prevents duplicates
 );
+
+-- 🏷️ Comments for documentation
+COMMENT ON TABLE gathering.result IS
+'Stores the final outcome of each player in an event, including their rank, round results, and final balance after pot distribution.';
+
+COMMENT ON COLUMN gathering.result.rank IS
+'Final rank of the player in the event.';
+
+COMMENT ON COLUMN gathering.result.rank_balance IS
+'Net balance of the player before loser pot distribution (positive = profit, negative = loss).';
+
+COMMENT ON COLUMN gathering.result.final_balance IS
+'Final balance of the player after loser pot distribution.';
 /* CREATE TABLES */
 
 /* CREATE VIEWS */
