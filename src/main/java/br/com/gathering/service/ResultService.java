@@ -94,7 +94,7 @@ public class ResultService extends AbstractService<Result> {
 		return list;
 	}
 	
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public List<Result> saveResult(Long idEvent) {
 	    // 1. Remove resultados antigos (recalcular caso necessário)
 	    repository.deleteByIdEvent(idEvent);
