@@ -26,7 +26,7 @@ public class TransactionService extends AbstractService<Transaction> {
 	private EntityManager entityManager;
 
 	public static Sort getSort() {
-		return Sort.by(Order.asc("idPlayer"), Order.asc("idGathering"), Order.asc("idTransactionType"), Order.asc("createdAt"));
+		return Sort.by(Order.asc("idGathering"), Order.asc("idPlayer"), Order.asc("createdAt"));
 	}
 
 	public List<Transaction> getList(Transaction model) {
