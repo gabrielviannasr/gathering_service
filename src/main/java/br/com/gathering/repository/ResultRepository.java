@@ -54,7 +54,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 			WHERE
 			    id_event = :idEvent
 			""")
-	List<RankCountProjection> getRankCount(Long idEvent);
+	List<RankCountProjection> getRankCount(@Param("idEvent") Long idEvent);
 
 	@Query(nativeQuery = true, value = """
 			SELECT
@@ -72,5 +72,5 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 			WHERE
 				id_event = :idEvent
 			""")
-	List<RankProjection> getRankProjection(Long idEvent);
+	List<RankProjection> getRankProjection(@Param("idEvent") Long idEvent);
 }
