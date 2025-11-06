@@ -13,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Result;
 import br.com.gathering.entity.Transaction;
+import br.com.gathering.constant.TransactionType;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.projection.RankProjection;
+import br.com.gathering.repository.EventRepository;
 import br.com.gathering.repository.ResultRepository;
 import br.com.gathering.repository.TransactionRepository;
 
@@ -34,6 +37,9 @@ public class ResultService extends AbstractService<Result> {
 
 	@Autowired
 	private ResultRepository repository;
+
+	@Autowired
+	private EventRepository eventRepository;
 
 	@Autowired
 	private TransactionRepository transactionRepository;
@@ -164,26 +170,30 @@ public class ResultService extends AbstractService<Result> {
             );
 
             // 6. Create and save transactions (inscription and result)
-            LocalDateTime now = LocalDateTime.now();
+            Event event = eventRepository.findById(idEvent).get();
+            
+            LocalDateTime createdAt = event.getCreatedAt();
+//            LocalDateTime createdAt = LocalDateTime.now();
+
             List<Transaction> transactions = results.stream()
                 .flatMap(result -> Stream.of(
                     Transaction.builder()
-                    	.idGathering(result.getEvent().getIdGathering())
+                    	.idGathering(event.getIdGathering())
                         .idEvent(idEvent)
                         .idPlayer(result.getIdPlayer())
-                        .idTransactionType(3L) // inscription
-                        .createdAt(now)
-                        .amount(-result.getNegative()) // ConfraFee
-                        .description("Taxa de inscrição do evento")
+                        .idTransactionType(TransactionType.INSCRICAO.getId())
+                        .createdAt(createdAt)
+                        .amount(-event.getConfraFee())
+                        .description(TransactionType.INSCRICAO.getDescription())
                         .build(),
                     Transaction.builder()
-                    	.idGathering(result.getEvent().getIdGathering())
+                    	.idGathering(event.getIdGathering())
                         .idEvent(idEvent)
                         .idPlayer(result.getIdPlayer())
-                        .idTransactionType(4L) // Result
-                        .createdAt(now)
-                        .amount(result.getFinalBalance()) // FinalBalance
-                        .description("Saldo final do evento")
+                        .idTransactionType(TransactionType.RESULTADO.getId())
+                        .createdAt(createdAt)
+                        .amount(result.getFinalBalance())
+                        .description(TransactionType.RESULTADO.getDescription())
                         .build()
                 ))
                 .collect(Collectors.toList());
