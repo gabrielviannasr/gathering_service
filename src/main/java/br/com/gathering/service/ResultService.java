@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import br.com.gathering.repository.ResultRepository;
 
 @Service
 public class ResultService extends AbstractService<Result> {
+
+	private static final Logger log = LoggerFactory.getLogger(ResultService.class);
 
 	// The worst-ranked player takes the largest piece of loserPot
 	private static final double WORST_RANK_LOSER_POT_PERCENTAGE = 0.6;
@@ -93,26 +97,63 @@ public class ResultService extends AbstractService<Result> {
 
 		return list;
 	}
-	
+
+    /**
+     * Calculates and persists the event results.
+     * The process is transactional — if any error occurs,
+     * no partial result is committed.
+     */
 	@Transactional(rollbackFor = Exception.class)
 	public List<Result> saveResult(Long idEvent) {
-	    // 1. Remove resultados antigos (recalcular caso necessário)
-	    repository.deleteByIdEvent(idEvent);
+		log.info("Starting result calculation for event {}", idEvent);
 
-	    // 2. Calcula os novos resultados
-	    List<Result> results = getResult(idEvent);
+		try {
+			// 1. Remove previous results to avoid duplicates
+//			repository.deleteByIdEvent(idEvent);
+            int oldCount = repository.findByIdEvent(idEvent).size();
+            if (oldCount > 0) {
+                repository.deleteByIdEvent(idEvent);
+                log.info("Deleted {} previous results for event {}", oldCount, idEvent);
+            }		    
 
-	    if (results.isEmpty()) {
-	        System.out.printf("No results generated for event %d%n", idEvent);
-	        return results;
-	    }
+		    // 2. Compute new results
+		    List<Result> results = getResult(idEvent);
+		    if (results == null || results.isEmpty()) {
+//		    	System.out.printf("No results generated for event %d%n", idEvent);
+                log.warn("No results generated for event {}", idEvent);
+                return Collections.emptyList();
+            }
+	
+		    // 3. Persist data
+		    List<Result> savedResults = repository.saveAll(results);
+		    log.info("{} results saved successfully for event {}", savedResults.size(), idEvent);	
+//		    System.out.printf("%d results saved for event %d%n", savedResults.size(), idEvent);
 
-	    // 3. Persiste todos
-	    List<Result> savedResults = repository.saveAll(results);
+		    // 4. Log summary
+            int maxNameLength = savedResults.stream()
+                .map(Result::getPlayerName)
+                .filter(Objects::nonNull)
+                .mapToInt(String::length)
+                .max()
+                .orElse(25);
 
-	    System.out.printf("%d results saved for event %d%n", savedResults.size(), idEvent);
+            savedResults.forEach(item ->
+                log.info(String.format(
+                    "{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }",
+                    item.getRank(),
+                    item.getPlayerName(),
+                    item.getRankBalance(),
+                    item.getLoserPot(),
+                    item.getFinalBalance()
+                ))
+            );
+	
+		    return savedResults;
 
-	    return savedResults;
+		} catch (Exception ex) {
+            log.error("Error while calculating/saving results for event {}: {}", idEvent, ex.getMessage(), ex);
+            throw ex; // rollback automático pelo Spring
+        }
 	}
 
 	public List<Result> getResult(Long idEvent) {
