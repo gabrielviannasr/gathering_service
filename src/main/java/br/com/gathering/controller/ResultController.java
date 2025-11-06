@@ -29,11 +29,11 @@ public class ResultController {
         return service.getResult(idEvent);
     }
 
-//    @PostMapping("/{idEvent}")
-//    public List<Result> saveResult(@PathVariable Long idEvent) {
-//    	System.out.println("idEvent: " + idEvent);
-//        return service.saveResult(idEvent);
-//    }
+    @PostMapping("/{idEvent}")
+    public List<Result> saveResult(@PathVariable Long idEvent) {
+    	System.out.println("idEvent: " + idEvent);
+        return service.saveResult(idEvent);
+    }
 
     @GetMapping("/{idEvent}/confra-pot")
     public ConfraPotProjection getConfraPot(@PathVariable Long idEvent) {

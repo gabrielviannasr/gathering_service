@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gathering.entity.Result;
 import br.com.gathering.projection.ConfraPotProjection;
@@ -91,6 +92,27 @@ public class ResultService extends AbstractService<Result> {
 	    );
 
 		return list;
+	}
+	
+	@Transactional
+	public List<Result> saveResult(Long idEvent) {
+	    // 1. Remove resultados antigos (recalcular caso necessário)
+	    repository.deleteByIdEvent(idEvent);
+
+	    // 2. Calcula os novos resultados
+	    List<Result> results = getResult(idEvent);
+
+	    if (results.isEmpty()) {
+	        System.out.printf("No results generated for event %d%n", idEvent);
+	        return results;
+	    }
+
+	    // 3. Persiste todos
+	    List<Result> savedResults = repository.saveAll(results);
+
+	    System.out.printf("%d results saved for event %d%n", savedResults.size(), idEvent);
+
+	    return savedResults;
 	}
 	
 	public List<Result> getResult(Long idEvent) {
