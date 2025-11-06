@@ -41,7 +41,7 @@ public class TransactionFactory {
             .idTransactionType(type.getId())
             .createdAt(createdAt)
             .amount(amount)
-            .description(type.getDescription())
+//            .description(type.getDescription())
             .build();
     }
 }
