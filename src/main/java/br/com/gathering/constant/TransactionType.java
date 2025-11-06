@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TransactionType {
-	
-	DEPOSITO (1L, "Depósito", "Pagamento de inscrições e resultados"),
-	SAQUE (2L, "Saque", "Recebimento de premiação"),
-	INSCRICAO (3L, "Inscrição", "Taxa destinada à confra"),
-	RESULTADO (4L, "Resultado", "Saldo final do evento");
+
+    INSCRICAO (1L, "Inscrição", "Taxa destinada à confra"),
+    RESULTADO (2L, "Resultado", "Saldo final do evento"),
+    DEPOSITO (3L, "Depósito", "Pagamento de inscrições e resultados"),
+    SAQUE (4L, "Saque", "Recebimento de premiação");
 	
 	private final Long id;
 	private final String name;
