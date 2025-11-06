@@ -8,4 +8,6 @@ import br.com.gathering.entity.Transaction;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 
+    void deleteByIdEvent(Long idEvent);
+
 }
