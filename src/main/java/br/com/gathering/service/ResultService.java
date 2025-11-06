@@ -1,9 +1,11 @@
 package br.com.gathering.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gathering.entity.Result;
+import br.com.gathering.entity.Transaction;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.RankCountProjection;
 import br.com.gathering.projection.RankProjection;
 import br.com.gathering.repository.ResultRepository;
+import br.com.gathering.repository.TransactionRepository;
 
 @Service
 public class ResultService extends AbstractService<Result> {
@@ -30,7 +34,10 @@ public class ResultService extends AbstractService<Result> {
 
 	@Autowired
 	private ResultRepository repository;
-	
+
+	@Autowired
+	private TransactionRepository transactionRepository;
+
 	public ConfraPotProjection getConfraPot(Long idEvent) {
 		ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
 
@@ -108,15 +115,23 @@ public class ResultService extends AbstractService<Result> {
 		log.info("Starting result calculation for event {}", idEvent);
 
 		try {
-			// 1. Remove previous results to avoid duplicates
+            // 1. Remove previous transactions to avoid duplicates
+//            transactionRepository.deleteByIdEvent(idEvent);
+            int oldCount = transactionRepository.findByIdEvent(idEvent).size();
+            if (oldCount > 0) {
+            	transactionRepository.deleteByIdEvent(idEvent);
+                log.info("Deleted {} previous transactions for event {}", oldCount, idEvent);
+            }
+
+			// 2. Remove previous results to avoid duplicates
 //			repository.deleteByIdEvent(idEvent);
-            int oldCount = repository.findByIdEvent(idEvent).size();
+            oldCount = repository.findByIdEvent(idEvent).size();
             if (oldCount > 0) {
                 repository.deleteByIdEvent(idEvent);
                 log.info("Deleted {} previous results for event {}", oldCount, idEvent);
-            }		    
+            }
 
-		    // 2. Compute new results
+		    // 3. Compute new results
 		    List<Result> results = getResult(idEvent);
 		    if (results == null || results.isEmpty()) {
 //		    	System.out.printf("No results generated for event %d%n", idEvent);
@@ -124,12 +139,12 @@ public class ResultService extends AbstractService<Result> {
                 return Collections.emptyList();
             }
 	
-		    // 3. Persist data
+		    // 4. Persist data
 		    List<Result> savedResults = repository.saveAll(results);
 		    log.info("{} results saved successfully for event {}", savedResults.size(), idEvent);	
 //		    System.out.printf("%d results saved for event %d%n", savedResults.size(), idEvent);
 
-		    // 4. Log summary
+		    // 5. Log summary
             int maxNameLength = savedResults.stream()
                 .map(Result::getPlayerName)
                 .filter(Objects::nonNull)
@@ -147,12 +162,39 @@ public class ResultService extends AbstractService<Result> {
                     item.getFinalBalance()
                 ))
             );
+
+            // 6. Create and save transactions (inscription and result)
+            LocalDateTime now = LocalDateTime.now();
+            List<Transaction> transactions = results.stream()
+                .flatMap(result -> Stream.of(
+                    Transaction.builder()
+                    	.idGathering(result.getEvent().getIdGathering())
+                        .idEvent(idEvent)
+                        .idPlayer(result.getIdPlayer())
+                        .idTransactionType(3L) // inscription
+                        .createdAt(now)
+                        .amount(-result.getNegative()) // ConfraFee
+                        .description("Taxa de inscrição do evento")
+                        .build(),
+                    Transaction.builder()
+                    	.idGathering(result.getEvent().getIdGathering())
+                        .idEvent(idEvent)
+                        .idPlayer(result.getIdPlayer())
+                        .idTransactionType(4L) // Result
+                        .createdAt(now)
+                        .amount(result.getFinalBalance()) // FinalBalance
+                        .description("Saldo final do evento")
+                        .build()
+                ))
+                .collect(Collectors.toList());
+
+            transactionRepository.saveAll(transactions);
 	
 		    return savedResults;
 
 		} catch (Exception ex) {
             log.error("Error while calculating/saving results for event {}: {}", idEvent, ex.getMessage(), ex);
-            throw ex; // rollback automático pelo Spring
+            throw ex; // Auto rollback by Spring
         }
 	}
 

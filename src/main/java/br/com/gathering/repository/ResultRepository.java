@@ -19,7 +19,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
     void deleteByIdEvent(Long idEvent);
 
     List<Result> findByIdEvent(Long idEvent);
-    
+
     @Query(nativeQuery = true, value = """
 			SELECT
 				id_event AS idEvent,
@@ -73,4 +73,5 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 				id_event = :idEvent
 			""")
 	List<RankProjection> getRankProjection(@Param("idEvent") Long idEvent);
+
 }
