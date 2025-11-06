@@ -394,38 +394,7 @@ COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
 'Displays each player''s wallet (balance) grouped by gathering, based on all related transactions.';
 /* CREATE VIEWS */
 
--- Create function to update wallet and return player
-DROP FUNCTION IF EXISTS gathering.update_wallet;
-CREATE OR REPLACE FUNCTION gathering.update_wallet(id_player_param BIGINT)
-RETURNS SETOF gathering.player AS $$
-DECLARE
-    updated_player gathering.player%ROWTYPE;
-BEGIN
-    UPDATE gathering.player
-    SET wallet = (
-        COALESCE(
-            (SELECT SUM(transaction.amount)
-             FROM gathering.transaction
-             WHERE 
-             	transaction.id_player = id_player_param),
-            0
-        ) +
-        COALESCE(
-            (SELECT SUM(rank.final_balance)
-             FROM gathering.rank
-             WHERE rank.id_player = id_player_param),
-            0
-        )
-    )
-    WHERE id = id_player_param
-    RETURNING * INTO updated_player;
-
-    RETURN NEXT updated_player;
-    RETURN;
-END;
-$$ LANGUAGE plpgsql;
-
--- Create indexes
+-- CREATE INDEXES
 -- CREATE INDEX IF NOT EXISTS idx_gathering_format_name ON gathering.format(name);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_email ON gathering.player(email);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_name ON gathering.player(name);
