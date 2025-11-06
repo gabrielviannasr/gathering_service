@@ -1,6 +1,7 @@
 package br.com.gathering.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @Table(name = "result", schema = "gathering")
 public class Result {
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gathering.sequence_result")
 	@SequenceGenerator(name = "gathering.sequence_result", sequenceName = "gathering.sequence_result", allocationSize = 1)
@@ -43,6 +45,7 @@ public class Result {
 	@Column(name = "id_player", nullable = true)
 	private Long idPlayer;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
