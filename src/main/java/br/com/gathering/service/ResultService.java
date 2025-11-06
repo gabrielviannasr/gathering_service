@@ -114,7 +114,7 @@ public class ResultService extends AbstractService<Result> {
 
 	    return savedResults;
 	}
-	
+
 	public List<Result> getResult(Long idEvent) {
 	    // Rank data without loser pot distribution
 	    List<RankProjection> ranks = repository.getRankProjection(idEvent);
