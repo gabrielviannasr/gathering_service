@@ -373,25 +373,51 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
     'Provides the player ranking within each gathering based on cumulative performance and balance, built upon vw_gathering_player_balance.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
-SELECT
-    g.id AS id_gathering,
-    g.name AS gathering_name,
-    p.id AS id_player,
-    p.name AS player_name,
-    COALESCE(SUM(t.amount), 0) AS wallet
-FROM
-    gathering.player p
-LEFT JOIN
-    gathering.transaction t ON t.id_player = p.id
-LEFT JOIN
-    gathering.gathering g ON g.id = t.id_gathering
-GROUP BY
-    g.id, g.name, p.id, p.name
-ORDER BY
-    g.name, p.name;
+    SELECT
+        g.id AS id_gathering,
+        g.name AS gathering_name,
+        p.id AS id_player,
+        p.name AS player_name,
+        COALESCE(SUM(t.amount), 0) AS wallet
+    FROM
+        gathering.player p
+    LEFT JOIN
+        gathering.transaction t ON t.id_player = p.id
+    LEFT JOIN
+        gathering.gathering g ON g.id = t.id_gathering
+    GROUP BY
+        g.id, g.name, p.id, p.name
+    ORDER BY
+        g.name, p.name;
 
 COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
 'Displays each player''s wallet (balance) grouped by gathering, based on all related transactions.';
+
+CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
+    SELECT
+        g.id AS id_gathering,
+        g.name AS gathering_name,
+        p.id AS id_player,
+        p.name AS player_name,
+        t.id AS id_transaction,
+        t.created_at,
+        tt.name AS transaction_type_name,
+        t.amount,
+        t.description AS transaction_description
+    FROM
+        gathering.gathering g
+    LEFT JOIN
+        gathering.transaction t ON t.id_gathering = g.id
+    LEFT JOIN
+        gathering.player p ON p.id = t.id_player
+    LEFT JOIN
+        gathering.transaction_type tt ON tt.id = t.id_transaction_type
+    ORDER BY
+        g.name, p.name, t.created_at, t.id_transaction_type;
+
+COMMENT ON VIEW gathering.vw_gathering_player_transaction IS
+'Exibe as transações de cada jogador em suas respectivas confraternizações, incluindo tipo, valor e descrição. 
+A ordenação segue a sequência natural do fluxo: Inscrição → Resultado → Depósito → Saque.';
 /* CREATE VIEWS */
 
 -- CREATE INDEXES
