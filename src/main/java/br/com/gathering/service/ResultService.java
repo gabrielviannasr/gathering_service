@@ -1,11 +1,9 @@
 package br.com.gathering.service;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Result;
 import br.com.gathering.entity.Transaction;
-import br.com.gathering.constant.TransactionType;
+import br.com.gathering.factory.TransactionFactory;
 import br.com.gathering.projection.ConfraPotProjection;
 import br.com.gathering.projection.LoserPotProjection;
 import br.com.gathering.projection.RankCountProjection;
@@ -171,35 +169,38 @@ public class ResultService extends AbstractService<Result> {
                 ))
             );
 
-            // 6. Create and save transactions (inscription and result)
-            Event event = eventRepository.findById(idEvent).get();
+            // 6. Create and save transactions (via factory)
+//            Event event = eventRepository.findById(idEvent).get();
+            Event event = eventRepository.findById(idEvent)
+                    .orElseThrow(() -> new IllegalArgumentException("Event not found for id " + idEvent));
             
-            LocalDateTime createdAt = event.getCreatedAt();
+//            LocalDateTime createdAt = event.getCreatedAt();
 //            LocalDateTime createdAt = LocalDateTime.now();
 
-            List<Transaction> transactions = results.stream()
-                .flatMap(result -> Stream.of(
-                    Transaction.builder()
-                    	.idGathering(event.getIdGathering())
-                        .idEvent(idEvent)
-                        .idPlayer(result.getIdPlayer())
-                        .idTransactionType(TransactionType.INSCRICAO.getId())
-                        .createdAt(createdAt)
-                        .amount(-event.getConfraFee())
-                        .description(TransactionType.INSCRICAO.getDescription())
-                        .build(),
-                    Transaction.builder()
-                    	.idGathering(event.getIdGathering())
-                        .idEvent(idEvent)
-                        .idPlayer(result.getIdPlayer())
-                        .idTransactionType(TransactionType.RESULTADO.getId())
-                        .createdAt(createdAt)
-                        .amount(result.getFinalBalance())
-                        .description(TransactionType.RESULTADO.getDescription())
-                        .build()
-                ))
-                .collect(Collectors.toList());
-
+//            List<Transaction> transactions = results.stream()
+//                .flatMap(result -> Stream.of(
+//                    Transaction.builder()
+//                    	.idGathering(event.getIdGathering())
+//                        .idEvent(idEvent)
+//                        .idPlayer(result.getIdPlayer())
+//                        .idTransactionType(TransactionType.INSCRICAO.getId())
+//                        .createdAt(createdAt)
+//                        .amount(-event.getConfraFee())
+//                        .description(TransactionType.INSCRICAO.getDescription())
+//                        .build(),
+//                    Transaction.builder()
+//                    	.idGathering(event.getIdGathering())
+//                        .idEvent(idEvent)
+//                        .idPlayer(result.getIdPlayer())
+//                        .idTransactionType(TransactionType.RESULTADO.getId())
+//                        .createdAt(createdAt)
+//                        .amount(result.getFinalBalance())
+//                        .description(TransactionType.RESULTADO.getDescription())
+//                        .build()
+//                ))
+//                .collect(Collectors.toList());
+            
+            List<Transaction> transactions = TransactionFactory.fromResults(event, results);
             transactionRepository.saveAll(transactions);
 	
 		    return savedResults;
