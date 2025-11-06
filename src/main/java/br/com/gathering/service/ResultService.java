@@ -159,8 +159,10 @@ public class ResultService extends AbstractService<Result> {
                 .orElse(25);
 
             savedResults.forEach(item ->
-                log.info(String.format(
-                    "{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }",
+//                log.info(String.format(
+//            		"{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }",
+            	System.out.printf(String.format(
+                    "\t{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f | loserPot: %8.2f | finalBalance: %8.2f }%n",
                     item.getRank(),
                     item.getPlayerName(),
                     item.getRankBalance(),
