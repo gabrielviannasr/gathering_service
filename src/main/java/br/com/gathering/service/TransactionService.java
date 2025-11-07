@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.gathering.constant.TransactionType;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
+import br.com.gathering.repository.GatheringRepository;
+import br.com.gathering.repository.PlayerRepository;
 import br.com.gathering.repository.TransactionRepository;
 
 @Service
@@ -23,6 +25,12 @@ public class TransactionService extends AbstractService<Transaction> {
 
 	@Autowired
 	private TransactionRepository repository;
+
+	@Autowired
+	private GatheringRepository gatheringRepository;
+
+	@Autowired
+	private PlayerRepository playerRepository;
 
 	public static Sort getSort() {
 		return Sort.by(Order.asc("idGathering"), Order.asc("idPlayer"), Order.asc("createdAt"));
@@ -58,9 +66,13 @@ public class TransactionService extends AbstractService<Transaction> {
 	    if (model.getIdTransactionType() == null)
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do tipo de transação é obrigatório");
 
-	    // TODO: Add HttpStatus.NOT_FOUND to Gathering
-	    
-	    // TODO: Add HttpStatus.NOT_FOUND to Player
+	    if (!gatheringRepository.existsById(model.getIdGathering())) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Gathering não encontrada");
+	    }
+
+	    if (!playerRepository.existsById(model.getIdPlayer())) {
+	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Jogador não encontrado");
+	    }
 
 	    TransactionType type = Arrays.stream(TransactionType.values())
 	        .filter(t -> t.getId() == model.getIdTransactionType())
@@ -87,7 +99,7 @@ public class TransactionService extends AbstractService<Transaction> {
 	        }
 	    }
 	}
-	
+
 	public double getWalletBalance(Long idGathering, Long idPlayer) {
 	    PlayerWalletProjection walletProjection = repository.getWalletBalance(idGathering, idPlayer);
 	    return (walletProjection != null && walletProjection.getWallet() != null)
