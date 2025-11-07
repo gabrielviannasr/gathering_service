@@ -56,16 +56,16 @@ public class RoundDTO {
 	@Override
 	public String toString() {
 	    return "RoundDTO: {\n"
-//	            + "    id: " + this.id + ",\n"
-	            + "    idEvent: " + this.idEvent + ",\n"
-	            + "    idFormat: " + this.idFormat + ",\n"
-	            + "    idPlayerWinner: " + this.idPlayerWinner + ",\n"
-	            + "    createdAt: " + this.createdAt + ",\n"
-	            + "    round: " + this.round + ",\n"
-	            + "    players: " + this.players + ",\n"
-	            + "    prize: " + this.prize + ",\n"
-	            + "    loserPot: " + this.loserPot + ",\n"
-	            + "    canceled: " + this.canceled + ",\n"
+//	            + "\tid: " + this.id + ",\n"
+	            + "\tidEvent: " + this.idEvent + ",\n"
+	            + "\tidFormat: " + this.idFormat + ",\n"
+	            + "\tidPlayerWinner: " + this.idPlayerWinner + ",\n"
+	            + "\tcreatedAt: " + this.createdAt + ",\n"
+	            + "\tround: " + this.round + ",\n"
+	            + "\tplayers: " + this.players + ",\n"
+	            + "\tprize: " + this.prize + ",\n"
+	            + "\tloserPot: " + this.loserPot + ",\n"
+	            + "\tcanceled: " + this.canceled + ",\n"
 	            + "}";
 	}
 

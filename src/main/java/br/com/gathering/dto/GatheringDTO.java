@@ -38,7 +38,7 @@ public class GatheringDTO {
     @Override
     public String toString() {
 		return "GatheringDTO: {\n"
-				// + "\tid: " + this.id + ",\n"
+//				+ "\tid: " + this.id + ",\n"
 				+ "\tidPlayer: " + this.idPlayer + ",\n"
 				+ "\tyear: " + this.year + ",\n"
 				+ "\tname: " + this.name + ",\n"

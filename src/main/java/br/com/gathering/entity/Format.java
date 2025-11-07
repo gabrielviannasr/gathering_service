@@ -38,9 +38,9 @@ public class Format {
     @Override
     public String toString() {
 		return "Format: {\n"
-				+ "	id: " + this.id + ",\n"
-				+ "	name: " + this.name + ",\n"
-				+ "	lifeCount: " + this.lifeCount + ",\n"
+				+ "\tid: " + this.id + ",\n"
+				+ "\tname: " + this.name + ",\n"
+				+ "\tlifeCount: " + this.lifeCount + ",\n"
 				+ "}";
     }
 

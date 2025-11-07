@@ -90,17 +90,17 @@ public class Result {
 	@Override
 	public String toString() {
 	    return "Result: {\n"
-	            + "    id: " + this.id + ",\n"
-	            + "    idEvent: " + this.idEvent + ",\n"
-	            + "    idPlayer: " + this.idPlayer + ",\n"
-	            + "    rank: " + this.rank + ",\n"
-	            + "    wins: " + this.wins + ",\n"
-	            + "    rounds: " + this.rounds + ",\n"
-	            + "    positive: " + this.positive + ",\n"
-	            + "    negative: " + this.negative + ",\n"
-	            + "    rankBalance: " + this.rankBalance + ",\n"
-	            + "    loserPot: " + this.loserPot + ",\n"
-	            + "    finalBalance: " + this.finalBalance + ",\n"
+	            + "\tid: " + this.id + ",\n"
+	            + "\tidEvent: " + this.idEvent + ",\n"
+	            + "\tidPlayer: " + this.idPlayer + ",\n"
+	            + "\trank: " + this.rank + ",\n"
+	            + "\twins: " + this.wins + ",\n"
+	            + "\trounds: " + this.rounds + ",\n"
+	            + "\tpositive: " + this.positive + ",\n"
+	            + "\tnegative: " + this.negative + ",\n"
+	            + "\trankBalance: " + this.rankBalance + ",\n"
+	            + "\tloserPot: " + this.loserPot + ",\n"
+	            + "\tfinalBalance: " + this.finalBalance + ",\n"
 	            + "}";
 	}
 

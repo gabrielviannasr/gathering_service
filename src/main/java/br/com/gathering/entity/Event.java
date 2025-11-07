@@ -91,19 +91,19 @@ public class Event {
 	@Override
 	public String toString() {
 	    return "Event: {\n"
-	            + "    id: " + this.id + ",\n"
-	            + "    idGathering: " + this.idGathering + ",\n"
-	            + "    idFormat: " + this.idFormat + ",\n"
-	            + "    createdAt: " + this.createdAt + ",\n"
-	            + "    players: " + this.players + ",\n"
-	            + "    rounds: " + this.rounds + ",\n"
-	            + "    confraFee: " + this.confraFee + ",\n"
-	            + "    roundFee: " + this.roundFee + ",\n"
-	            + "    loserFee4: " + this.loserFee4 + ",\n"
-	            + "    loserFee5: " + this.loserFee5 + ",\n"
-	            + "    loserFee6: " + this.loserFee6 + ",\n"
-	            + "    loserPot: " + this.loserPot + ",\n"
-	            + "    confraPot: " + this.confraPot + ",\n"
+	            + "\tid: " + this.id + ",\n"
+	            + "\tidGathering: " + this.idGathering + ",\n"
+	            + "\tidFormat: " + this.idFormat + ",\n"
+	            + "\tcreatedAt: " + this.createdAt + ",\n"
+	            + "\tplayers: " + this.players + ",\n"
+	            + "\trounds: " + this.rounds + ",\n"
+	            + "\tconfraFee: " + this.confraFee + ",\n"
+	            + "\troundFee: " + this.roundFee + ",\n"
+	            + "\tloserFee4: " + this.loserFee4 + ",\n"
+	            + "\tloserFee5: " + this.loserFee5 + ",\n"
+	            + "\tloserFee6: " + this.loserFee6 + ",\n"
+	            + "\tloserPot: " + this.loserPot + ",\n"
+	            + "\tconfraPot: " + this.confraPot + ",\n"
 	            + "}";
 	}
 

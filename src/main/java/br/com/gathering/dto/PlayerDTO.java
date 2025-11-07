@@ -42,11 +42,11 @@ public class PlayerDTO {
     @Override
     public String toString() {
 		return "PlayerDTO: {\n"
-//				+ "	id: " + this.id + ",\n"
-				+ "	name: " + this.name + ",\n"
-//				+ "	username: " + this.username + ",\n"
-//				+ "	password: " + this.password + ",\n"
-//				+ "	wallet: " + this.wallet + ",\n"
+//				+ "\tid: " + this.id + ",\n"
+				+ "\tname: " + this.name + ",\n"
+//				+ "\tusername: " + this.username + ",\n"
+//				+ "\tpassword: " + this.password + ",\n"
+//				+ "\twallet: " + this.wallet + ",\n"
 				+ "}";
     }
 

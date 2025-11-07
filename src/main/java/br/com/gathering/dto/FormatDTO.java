@@ -32,9 +32,9 @@ public class FormatDTO {
     @Override
     public String toString() {
 		return "FormatDTO: {\n"
-//				+ "	id: " + this.id + ",\n"
-				+ "	name: " + this.name + ",\n"
-				+ "	lifeCount: " + this.lifeCount + ",\n"
+//				+ "\tid: " + this.id + ",\n"
+				+ "\tname: " + this.name + ",\n"
+				+ "\tlifeCount: " + this.lifeCount + ",\n"
 				+ "}";
     }
 

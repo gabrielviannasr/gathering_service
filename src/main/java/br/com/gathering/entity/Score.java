@@ -81,17 +81,17 @@ public class Score {
 	@Override
 	public String toString() {
 	    return "RoundPlayer: {\n"
-	            + "    id: " + this.id + ",\n"
-	            + "    idRound: " + this.idRound + ",\n"
-	            + "    idPlayer: " + this.idPlayer + ",\n"
-//	            + "    idPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
-//	            + "    isDead: " + this.isDead + ",\n"
-//	            + "    primaryCommanderName: " + this.primaryCommanderName + ",\n"
-//	            + "    primaryCommanderCount: " + this.primaryCommanderCount + ",\n"
-//	            + "    secondaryCommanderName: " + this.secondaryCommanderName + ",\n"
-//	            + "    secondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
-//	            + "    infectCount: " + this.infectCount + ",\n"
-//	            + "    lifeCount: " + this.lifeCount + ",\n"
+	            + "\tid: " + this.id + ",\n"
+	            + "\tidRound: " + this.idRound + ",\n"
+	            + "\tidPlayer: " + this.idPlayer + ",\n"
+//	            + "\tidPlayerKilledBy: " + this.idPlayerKilledBy + ",\n"
+//	            + "\tisDead: " + this.isDead + ",\n"
+//	            + "\tprimaryCommanderName: " + this.primaryCommanderName + ",\n"
+//	            + "\tprimaryCommanderCount: " + this.primaryCommanderCount + ",\n"
+//	            + "\tsecondaryCommanderName: " + this.secondaryCommanderName + ",\n"
+//	            + "\tsecondaryCommanderCount: " + this.secondaryCommanderCount + ",\n"
+//	            + "\tinfectCount: " + this.infectCount + ",\n"
+//	            + "\tlifeCount: " + this.lifeCount + ",\n"
 	            + "}";
 	}
 

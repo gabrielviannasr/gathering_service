@@ -56,12 +56,12 @@ public class Player {
     @Override
     public String toString() {
 		return "Player: {\n"
-				+ "	id: " + this.id + ",\n"
-				+ "	name: " + this.name + ",\n"
-//				+ "	username: " + this.username + ",\n"
-//				+ "	email: " + this.email + ",\n"
-//				+ "	password: " + this.password + ",\n"
-//				+ "	wallet: " + this.wallet + ",\n"
+				+ "\tid: " + this.id + ",\n"
+				+ "\tname: " + this.name + ",\n"
+//				+ "\tusername: " + this.username + ",\n"
+//				+ "\temail: " + this.email + ",\n"
+//				+ "\tpassword: " + this.password + ",\n"
+//				+ "\twallet: " + this.wallet + ",\n"
 				+ "}";
     }
 
