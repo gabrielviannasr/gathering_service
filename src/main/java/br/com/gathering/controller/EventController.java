@@ -54,6 +54,7 @@ public class EventController {
 		return service.save(model);
 	}
 
+	// TODO: Review method
 	@PutMapping
 	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
 		System.out.println(dto);
