@@ -33,7 +33,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>{
     PlayerWalletProjection getWalletBalance(@Param("idGathering") Long idGathering, @Param("idPlayer") Long idPlayer);
 
     // Future cross validation. Player must belong to the same transaction's gathering.
-    @Query("""
+    @Query(nativeQuery = true, value = """
     		SELECT COUNT(p) > 0
 			FROM gathering.player p
 			JOIN gathering.gathering g ON g.id = :idGathering
