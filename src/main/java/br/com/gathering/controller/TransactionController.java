@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.TransactionDTO;
-import br.com.gathering.entity.Player;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.service.PlayerService;
 import br.com.gathering.service.TransactionService;
@@ -51,25 +50,6 @@ public class TransactionController {
 		return service.getById(id);
 	}
 
-	// TODO: Review method, used depracated updateWallet
-//	@PostMapping
-//	public Transaction save2(@RequestBody TransactionDTO dto) {
-//		System.out.println(dto);
-//		// Get player to be used in validation
-//		Player player = playerService.getById(dto.getIdPlayer());
-//
-//		Transaction model = dto.toModel();
-//		model.setPlayer(player);
-//		System.out.println(model);
-//
-//		model = service.save(model);
-//
-////		playerService.updateWallet(model.getIdPlayer());
-//
-//		// Fetch the managed entity to ensure it's in the persistence context
-//		return getById(model.getId());
-//	}
-
 	@PostMapping
 	public Transaction save(@RequestBody TransactionDTO dto) {
 		System.out.println(dto);
@@ -77,25 +57,14 @@ public class TransactionController {
 		System.out.println(model);
 		return service.save(model);
 	}
-	
-	// TODO: Review method, used depracated updateWallet
+
 	@PutMapping
 	public Transaction update(@RequestParam Long id, @RequestBody TransactionDTO dto) {
 		System.out.println(dto);
-		// Get player to be used in validation
-		Player player = playerService.getById(dto.getIdPlayer());
-
 		Transaction model = dto.toModel();
 		model.setId(id);
-		model.setPlayer(player);
 		System.out.println(model);
-
-		model = service.save(model);
-
-//		playerService.updateWallet(model.getIdPlayer());
-
-		// Fetch the managed entity to ensure it's in the persistence context
-		return getById(model.getId());
+		return service.save(model);
 	}
 
 }
