@@ -75,9 +75,6 @@ public class Event {
 	@Column(name = "confra_pot", nullable = false)
     private Double confraPot;
 
-//	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<Rank> ranks;
-
 	public void init() {
 	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
 	    this.players = (this.players == null) ? 0 : this.players;

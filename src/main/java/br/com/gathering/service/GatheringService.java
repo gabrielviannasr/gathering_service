@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Gathering;
-import br.com.gathering.projection.DashboardProjection;
 import br.com.gathering.repository.GatheringRepository;
 import jakarta.persistence.EntityManager;
 
@@ -51,10 +50,6 @@ public class GatheringService extends AbstractService<Gathering> {
 	    entityManager.clear();
 
 		return getById(model.getId());
-	}
-	
-	public List<DashboardProjection> getDashboard(Long idGathering) {
-		return repository.getDashboard(idGathering);
 	}
 
 }

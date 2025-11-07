@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.GatheringDTO;
 import br.com.gathering.entity.Gathering;
-import br.com.gathering.projection.DashboardProjection;
 import br.com.gathering.service.GatheringService;
 
 @RestController
@@ -64,8 +63,4 @@ public class GatheringController {
 		return service.save(model);
 	}
 
-	@GetMapping("/{id}/dashboard")
-	public List<DashboardProjection> getDashboard(@PathVariable Long id) {
-		return service.getDashboard(id);
-	}
 }
