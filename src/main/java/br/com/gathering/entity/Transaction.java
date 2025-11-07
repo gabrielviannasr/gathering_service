@@ -2,7 +2,7 @@ package br.com.gathering.entity;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +38,7 @@ public class Transaction {
 	@Column(name = "id_gathering", nullable = false)
 	private Long idGathering;
 
-	@JsonIgnore
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
 	private Gathering gathering;
@@ -46,6 +46,7 @@ public class Transaction {
 	@Column(name = "id_event", nullable = false)
 	private Long idEvent;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@JoinColumn(name = "id_event", nullable = true, insertable = false, updatable = false)
 	private Event event;
@@ -53,6 +54,7 @@ public class Transaction {
 	@Column(name = "id_player", nullable = false)
 	private Long idPlayer;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
@@ -60,6 +62,7 @@ public class Transaction {
 	@Column(name = "id_transaction_type", nullable = false)
 	private Long idTransactionType;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@ManyToOne
 	@JoinColumn(name = "id_transaction_type", nullable = true, insertable = false, updatable = false)
 	private TransactionType transactionType;
