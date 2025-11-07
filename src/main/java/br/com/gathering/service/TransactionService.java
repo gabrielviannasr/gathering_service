@@ -79,15 +79,20 @@ public class TransactionService extends AbstractService<Transaction> {
 	        case SAQUE -> {
 	            if (model.getAmount() == null || model.getAmount() >= 0)
 	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do saque deve ser negativo");
-	            
-	            PlayerWalletProjection walletProjection = repository.getWalletBalance(model.getIdGathering(), model.getIdPlayer());
-	            // Double wallet = walletProjection.getWallet();
-	            Double wallet = (walletProjection != null) ? walletProjection.getWallet() : 0.0; // In case of first event, so without transactions
+
+	            Double wallet = getWalletBalance(model.getIdGathering(), model.getIdPlayer());
 
 	            if (wallet + model.getAmount() < 0)
 	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente para saque");
 	        }
 	    }
+	}
+	
+	public double getWalletBalance(Long idGathering, Long idPlayer) {
+	    PlayerWalletProjection walletProjection = repository.getWalletBalance(idGathering, idPlayer);
+	    return (walletProjection != null && walletProjection.getWallet() != null)
+	        ? walletProjection.getWallet()
+	        : 0.0; // In case of first event, so without transactions
 	}
 
 }
