@@ -14,16 +14,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Player;
 import br.com.gathering.repository.PlayerRepository;
-import jakarta.persistence.EntityManager;
 
 @Service
 public class PlayerService extends AbstractService<Player> {
 
 	@Autowired
 	private PlayerRepository repository;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	public static Sort getSort() {
 		return Sort.by(Order.asc("name"));

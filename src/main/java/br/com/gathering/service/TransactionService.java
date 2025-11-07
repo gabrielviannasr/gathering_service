@@ -52,7 +52,7 @@ public class TransactionService extends AbstractService<Transaction> {
 	public Transaction save(Transaction model) {
 		model.init();
 		validate(model);
-		return model;		
+		return repository.save(model);		
 	}
 
 	private void validate(Transaction model) {
