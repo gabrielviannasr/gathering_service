@@ -202,7 +202,24 @@ public class ResultService extends AbstractService<Result> {
             
             List<Transaction> transactions = TransactionFactory.fromResults(event, results);
             transactionRepository.saveAll(transactions);
-	
+
+            // 7. Update event summary fields
+            ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
+            LoserPotProjection loserPot = repository.getLoserPot(idEvent);
+
+            event.setPlayers(confraPot.getPlayers());
+            event.setRounds(loserPot.getRounds());
+            event.setLoserPot(loserPot.getLoserPot());
+            event.setConfraPot(confraPot.getConfraPot());
+
+            eventRepository.save(event);
+            log.info("Event {} updated with players={}, rounds={}, confraPot={}, loserPot={}",
+                    idEvent,
+                    confraPot.getPlayers(),
+                    loserPot.getRounds(),
+                    confraPot.getConfraPot(),
+                    loserPot.getLoserPot());
+
 		    return savedResults;
 
 		} catch (Exception ex) {
