@@ -1,5 +1,6 @@
 package br.com.gathering.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.gathering.constant.TransactionType;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.repository.TransactionRepository;
-import jakarta.persistence.EntityManager;
 
 @Service
 public class TransactionService extends AbstractService<Transaction> {
@@ -48,59 +48,39 @@ public class TransactionService extends AbstractService<Transaction> {
 
 	private void validate(Transaction model) {
 
-		if (model.getIdGathering() == null) {
+	    if (model.getIdGathering() == null)
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID da gathering é obrigatório");
 
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID da gathering é obrigatório");
+	    if (model.getIdPlayer() == null)
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do player é obrigatório");
 
-		}
-		if (model.getIdPlayer() == null) {
+	    if (model.getIdTransactionType() == null)
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do tipo de transação é obrigatório");
 
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do player é obrigatório");
+	    TransactionType type = Arrays.stream(TransactionType.values())
+	        .filter(t -> t.getId() == model.getIdTransactionType())
+	        .findFirst()
+	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de transação não encontrado"));
 
-		}
-
-		Long idTransactionType = model.getIdTransactionType();
-
-		if (idTransactionType == null) {
-
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do tipo de transação é obrigatório");
-
-		} else if (idTransactionType == TransactionType.INSCRICAO.getId() || idTransactionType == TransactionType.RESULTADO.getId()) {
-
-			if (model.getIdEvent() == null) {
-
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do evento é obrigatório");
-
-			}
-
-		} else if (idTransactionType == TransactionType.DEPOSITO.getId()) {
-
-			if(model.getAmount() < 0) {
-
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do depósito deve ser positivo");
-
-			}
-
-		} else if (idTransactionType == TransactionType.SAQUE.getId()) {
-
-			if(model.getAmount() >= 0) {
-
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do saque deve ser negativo");
-
-			}
-
-			Double wallet = 0.0; // TODO: Consultar do repository
-
-			if (wallet + model.getAmount() < 0) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente para saque");
-			}
-
-		} else {
-
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de transação não encontrada");
-
-		}
-
+	    switch (type) {
+	        case INSCRICAO, RESULTADO -> {
+	            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+	                "Transações de inscrição e resultado são geradas automaticamente pelo sistema");
+	        }
+	        case DEPOSITO -> {
+	            if (model.getAmount() == null || model.getAmount() <= 0)
+	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do depósito deve ser positivo");
+	        }
+	        case SAQUE -> {
+	            if (model.getAmount() == null || model.getAmount() >= 0)
+	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do saque deve ser negativo");
+	            
+	            Double wallet = 0.0; // TODO: Consultar do repository
+//	            Double wallet = transactionRepository.getWalletBalance(model.getIdGathering(), model.getIdPlayer());
+	            if (wallet + model.getAmount() < 0)
+	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente para saque");
+	        }
+	    }
 	}
 
 }
