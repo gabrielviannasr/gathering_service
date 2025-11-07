@@ -47,17 +47,4 @@ public class PlayerService extends AbstractService<Player> {
 		return repository.save(model);
 	}
 
-//	public Player updateWallet(Long id) {
-//		Player player = repository.updateWallet(id);
-//
-//		// Clear the persistence context
-//	    entityManager.clear();
-//	    
-//	    // Fetch the managed entity to ensure it's in the persistence context
-//	    player = getById(id);
-//
-//		System.out.println("updateWallet: " + player);
-//		return player;
-//	}
-
 }

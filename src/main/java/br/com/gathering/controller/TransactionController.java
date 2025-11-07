@@ -51,6 +51,7 @@ public class TransactionController {
 		return service.getById(id);
 	}
 
+	// TODO: Review method, used depracated updateWallet
 	@PostMapping
 	public Transaction save(@RequestBody TransactionDTO dto) {
 		System.out.println(dto);
@@ -69,6 +70,7 @@ public class TransactionController {
 		return getById(model.getId());
 	}
 
+	// TODO: Review method, used depracated updateWallet
 	@PutMapping
 	public Transaction update(@RequestParam Long id, @RequestBody TransactionDTO dto) {
 		System.out.println(dto);
