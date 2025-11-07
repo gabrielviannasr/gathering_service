@@ -34,6 +34,7 @@ public class RoundService extends AbstractService<Round> {
 
 	public Round save(Round model) {
 		model.init();
+//		validate(model);
 		return repository.save(model);
 	}
 

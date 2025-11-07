@@ -33,6 +33,7 @@ public class FormatService extends AbstractService<Format> {
 	}
 
 	public Format save(Format model) {
+//		validate(model);
 		return repository.save(model);
 	}
 

@@ -14,16 +14,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Gathering;
 import br.com.gathering.repository.GatheringRepository;
-import jakarta.persistence.EntityManager;
 
 @Service
 public class GatheringService extends AbstractService<Gathering> {
 
 	@Autowired
 	private GatheringRepository repository;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	public static Sort getSort() {
 		return Sort.by(Order.asc("name"));
@@ -44,12 +40,8 @@ public class GatheringService extends AbstractService<Gathering> {
 
 	public Gathering save(Gathering model) {
 		model.init();
-		repository.save(model);
-		
-		// Clear the persistence context
-	    entityManager.clear();
-
-		return getById(model.getId());
+//		validate(model);
+		return repository.save(model);
 	}
 
 }

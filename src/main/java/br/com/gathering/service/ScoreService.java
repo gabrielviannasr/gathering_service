@@ -34,6 +34,7 @@ public class ScoreService extends AbstractService<Score> {
 
 	public Score save(Score model) {
 		model.init();
+//		validate(model);
 		return repository.save(model);
 	}
 

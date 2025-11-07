@@ -40,6 +40,7 @@ public class PlayerService extends AbstractService<Player> {
 
 	public Player save(Player model) {
 		model.init();
+//		validate(model);
 		return repository.save(model);
 	}
 
