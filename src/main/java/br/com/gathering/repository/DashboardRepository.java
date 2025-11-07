@@ -15,8 +15,8 @@ public interface DashboardRepository extends JpaRepository<Result, Long> {
 
     @Query(nativeQuery = true, value = """
     	    SELECT
-				id_gathering AS idGathering,
-				gathering_name AS gatheringName,
+				-- id_gathering AS idGathering,
+				-- gathering_name AS gatheringName,
 				id_player AS idPlayer,
 				player_name AS playerName,
 				wallet
