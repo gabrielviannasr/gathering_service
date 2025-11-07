@@ -21,7 +21,7 @@ public class WebConfig {
     private String allowOrigins;
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
 
             @Override
