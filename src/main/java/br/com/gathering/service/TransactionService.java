@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.constant.TransactionType;
 import br.com.gathering.entity.Transaction;
+import br.com.gathering.projection.gathering.PlayerWalletProjection;
 import br.com.gathering.repository.TransactionRepository;
 
 @Service
@@ -57,6 +58,10 @@ public class TransactionService extends AbstractService<Transaction> {
 	    if (model.getIdTransactionType() == null)
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do tipo de transação é obrigatório");
 
+	    // TODO: Add HttpStatus.NOT_FOUND to Gathering
+	    
+	    // TODO: Add HttpStatus.NOT_FOUND to Player
+
 	    TransactionType type = Arrays.stream(TransactionType.values())
 	        .filter(t -> t.getId() == model.getIdTransactionType())
 	        .findFirst()
@@ -75,8 +80,10 @@ public class TransactionService extends AbstractService<Transaction> {
 	            if (model.getAmount() == null || model.getAmount() >= 0)
 	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do saque deve ser negativo");
 	            
-	            Double wallet = 0.0; // TODO: Consultar do repository
-//	            Double wallet = transactionRepository.getWalletBalance(model.getIdGathering(), model.getIdPlayer());
+	            PlayerWalletProjection walletProjection = repository.getWalletBalance(model.getIdGathering(), model.getIdPlayer());
+	            // Double wallet = walletProjection.getWallet();
+	            Double wallet = (walletProjection != null) ? walletProjection.getWallet() : 0.0; // In case of first event, so without transactions
+
 	            if (wallet + model.getAmount() < 0)
 	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente para saque");
 	        }
