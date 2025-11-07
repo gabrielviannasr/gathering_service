@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.dto.TransactionDTO;
 import br.com.gathering.entity.Transaction;
-import br.com.gathering.service.PlayerService;
 import br.com.gathering.service.TransactionService;
 
 @RestController
@@ -26,9 +25,6 @@ public class TransactionController {
 
 	@Autowired
 	private TransactionService service;
-
-	@Autowired
-	private PlayerService playerService;
 
 	@GetMapping
 	public List<Transaction> getList(Transaction model) {
