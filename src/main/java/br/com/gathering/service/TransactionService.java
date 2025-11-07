@@ -79,6 +79,16 @@ public class TransactionService extends AbstractService<Transaction> {
 	        .findFirst()
 	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de transação não encontrado"));
 
+	    /**
+	     * Future rule: player must belong to the gathering of the transaction.
+	     * This validation is currently disabled because some players may not have 
+	     * participated in any event but can still pay the confra fee manually.
+	     */
+//		  if (!playerRepository.playerBelongsToGathering(model.getIdPlayer(), model.getIdGathering())) {
+//		      throw new ResponseStatusException(HttpStatus.FORBIDDEN, 
+//		          "O jogador não pertence à gathering da transação");
+//		  }
+
 	    switch (type) {
 	        case INSCRICAO, RESULTADO -> {
 	            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
