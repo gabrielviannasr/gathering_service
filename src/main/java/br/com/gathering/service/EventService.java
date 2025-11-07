@@ -43,9 +43,9 @@ public class EventService extends AbstractService<Event> {
 		validate(model);
 		return repository.save(model);
 	}
-	
+
 	private void validate(Event model) {
-		
+
 		for (int players = 4; players <= 6; players++) {
 		    Double total = players * model.getRoundFee();
 		    Double loserFee = switch (players) {

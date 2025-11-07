@@ -67,7 +67,7 @@ public class ResultService extends AbstractService<Result> {
 
 		return loserPot;
 	}
-	
+
 	public List<RankCountProjection> getRankCount(Long idEvent) {
 		List<RankCountProjection> list = repository.getRankCount(idEvent);
 
@@ -95,7 +95,7 @@ public class ResultService extends AbstractService<Result> {
 
 //		String format = "\t{ rank: %-2d | name: %-" + Player.NAME_LENGTH + "s | rankBalance: %8.2f }%n";
 		String format = "\t{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f }%n";
-		
+
 		// Log
 		list.forEach(item -> 
 	        System.out.printf(
@@ -142,7 +142,7 @@ public class ResultService extends AbstractService<Result> {
                 log.warn("No results generated for event {}", idEvent);
                 return Collections.emptyList();
             }
-	
+
 		    // 4. Persist data
 		    List<Result> savedResults = repository.saveAll(results);
 		    log.info("{} results saved successfully for event {}", savedResults.size(), idEvent);	
@@ -173,7 +173,7 @@ public class ResultService extends AbstractService<Result> {
 //            Event event = eventRepository.findById(idEvent).get();
             Event event = eventRepository.findById(idEvent)
                     .orElseThrow(() -> new IllegalArgumentException("Event not found for id " + idEvent));
-            
+
 //            LocalDateTime createdAt = event.getCreatedAt();
 //            LocalDateTime createdAt = LocalDateTime.now();
 
@@ -199,7 +199,7 @@ public class ResultService extends AbstractService<Result> {
 //                        .build()
 //                ))
 //                .collect(Collectors.toList());
-            
+
             List<Transaction> transactions = TransactionFactory.fromResults(event, results);
             transactionRepository.saveAll(transactions);
 
@@ -276,7 +276,7 @@ public class ResultService extends AbstractService<Result> {
 		    .mapToInt(String::length)
 		    .max()
 		    .orElse(25); // fallback
-	    
+
 	    // Log
 	    results.forEach(item -> 
 	        System.out.printf(

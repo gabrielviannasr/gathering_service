@@ -7,5 +7,5 @@ import br.com.gathering.entity.Event;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{
-	
+
 }
