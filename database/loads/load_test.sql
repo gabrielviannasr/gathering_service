@@ -87,3 +87,11 @@ INSERT INTO gathering.score
 (8, 6),
 (8, 7),
 (8, 8);
+
+INSERT INTO gathering.transaction
+(id_gathering, id_event, id_player, id_transaction_type, created_at, amount)
+VALUES
+(1, 1, 4, 3, CURRENT_TIMESTAMP, 35.5), -- Gabriel
+(1, 1, 5, 3, CURRENT_TIMESTAMP, 5), -- Jean
+(1, 1, 7, 4, CURRENT_TIMESTAMP, -5), -- Tobias
+(1, 1, 8, 4, CURRENT_TIMESTAMP, -5); -- Valmir
