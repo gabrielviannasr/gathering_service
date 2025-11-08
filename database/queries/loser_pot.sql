@@ -3,6 +3,7 @@ SELECT
     e.id AS id_event,
     COUNT(r.id) AS rounds,
     SUM(r.loser_pot) AS loser_pot
+    SUM(r.prize) AS prize
 FROM
     gathering.round r
     INNER JOIN gathering.event e ON e.id = r.id_event
@@ -16,7 +17,8 @@ GROUP BY
 SELECT
     id_event,
     rounds,
-    loser_pot
+    loser_pot,
+    prize
 FROM
     gathering.vw_event_loser_pot
 WHERE
