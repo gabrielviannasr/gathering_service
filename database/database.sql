@@ -77,6 +77,7 @@ CREATE TABLE gathering.event (
     loser_fee6 NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee6 >= 0),    
     loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_pot >= 0),
     confra_pot NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (confra_pot >= 0),
+    prize NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (prize >= 0),
 	CONSTRAINT fk_event_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
     CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.format(id)
 );
