@@ -284,12 +284,12 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot_total AS
     COMMENT ON VIEW gathering.vw_gathering_confra_pot_total IS
     'Displays the total accumulated confra pot, total rounds, and number of events for each gathering.';
 
-CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot_total AS
+CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot AS
     SELECT
         g.id AS id_gathering,
         g.name AS gathering_name,
-        COALESCE(SUM(r.prize), 0) AS total_prize,
-        COALESCE(SUM(r.loser_pot), 0) AS total_loser_pot
+        COALESCE(SUM(r.prize), 0) AS prize,
+        COALESCE(SUM(r.loser_pot), 0) AS loser_pot
     FROM
         gathering.gathering g
         INNER JOIN gathering.event e ON e.id_gathering = g.id
@@ -301,7 +301,7 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot_total AS
     ORDER BY
         g.name;
     
-    COMMENT ON VIEW gathering.vw_gathering_loser_pot_total IS
+    COMMENT ON VIEW gathering.vw_gathering_loser_pot IS
     'Summarizes the total prizes and loser pots accumulated across all events within each gathering.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_format AS
