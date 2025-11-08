@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gathering.projection.event.RankProjection;
+import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
 import br.com.gathering.repository.DashboardRepository;
@@ -31,6 +32,11 @@ public class DashboardService {
 	public List<PlayerTransactionProjection> getPlayerTransaciton(Long idGathering) {
 		log.info("Fetching player transactions for gathering {}", idGathering);
 		return repository.getPlayerTransaciton(idGathering);
+	}
+
+	public List<FormatProjection> getFormatProjection(Long idGathering) {
+		log.info("Fetching formats for gathering {}", idGathering);
+		return repository.getFormatProjection(idGathering);
 	}
 
 	public List<RankProjection> getRankProjection(Long idGathering) {

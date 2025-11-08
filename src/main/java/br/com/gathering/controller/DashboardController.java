@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.projection.event.RankProjection;
+import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
 import br.com.gathering.service.DashboardService;
@@ -30,6 +31,12 @@ public class DashboardController {
     public List<PlayerTransactionProjection> getPlayerTransaciton(@PathVariable Long idGathering) {
     	System.out.println("idGathering: " + idGathering);
         return service.getPlayerTransaciton(idGathering);
+    }
+
+    @GetMapping("/{idGathering}/format")
+    public List<FormatProjection> getFormatProjection(@PathVariable Long idGathering) {
+    	System.out.println("idGathering: " + idGathering);
+        return service.getFormatProjection(idGathering);
     }
 
     @GetMapping("/{idGathering}/rank")
