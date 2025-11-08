@@ -211,14 +211,16 @@ public class ResultService extends AbstractService<Result> {
             event.setRounds(loserPot.getRounds());
             event.setLoserPot(loserPot.getLoserPot());
             event.setConfraPot(confraPot.getConfraPot());
+            event.setPrize(loserPot.getPrize());
 
             eventRepository.save(event);
-            log.info("Event {} updated with players={}, rounds={}, confraPot={}, loserPot={}",
+            log.info("Event {} updated with players={}, rounds={}, confraPot={}, loserPot={}, prize={}",
                     idEvent,
                     confraPot.getPlayers(),
                     loserPot.getRounds(),
                     confraPot.getConfraPot(),
-                    loserPot.getLoserPot());
+                    loserPot.getLoserPot(),
+                    loserPot.getPrize());
 
 		    return savedResults;
 

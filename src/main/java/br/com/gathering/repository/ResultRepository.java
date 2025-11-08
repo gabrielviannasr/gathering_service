@@ -36,7 +36,8 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 			SELECT
 			    id_event AS idEvent,
 			    rounds,
-			    loser_pot AS loserPot
+			    loser_pot AS loserPot,
+			    prize
 			FROM
 			    gathering.vw_event_loser_pot
 			WHERE

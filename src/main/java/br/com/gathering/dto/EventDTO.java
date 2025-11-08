@@ -43,6 +43,8 @@ public class EventDTO {
 
     private Double loserPot;
 
+    private Double prize;
+
     public Event toModel() {
         Event event = new Event();
 //        event.setId(this.id);
@@ -58,6 +60,7 @@ public class EventDTO {
         event.setLoserFee6(this.loserFee6);
         event.setLoserPot(this.loserPot);
         event.setConfraPot(this.confraPot);
+        event.setPrize(this.prize);
 
         return event;
     }
@@ -78,6 +81,7 @@ public class EventDTO {
 	            + "\tloserFee6: " + this.loserFee6 + ",\n"
 	            + "\tloserPot: " + this.loserPot + ",\n"
 	            + "\tconfraPot: " + this.confraPot + ",\n"
+	            + "\tprize: " + this.prize + ",\n"
 	            + "}";
 	}
 

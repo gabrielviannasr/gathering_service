@@ -75,6 +75,9 @@ public class Event {
 	@Column(name = "confra_pot", nullable = false)
     private Double confraPot;
 
+	@Column(name = "prize", nullable = false)
+    private Double prize;
+
 	public void init() {
 	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
 	    this.players = (this.players == null) ? 0 : this.players;
@@ -86,6 +89,7 @@ public class Event {
 	    this.loserFee6 = (this.loserFee6 == null) ? 0.0 : this.loserFee6;    
 	    this.loserPot = (this.loserPot == null) ? 0.0 : this.loserPot;
 	    this.confraPot = (this.confraPot == null) ? 0.0 : this.confraPot;
+	    this.prize = (this.prize == null) ? 0.0 : this.prize;
 	}
 
 	@Override
@@ -104,6 +108,7 @@ public class Event {
 	            + "\tloserFee6: " + this.loserFee6 + ",\n"
 	            + "\tloserPot: " + this.loserPot + ",\n"
 	            + "\tconfraPot: " + this.confraPot + ",\n"
+	            + "\tprize: " + this.prize + ",\n"
 	            + "}";
 	}
 
