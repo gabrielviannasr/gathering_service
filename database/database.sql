@@ -7,19 +7,21 @@ CREATE SEQUENCE gathering.sequence_result START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_score START 1;
 CREATE SEQUENCE gathering.sequence_transaction START 1;
-CREATE SEQUENCE gathering.sequence_transaction_type START 1;
-
+CREATE SEQUENCE gathering.sequence_transaction_type START 1
 /* CREATE SEQUENCES */
 
 /* CREATE TABLES */
+-- 🧍‍♂️ Tabela de jogadores / participantes
 CREATE TABLE gathering.player (
     id INT DEFAULT nextval('gathering.sequence_player'::regclass) PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 
 COMMENT ON TABLE gathering.player IS
-'Represents a participant of a gathering. Personal and financial details are handled in related entities.';
+'Representa um participante das conferências (gatherings).
+Detalhes pessoais e financeiros são tratados em entidades relacionadas.';
 
+-- 🏆 Tabela principal de confras
 CREATE TABLE gathering.gathering (
     id INT DEFAULT nextval('gathering.sequence_gathering'::regclass) PRIMARY KEY,
 	id_player INT NOT NULL, -- createdBy and the person in charge of the event
@@ -28,6 +30,11 @@ CREATE TABLE gathering.gathering (
 	CONSTRAINT fk_gathering_player FOREIGN KEY (id_player) REFERENCES gathering.player(id)
 );
 
+COMMENT ON TABLE gathering.gathering IS
+'Representa uma confras (gathering), ou conjunto de eventos de um grupo de jogadores.
+Cada gathering é criada e gerenciada por um jogador responsável (id_player).';
+
+-- 💰 Tipos de transações financeiras
 CREATE TABLE gathering.transaction_type (
     id INT DEFAULT nextval('gathering.sequence_transaction_type'::regclass) PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
@@ -35,8 +42,10 @@ CREATE TABLE gathering.transaction_type (
 );
 
 COMMENT ON TABLE gathering.transaction_type IS
-'Defines the available financial transaction types used in the system. Each type represents a specific player operation, such as deposits, withdrawals, or event fees.';
+'Define os tipos de transações financeiras disponíveis no sistema.
+Cada tipo representa uma operação específica do jogador, como depósito, saque ou taxas de evento.';
 
+-- 💸 Tabela de transações financeiras
 CREATE TABLE gathering.transaction (
     id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
     id_gathering INT NOT NULL,
@@ -53,16 +62,21 @@ CREATE TABLE gathering.transaction (
 );
 
 COMMENT ON TABLE gathering.transaction IS 
-'Stores all player financial transactions.
-A positive amount represents a credit, while a negative amount represents a debit.
-The id_event field is optional and indicates the event that originated the transaction, if applicable.';
+'Armazena todas as transações financeiras realizadas pelos jogadores.
+Um valor positivo representa crédito, enquanto um valor negativo representa débito.
+O campo id_event é opcional e indica o evento que originou a transação, se aplicável.';
 
+-- 🧩 Formatos de jogo
 CREATE TABLE gathering.format (
     id INT DEFAULT nextval('gathering.sequence_format'::regclass) PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
     life_count INT NOT NULL
 );
 
+COMMENT ON TABLE gathering.format IS
+'Define os formatos de jogo disponíveis para os eventos, incluindo os pontos de vidas (life_count) associado a cada formato.';
+
+-- 🎯 Tabela de eventos
 CREATE TABLE gathering.event (
     id INT DEFAULT nextval('gathering.sequence_event'::regclass) PRIMARY KEY,
     id_gathering INT NOT NULL,
@@ -70,8 +84,8 @@ CREATE TABLE gathering.event (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     players INT NOT NULL DEFAULT 0,
     rounds INT NOT NULL DEFAULT 0,
-    confra_fee NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee4 >= 0),
-    round_fee NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee4 >= 0),
+    confra_fee NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (confra_fee >= 0),
+    round_fee NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (round_fee >= 0),
     loser_fee4 NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee4 >= 0),
     loser_fee5 NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee5 >= 0),
     loser_fee6 NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_fee6 >= 0),    
@@ -82,6 +96,31 @@ CREATE TABLE gathering.event (
     CONSTRAINT fk_event_format FOREIGN KEY (id_format) REFERENCES gathering.format(id)
 );
 
+COMMENT ON TABLE gathering.event IS
+'Representa um evento individual pertencente a uma confra (gathering).
+Armazena informações sobre taxas, rodadas, valores acumulados e premiações.';
+
+COMMENT ON COLUMN gathering.event.id_gathering IS 'Identificador da confra à qual o evento pertence.';
+
+COMMENT ON COLUMN gathering.event.id_format IS 'Formato de jogo associado ao evento.';
+
+COMMENT ON COLUMN gathering.event.confra_fee IS 'Taxa destinada ao pote da confra.';
+
+COMMENT ON COLUMN gathering.event.round_fee IS 'Taxa de inscrição cobrada em cada rodada do evento.';
+
+COMMENT ON COLUMN gathering.event.loser_fee4 IS 'Taxa destinada ao pote dos derrotados quando a rodada tiver 4 jogadores.';
+
+COMMENT ON COLUMN gathering.event.loser_fee5 IS 'Taxa destinada ao pote dos derrotados quando a rodada tiver 5 jogadores.';
+
+COMMENT ON COLUMN gathering.event.loser_fee6 IS 'Taxa destinada ao pote dos derrotados quando a rodada tiver 6  jogadores.';
+
+COMMENT ON COLUMN gathering.event.loser_pot IS 'Total acumulado destinado ao pote dos derrotados.';
+
+COMMENT ON COLUMN gathering.event.confra_pot IS 'Total acumulado destinado ao pote da confra.';
+
+COMMENT ON COLUMN gathering.event.prize IS 'Total acumulado de premiação do evento (pote dos vencedores).';
+
+-- 🧭 Tabela de rodadas
 CREATE TABLE gathering.round (
     id INT DEFAULT nextval('gathering.sequence_round'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
@@ -98,7 +137,29 @@ CREATE TABLE gathering.round (
     CONSTRAINT fk_round_player_winner FOREIGN KEY (id_player_winner) REFERENCES gathering.player(id)
 );
 
--- Score (Round_Player)
+COMMENT ON TABLE gathering.round IS
+'Representa uma rodada dentro de um evento.
+Armazena informações sobre formato, jogadores, vencedor, prêmiação e valores destinados ao pote dos derrotados.';
+
+COMMENT ON COLUMN gathering.round.id_event IS 'Identificador do evento ao qual a rodada pertence.';
+
+COMMENT ON COLUMN gathering.round.id_format IS 'Formato de jogo utilizado nesta rodada.';
+
+COMMENT ON COLUMN gathering.round.id_player_winner IS 'Identificador do jogador vencedor da rodada.';
+
+COMMENT ON COLUMN gathering.round.created_at IS 'Data e hora de criação da rodada.';
+
+COMMENT ON COLUMN gathering.round.round IS 'Número sequencial da rodada dentro do evento.';
+
+COMMENT ON COLUMN gathering.round.players IS 'Quantidade de jogadores participantes da rodada.';
+
+COMMENT ON COLUMN gathering.round.prize IS 'Valor total de premiação entregue nesta rodada.';
+
+COMMENT ON COLUMN gathering.round.loser_pot IS 'Valor total destinado ao pote dos derrotados nesta rodada.';
+
+COMMENT ON COLUMN gathering.round.canceled IS 'Indica se a rodada foi cancelada (true) ou válida (false).';
+
+-- 🧮 Tabela de placar por rodada (Round_Player)
 CREATE TABLE gathering.score (
     id INT DEFAULT nextval('gathering.sequence_score'::regclass) PRIMARY KEY,
     id_round INT NOT NULL,
@@ -109,43 +170,58 @@ CREATE TABLE gathering.score (
 );
 
 COMMENT ON TABLE gathering.score IS
-'Stores player participation in each round.
-Each record links a player to a specific round and ensures one unique entry per player per round.';
+'Armazena a participação dos jogadores em cada rodada.
+Cada registro vincula um jogador a uma rodada específica, garantindo uma única entrada por jogador por rodada.';
+
+COMMENT ON COLUMN gathering.score.id_round IS 'Identificador da rodada.';
+
+COMMENT ON COLUMN gathering.score.id_player IS 'Identificador do jogador participante da rodada.';
 
 -- ======================================================
--- Result (Event_Player)
--- Stores the final outcome of each player in an event,
--- including ranking, round stats, and balance results.
+-- 🏁 Tabela de resultados (Result)
+-- Armazena o desempenho final de cada jogador em um evento,
+-- incluindo posição no ranking, estatísticas de rodadas e
+-- saldos antes e depois da distribuição do pote dos derrotados.
 -- ======================================================
 CREATE TABLE gathering.result (
     id INT DEFAULT nextval('gathering.sequence_result'::regclass) PRIMARY KEY,
     id_event INT NOT NULL,
     id_player INT NOT NULL,
     rank INT,
-    wins INT NOT NULL DEFAULT 0,
-    rounds INT NOT NULL DEFAULT 0,
-    positive NUMERIC(10,2) NOT NULL DEFAULT 0,  -- total earned
-    negative NUMERIC(10,2) NOT NULL DEFAULT 0,  -- total owed
+    wins INT NOT NULL DEFAULT 0 CHECK (wins >= 0),
+    rounds INT NOT NULL DEFAULT 0 CHECK (rounds >= 0),
+    positive NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (positive >= 0), -- total earned
+    negative NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (negative >= 0), -- total owed
     rank_balance NUMERIC(10,2) NOT NULL DEFAULT 0, -- net result before pot distribution
-    loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0, -- share of loser pot
+    loser_pot NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (loser_pot >= 0), -- share of loser pot
     final_balance NUMERIC(10,2) NOT NULL DEFAULT 0, -- final result after pot distribution
     CONSTRAINT fk_result_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
     CONSTRAINT fk_result_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
     CONSTRAINT uq_result_event_player UNIQUE (id_event, id_player) -- prevents duplicates
 );
 
--- 🏷️ Comments for documentation
 COMMENT ON TABLE gathering.result IS
-'Stores the final outcome of each player in an event, including their rank, round results, and final balance after pot distribution.';
+'Armazena o resultado final de cada jogador em um evento, incluindo sua colocação, desempenho nas rodadas e saldo final após a distribuição do pote dos derrotados.';
 
-COMMENT ON COLUMN gathering.result.rank IS
-'Final rank of the player in the event.';
+COMMENT ON COLUMN gathering.result.id_event IS 'Identificador do evento ao qual o resultado pertence.';
 
-COMMENT ON COLUMN gathering.result.rank_balance IS
-'Net balance of the player before loser pot distribution (positive = profit, negative = loss).';
+COMMENT ON COLUMN gathering.result.id_player IS 'Identificador do jogador ao qual o resultado pertence.';
 
-COMMENT ON COLUMN gathering.result.final_balance IS
-'Final balance of the player after loser pot distribution.';
+COMMENT ON COLUMN gathering.result.rank IS 'Posição final do jogador no ranking do evento.';
+
+COMMENT ON COLUMN gathering.result.wins IS 'Número total de vitórias obtidas pelo jogador no evento.';
+
+COMMENT ON COLUMN gathering.result.rounds IS 'Número total de rodadas disputadas pelo jogador no evento.';
+
+COMMENT ON COLUMN gathering.result.positive IS 'Valor total recebido pelo jogador (ganhos acumulados).';
+
+COMMENT ON COLUMN gathering.result.negative IS 'Valor total pago ou devido pelo jogador (custos acumulados).';
+
+COMMENT ON COLUMN gathering.result.rank_balance IS 'Saldo líquido do jogador antes da distribuição do pote dos derrotados (positivo = lucro, negativo = perda).';
+
+COMMENT ON COLUMN gathering.result.loser_pot IS 'Parcela do pote dos derrotados recebida pelo jogador.';
+
+COMMENT ON COLUMN gathering.result.final_balance IS 'Saldo final do jogador após a distribuição do pote dos derrotados.';
 /* CREATE TABLES */
 
 /* CREATE VIEWS */
@@ -165,8 +241,8 @@ CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
     GROUP BY
         e.id;
 
-    COMMENT ON VIEW gathering.vw_event_confra_pot IS
-    'Displays the total number of players and the total confra pot amount for each event.';
+COMMENT ON VIEW gathering.vw_event_confra_pot IS
+'Exibe o total de jogadores e o valor acumulado destinado ao pote da confra em cada evento.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
     SELECT
@@ -184,9 +260,9 @@ CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
         r.canceled = false
     GROUP BY
         g.id, e.id;
-    
-    COMMENT ON VIEW gathering.vw_event_loser_pot IS
-    'Displays the total number of rounds, the total prize awarded and the accumulated loser pot per event.';
+
+COMMENT ON VIEW gathering.vw_event_loser_pot IS
+'Exibe o total de rodadas, o valor total de premiações e o valor acumulado no pote dos derrotados por evento.';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     WITH player_balance AS (
@@ -227,9 +303,9 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     ORDER BY
         player_name;
 
-    COMMENT ON VIEW gathering.vw_event_player_balance IS
-    'Displays the performance and balance of each player per event, 
-    including total wins, rounds, prizes, fees, and the resulting rank balance.';
+COMMENT ON VIEW gathering.vw_event_player_balance IS
+'Exibe o desempenho e o saldo de cada jogador em um evento,
+incluindo número de vitórias, rodadas, premiação, taxas e saldo resultante (rank balance).';
 
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
     SELECT
@@ -252,8 +328,8 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
     ORDER BY
         id_event, rank, player_name;
 
-    COMMENT ON VIEW gathering.vw_event_player_rank IS
-    'Provides the player ranking for each event based on rank balance and performance, ensuring ranks are calculated independently per event.';
+COMMENT ON VIEW gathering.vw_event_player_rank IS
+'Apresenta o ranking dos jogadores em cada evento, calculado com base no saldo (rank balance).';
 
 CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
     SELECT
@@ -268,8 +344,8 @@ CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
     ORDER BY
         rank DESC;
 
-    COMMENT ON VIEW gathering.vw_event_rank_count IS
-    'Indicates how many players share each rank, used to distribute the loser pot.';
+COMMENT ON VIEW gathering.vw_event_rank_count IS
+'Indica quantos jogadores ocupam cada posição no ranking, utilizada para a distribuição do pote dos derrotados.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot AS
     SELECT
@@ -286,8 +362,8 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot AS
     ORDER BY
         g.name;
 
-    COMMENT ON VIEW gathering.vw_gathering_confra_pot IS
-    'Displays the total accumulated confra pot, total rounds, and number of events for each gathering.';
+COMMENT ON VIEW gathering.vw_gathering_confra_pot IS
+'Exibe o total acumulado do pote da confra, o número total de rodadas e a quantidade de eventos em cada confra.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot AS
     SELECT
@@ -305,9 +381,9 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot AS
         g.id
     ORDER BY
         g.name;
-    
-    COMMENT ON VIEW gathering.vw_gathering_loser_pot IS
-    'Summarizes the total prizes and loser pots accumulated across all events within each gathering.';
+
+COMMENT ON VIEW gathering.vw_gathering_loser_pot IS
+'Apresenta o total de premiações e o valor acumulado no pote dos derrotados em cada confra.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_format AS
     SELECT
@@ -328,8 +404,8 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_format AS
     ORDER BY
         g.name, f.name;
 
-    COMMENT ON VIEW gathering.vw_gathering_format IS
-    'Displays the total number rounds for each format played in the gathering.';
+COMMENT ON VIEW gathering.vw_gathering_format IS
+'Exibe o total de rodadas jogadas de cada formato em uma confra.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
     SELECT
@@ -349,9 +425,9 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
     ORDER BY
         id_gathering, player_name;
 
-    COMMENT ON VIEW gathering.vw_gathering_player_balance IS
-    'Aggregates player balances across all events within each gathering. 
-    Serves as the base view for calculating the cumulative gathering-level rankings.';
+COMMENT ON VIEW gathering.vw_gathering_player_balance IS
+'Agrega os saldos dos jogadores considerando todos os eventos de uma confra.
+Serve como base para o cálculo do ranking acumulado em nível de confra.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
     SELECT
@@ -374,8 +450,9 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
     ORDER BY
         id_gathering, rank, player_name;
 
-    COMMENT ON VIEW gathering.vw_gathering_player_rank IS
-    'Provides the player ranking within each gathering based on cumulative performance and balance, built upon vw_gathering_player_balance.';
+COMMENT ON VIEW gathering.vw_gathering_player_rank IS
+'Apresenta o ranking dos jogadores dentro de cada confra, 
+com base no desempenho e saldo acumulado, derivado da view vw_gathering_player_balance.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
     SELECT
@@ -395,8 +472,9 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
     ORDER BY
         g.name, p.name;
 
-    COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
-    'Displays each player''s wallet (balance) grouped by gathering, based on all related transactions.';
+COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
+'Exibe o saldo (carteira) de cada jogador agrupado por confra, 
+calculado a partir de todas as transações relacionadas.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
     SELECT
@@ -420,9 +498,9 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
     ORDER BY
         g.name, p.name, t.created_at, t.id_transaction_type;
 
-    COMMENT ON VIEW gathering.vw_gathering_player_transaction IS
-    'Exibe as transações de cada jogador em suas respectivas confraternizações, incluindo tipo, valor e descrição. 
-    A ordenação segue a sequência natural do fluxo: Inscrição → Resultado → Depósito → Saque.';
+COMMENT ON VIEW gathering.vw_gathering_player_transaction IS
+'Exibe as transações de cada jogador em suas respectivas confraternizações, incluindo tipo, valor e descrição. 
+A ordenação segue a sequência natural do fluxo: Inscrição → Resultado → Depósito → Saque.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_summary AS
     SELECT
@@ -441,14 +519,14 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_summary AS
     ORDER BY
         g.name;
 
-    COMMENT ON VIEW gathering.vw_gathering_summary IS
-    'Resumo consolidado das conferências (gatherings).
+COMMENT ON VIEW gathering.vw_gathering_summary IS
+'Resumo consolidado das conferências (gatherings).
 
-    Apresenta a quantidade total de eventos, rodadas, valores acumulados
-    de loser pot, confra pot e premiação (prize) de cada gathering.
+Apresenta a quantidade total de eventos, rodadas, valores acumulados
+de loser pot, confra pot e premiação (prize) de cada gathering.
 
-    Os dados são obtidos diretamente da tabela de eventos (event),
-    portanto dependem da consistência dos valores consolidados nela.';
+Os dados são obtidos diretamente da tabela de eventos (event),
+portanto dependem da consistência dos valores consolidados nela.';
 /* CREATE VIEWS */
 
 -- CREATE INDEXES
