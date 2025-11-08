@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
 import br.com.gathering.repository.DashboardRepository;
 
@@ -23,6 +24,11 @@ public class DashboardService {
 	public List<PlayerWalletProjection> getWalletBalance(Long idGathering) {
 		log.info("Fetching wallet balance for gathering {}", idGathering);
 		return repository.getWalletBalance(idGathering);
+	}
+
+	public List<PlayerTransactionProjection> getPlayerTransaciton(Long idGathering) {
+		log.info("Fetching player transactions for gathering {}", idGathering);
+		return repository.getPlayerTransaciton(idGathering);
 	}
 	
 }
