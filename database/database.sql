@@ -304,13 +304,13 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot_total AS
     COMMENT ON VIEW gathering.vw_gathering_loser_pot_total IS
     'Summarizes the total prizes and loser pots accumulated across all events within each gathering.';
 
-CREATE OR REPLACE VIEW gathering.vw_gathering_format_total AS
+CREATE OR REPLACE VIEW gathering.vw_gathering_format AS
     SELECT
         g.id AS id_gathering,
         g.name AS gathering_name,
         f.id AS id_format,
         f.name AS format_name,
-        COUNT(r.id) AS total_rounds
+        COUNT(r.id) AS rounds
     FROM
         gathering.gathering g
         INNER JOIN gathering.event e ON e.id_gathering = g.id
@@ -323,7 +323,7 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_format_total AS
     ORDER BY
         g.name, f.name;
 
-    COMMENT ON VIEW gathering.vw_gathering_format_total IS
+    COMMENT ON VIEW gathering.vw_gathering_format IS
     'Displays the total number rounds for each format played in the gathering.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
