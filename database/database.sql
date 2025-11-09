@@ -520,9 +520,41 @@ Os dados são derivados das views de evento, garantindo consistência
 e cálculos sempre atualizados.';
 /* CREATE VIEWS */
 
--- CREATE INDEXES
--- CREATE INDEX IF NOT EXISTS idx_gathering_format_name ON gathering.format(name);
+/* CREATE INDEXES */
+-- 🧱 Tabela gathering.event
+-- 🔹 Usadas em joins de praticamente todas as views (vw_event_*, vw_gathering_*).
+CREATE INDEX IF NOT EXISTS idx_event_id_gathering ON gathering.event(id_gathering);
+CREATE INDEX IF NOT EXISTS idx_event_id_format ON gathering.event(id_format);
+
+-- 🧱 Tabela gathering.round
+-- 🔹 Importantes para relacionar rounds → events e rounds → winners nas views de performance.
+CREATE INDEX IF NOT EXISTS idx_round_id_event ON gathering.round(id_event);
+CREATE INDEX IF NOT EXISTS idx_round_id_player_winner ON gathering.round(id_player_winner);
+
+-- 🧱 Tabela gathering.score
+-- 🔹 Usadas em vw_event_player_balance, base do ranking e do resumo.
+CREATE INDEX IF NOT EXISTS idx_score_id_round ON gathering.score(id_round);
+CREATE INDEX IF NOT EXISTS idx_score_id_player ON gathering.score(id_player);
+
+-- 🧱 Tabela gathering.transaction
+-- 🔹 Essencial para as views de saldo (vw_gathering_player_wallet) e consultas de movimentação.
+CREATE INDEX IF NOT EXISTS idx_transaction_id_gathering ON gathering.transaction(id_gathering);
+CREATE INDEX IF NOT EXISTS idx_transaction_id_event ON gathering.transaction(id_event);
+CREATE INDEX IF NOT EXISTS idx_transaction_id_player ON gathering.transaction(id_player);
+CREATE INDEX IF NOT EXISTS idx_transaction_type ON gathering.transaction(id_transaction_type);
+-- 🔹 (Opcional) índice composto para carteiras (melhor em joins por gathering + player).
+-- Isso substitui os dois índices separados (id_gathering, id_player) em alguns casos,
+-- então se quiser ser minimalista, pode manter só o composto.
+CREATE INDEX IF NOT EXISTS idx_transaction_gathering_player ON gathering.transaction (id_gathering, id_player);
+
+-- 🧱 Tabela gathering.result
+CREATE INDEX IF NOT EXISTS idx_result_event_player ON gathering.result(id_event, id_player);
+
+-- 🧱 Tabela gathering.player
+-- Opcional — só crie se:
+--  🔹você faz busca de jogadores por nome (WHERE name ILIKE 'gabriel%');
+--  🔹ou ordena listas grandes de jogadores por nome com frequência.
+CREATE INDEX IF NOT EXISTS idx_gathering_player_name ON gathering.player(name);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_email ON gathering.player(email);
--- CREATE INDEX IF NOT EXISTS idx_gathering_player_name ON gathering.player(name);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_username ON gathering.player(username);
-CREATE INDEX idx_rank_event_player ON gathering.rank(event_id, player_id);
+/* CREATE INDEXES */
