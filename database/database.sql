@@ -270,6 +270,7 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     WITH player_balance AS (
         SELECT
             e.id_gathering,
+            g.name AS gathering_name,
             e.id AS id_event,
             p.id AS id_player,
             p.name AS player_name,
@@ -283,15 +284,17 @@ CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
             INNER JOIN gathering.round r ON r.id = s.id_round
             INNER JOIN gathering.player p ON p.id = s.id_player
             INNER JOIN gathering.event e ON e.id = r.id_event
+            INNER JOIN gathering.gathering g ON g.id = e.id_gathering
         WHERE
             r.canceled = false
         GROUP BY
     --	    e.id, p.id
     --		Garante portabilidade e evita warning em versões futuras.
-            e.id_gathering, e.id, p.id, p.name, e.round_fee
+            g.id, e.id, p.id, p.name, e.round_fee
     )
     SELECT
         id_gathering,
+        gathering_name,
         id_event,
         id_player,
         player_name,
