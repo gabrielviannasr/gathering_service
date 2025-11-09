@@ -11,7 +11,9 @@ SELECT
 FROM
     gathering.vw_event_loser_pot loser
     INNER JOIN gathering.vw_event_confra_pot confra
-        ON confra.id_event = loser.id_event;
+        ON confra.id_event = loser.id_event
+ORDER BY
+	loser.id_gathering, loser.id_event;
 
 COMMENT ON VIEW gathering.vw_event_summary IS
 'Apresenta um resumo consolidado de cada evento, unindo informações do pote da confra e do pote dos derrotados.
