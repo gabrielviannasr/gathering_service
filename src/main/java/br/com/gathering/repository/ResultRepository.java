@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Result;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.projection.event.ConfraPotProjection;
 import br.com.gathering.projection.event.EventSummaryProjection;
 import br.com.gathering.projection.event.LoserPotProjection;
 import br.com.gathering.projection.event.RankCountProjection;
-import br.com.gathering.projection.event.RankProjection;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {

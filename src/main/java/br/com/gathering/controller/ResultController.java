@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.entity.Result;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.projection.event.ConfraPotProjection;
 import br.com.gathering.projection.event.EventSummaryProjection;
 import br.com.gathering.projection.event.LoserPotProjection;
 import br.com.gathering.projection.event.RankCountProjection;
-import br.com.gathering.projection.event.RankProjection;
 import br.com.gathering.service.ResultService;
 
 @RestController
