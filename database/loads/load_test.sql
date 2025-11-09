@@ -15,7 +15,7 @@ INSERT INTO gathering.gathering
 
 INSERT INTO gathering.event
 (id, id_gathering, id_format, confra_fee, round_fee, loser_fee4, loser_fee5, loser_fee6) VALUES
-(1, 1, 1, 20.0, 0.0, 10.0, 10.0, 15.0);
+(1, 1, 1, 20.0, 10.0, 0.0, 10.0, 15.0);
 
 /**
  * COLUMN		| INITIAL	| EXPECTED
