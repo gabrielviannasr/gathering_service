@@ -35,6 +35,7 @@ public interface DashboardRepository extends ViewRepository {
     	    SELECT
 				-- id_gathering AS idGathering,
 				-- gathering_name AS gatheringName,
+				id_event AS idEvent,
 				id_player AS idPlayer,
 				player_name AS playerName,
 				id_transaction AS idTransaction,
