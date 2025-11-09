@@ -13,7 +13,7 @@ import br.com.gathering.projection.event.RankProjection;
 import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
-import br.com.gathering.projection.gathering.SummaryProjection;
+import br.com.gathering.projection.gathering.GatheringSummaryProjection;
 import br.com.gathering.repository.DashboardRepository;
 
 @Transactional(readOnly = true)
@@ -40,7 +40,7 @@ public class DashboardService {
 		return repository.getFormatProjection(idGathering);
 	}
 
-	public List<SummaryProjection> getSummaryProjection(Long idGathering) {
+	public List<GatheringSummaryProjection> getSummaryProjection(Long idGathering) {
 		log.info("Fetching summary for gathering {}", idGathering);
 		return repository.getSummaryProjection(idGathering);
 	}

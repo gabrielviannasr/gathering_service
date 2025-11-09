@@ -12,7 +12,7 @@ import br.com.gathering.projection.event.RankProjection;
 import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
-import br.com.gathering.projection.gathering.SummaryProjection;
+import br.com.gathering.projection.gathering.GatheringSummaryProjection;
 import br.com.gathering.service.DashboardService;
 
 @RestController
@@ -41,7 +41,7 @@ public class DashboardController {
     }
 
     @GetMapping("/{idGathering}/summary")
-    public List<SummaryProjection> getSummaryProjection(@PathVariable Long idGathering) {
+    public List<GatheringSummaryProjection> getSummaryProjection(@PathVariable Long idGathering) {
     	System.out.println("idGathering: " + idGathering);
         return service.getSummaryProjection(idGathering);
     }

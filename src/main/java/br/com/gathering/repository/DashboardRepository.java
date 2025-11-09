@@ -10,7 +10,7 @@ import br.com.gathering.projection.event.RankProjection;
 import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
-import br.com.gathering.projection.gathering.SummaryProjection;
+import br.com.gathering.projection.gathering.GatheringSummaryProjection;
 
 @Repository
 public interface DashboardRepository extends ViewRepository {
@@ -87,6 +87,7 @@ public interface DashboardRepository extends ViewRepository {
 				id_gathering AS idGathering,
 				gathering_name AS gatheringName,
 				events,
+				players,
 				rounds,
 				loser_pot AS loserPot,
 				confra_pot AS confraPot,
@@ -96,6 +97,6 @@ public interface DashboardRepository extends ViewRepository {
 			WHERE
 				id_gathering = :idGathering
 			""")
-	List<SummaryProjection> getSummaryProjection(@Param("idGathering") Long idGathering);
+	List<GatheringSummaryProjection> getSummaryProjection(@Param("idGathering") Long idGathering);
 
 }
