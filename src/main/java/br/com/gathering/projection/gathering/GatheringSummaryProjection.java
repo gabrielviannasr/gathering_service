@@ -1,12 +1,7 @@
 package br.com.gathering.projection.gathering;
 
-public interface GatheringSummaryProjection {
-	Long getIdGathering();
-	String getGatheringName();
+import br.com.gathering.projection.SummaryProjection;
+
+public interface GatheringSummaryProjection extends SummaryProjection {
 	Integer getEvents();
-	Integer getPlayers();
-	Integer getRounds();
-	Double getLoserPot();
-	Double getConfraPot();
-	Double getPrize();	
 }
