@@ -422,6 +422,7 @@ Serve como base para o cálculo do ranking acumulado em nível de confra.';
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_rank AS
     SELECT
         id_gathering,
+        gathering_name,
         RANK() OVER (
             -- PARTITION BY id_gathering garante que o ranking é calculado dentro de cada gathering individualmente.
             PARTITION BY id_gathering
