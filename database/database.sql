@@ -439,28 +439,6 @@ COMMENT ON VIEW gathering.vw_gathering_player_rank IS
 'Apresenta o ranking dos jogadores dentro de cada confra, 
 com base no desempenho e saldo acumulado, derivado da view vw_gathering_player_balance.';
 
-CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
-    SELECT
-        g.id AS id_gathering,
-        g.name AS gathering_name,
-        p.id AS id_player,
-        p.name AS player_name,
-        COALESCE(SUM(t.amount), 0) AS wallet
-    FROM
-        gathering.player p
-    LEFT JOIN
-        gathering.transaction t ON t.id_player = p.id
-    LEFT JOIN
-        gathering.gathering g ON g.id = t.id_gathering
-    GROUP BY
-        g.id, g.name, p.id, p.name
-    ORDER BY
-        g.name, p.name;
-
-COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
-'Exibe o saldo (carteira) de cada jogador agrupado por confra, 
-calculado a partir de todas as transações relacionadas.';
-
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
     SELECT
         g.id AS id_gathering,
@@ -486,6 +464,28 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
 COMMENT ON VIEW gathering.vw_gathering_player_transaction IS
 'Exibe as transações de cada jogador em suas respectivas confraternizações, incluindo tipo, valor e descrição. 
 A ordenação segue a sequência natural do fluxo: Inscrição → Resultado → Depósito → Saque.';
+
+CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
+    SELECT
+        g.id AS id_gathering,
+        g.name AS gathering_name,
+        p.id AS id_player,
+        p.name AS player_name,
+        COALESCE(SUM(t.amount), 0) AS wallet
+    FROM
+        gathering.player p
+    LEFT JOIN
+        gathering.transaction t ON t.id_player = p.id
+    LEFT JOIN
+        gathering.gathering g ON g.id = t.id_gathering
+    GROUP BY
+        g.id, g.name, p.id, p.name
+    ORDER BY
+        g.name, p.name;
+
+COMMENT ON VIEW gathering.vw_gathering_player_wallet IS
+'Exibe o saldo (carteira) de cada jogador agrupado por confra, 
+calculado a partir de todas as transações relacionadas.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_summary AS
     SELECT
