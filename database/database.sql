@@ -266,25 +266,6 @@ CREATE OR REPLACE VIEW gathering.vw_event_loser_pot AS
 COMMENT ON VIEW gathering.vw_event_loser_pot IS
 'Exibe o total de rodadas, o valor total de premiações e o valor acumulado no pote dos derrotados por evento.';
 
-CREATE OR REPLACE VIEW gathering.vw_event_summary AS
-SELECT 
-	loser.id_gathering,
-	loser.gathering_name,
-	loser.id_event, 
-	confra.players,
-	loser.rounds, 
-	loser.loser_pot,
-	confra.confra_pot,
-	loser.prize
-FROM
-	gathering.vw_event_loser_pot loser
-	INNER JOIN gathering.vw_event_confra_pot confra
-		ON confra.id_event = loser.id_event;
-
-COMMENT ON VIEW gathering.vw_event_summary IS
-'Apresenta um resumo consolidado de cada evento, unindo informações do pote da confra e do pote dos derrotados.
-Inclui o total de jogadores, rodadas, valores acumulados e premiações do evento.';
-
 CREATE OR REPLACE VIEW gathering.vw_event_player_balance AS
     WITH player_balance AS (
         SELECT
@@ -368,43 +349,24 @@ CREATE OR REPLACE VIEW gathering.vw_event_rank_count AS
 COMMENT ON VIEW gathering.vw_event_rank_count IS
 'Indica quantos jogadores ocupam cada posição no ranking, utilizada para a distribuição do pote dos derrotados.';
 
-CREATE OR REPLACE VIEW gathering.vw_gathering_confra_pot AS
-    SELECT
-        g.id AS id_gathering,
-        g.name AS gathering_name,
-        COUNT(e.id) AS events,
-        COALESCE(SUM(e.rounds), 0) AS rounds,
-        COALESCE(SUM(e.confra_pot), 0) AS confra_pot
+CREATE OR REPLACE VIEW gathering.vw_event_summary AS
+    SELECT 
+        loser.id_gathering,
+        loser.gathering_name,
+        loser.id_event,
+        confra.players,
+        loser.rounds,
+        loser.loser_pot,
+        confra.confra_pot,
+        loser.prize
     FROM
-        gathering.gathering g
-        INNER JOIN gathering.event e ON e.id_gathering = g.id
-    GROUP BY
-        g.id, g.name
-    ORDER BY
-        g.name;
+        gathering.vw_event_loser_pot loser
+        INNER JOIN gathering.vw_event_confra_pot confra
+            ON confra.id_event = loser.id_event;
 
-COMMENT ON VIEW gathering.vw_gathering_confra_pot IS
-'Exibe o total acumulado do pote da confra, o número total de rodadas e a quantidade de eventos em cada confra.';
-
-CREATE OR REPLACE VIEW gathering.vw_gathering_loser_pot AS
-    SELECT
-        g.id AS id_gathering,
-        g.name AS gathering_name,
-        COALESCE(SUM(r.prize), 0) AS prize,
-        COALESCE(SUM(r.loser_pot), 0) AS loser_pot
-    FROM
-        gathering.gathering g
-        INNER JOIN gathering.event e ON e.id_gathering = g.id
-        INNER JOIN gathering.round r ON r.id_event = e.id
-    WHERE
-        r.canceled = false
-    GROUP BY
-        g.id
-    ORDER BY
-        g.name;
-
-COMMENT ON VIEW gathering.vw_gathering_loser_pot IS
-'Apresenta o total de premiações e o valor acumulado no pote dos derrotados em cada confra.';
+COMMENT ON VIEW gathering.vw_event_summary IS
+'Apresenta um resumo consolidado de cada evento, unindo informações do pote da confra e do pote dos derrotados.
+Inclui o total de jogadores, rodadas, valores acumulados e premiações do evento.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_format AS
     SELECT
