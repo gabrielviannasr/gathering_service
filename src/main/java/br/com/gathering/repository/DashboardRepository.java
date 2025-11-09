@@ -97,6 +97,6 @@ public interface DashboardRepository extends ViewRepository {
 			WHERE
 				id_gathering = :idGathering
 			""")
-	List<GatheringSummaryProjection> getSummaryProjection(@Param("idGathering") Long idGathering);
+	GatheringSummaryProjection getSummaryProjection(@Param("idGathering") Long idGathering);
 
 }

@@ -40,7 +40,7 @@ public class DashboardService {
 		return repository.getFormatProjection(idGathering);
 	}
 
-	public List<GatheringSummaryProjection> getSummaryProjection(Long idGathering) {
+	public GatheringSummaryProjection getSummaryProjection(Long idGathering) {
 		log.info("Fetching summary for gathering {}", idGathering);
 		return repository.getSummaryProjection(idGathering);
 	}

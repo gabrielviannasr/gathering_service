@@ -41,7 +41,7 @@ public class DashboardController {
     }
 
     @GetMapping("/{idGathering}/summary")
-    public List<GatheringSummaryProjection> getSummaryProjection(@PathVariable Long idGathering) {
+    public GatheringSummaryProjection getSummaryProjection(@PathVariable Long idGathering) {
     	System.out.println("idGathering: " + idGathering);
         return service.getSummaryProjection(idGathering);
     }
