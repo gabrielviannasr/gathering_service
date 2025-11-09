@@ -22,10 +22,10 @@ public class RankDTO {
 
 	@Column(name = "id_player")
 	private Long idPlayer;
-	
+
 	@Column(name = "player_name")
 	private String playerName;
-	
+
 	private Integer rank;
 
     private Integer wins;
@@ -42,7 +42,6 @@ public class RankDTO {
    	@Column(name = "loser_pot")
     private Double loserPot;
 
-
    	@Column(name = "final_balance")
     private Double finalBalance;
 
@@ -55,6 +54,7 @@ public class RankDTO {
 	    rank.setRankBalance(this.rankBalance);
 	    rank.setLoserPot(this.loserPot);
 	    rank.setFinalBalance(this.finalBalance);
+
 	    return rank;
 	}
 

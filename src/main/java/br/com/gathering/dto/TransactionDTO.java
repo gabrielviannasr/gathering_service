@@ -26,7 +26,7 @@ public class TransactionDTO {
 	private Long idEvent;
 
 	private Long idPlayer;
-	
+
 	private Long idTransactionType;
 
 	private LocalDateTime createdAt;
@@ -45,7 +45,7 @@ public class TransactionDTO {
     	transaction.setAmount(this.amount);
     	transaction.setDescription(this.description);
 
-    	return transaction;    	
+    	return transaction;
     }
 
 	@Override
@@ -61,4 +61,5 @@ public class TransactionDTO {
 				+ "\tdescription: " + this.description + ",\n"
 				+ "}";
     }
+
 }
