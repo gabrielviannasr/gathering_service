@@ -36,11 +36,17 @@ INSERT INTO gathering.round
 (1, 1, 1, 5, 1, 6, 45.0, 15.0, false),
 (2, 1, 1, 7, 2, 6, 45.0, 15.0, false),
 (3, 1, 1, 8, 3, 6, 45.0, 15.0, false),
-(4, 1, 1, 1, 4, 6, 45.0, 15.0, false),
-(5, 1, 1, 7, 5, 6, 45.0, 15.0, false),
-(6, 1, 1, 6, 6, 6, 45.0, 15.0, false),
-(7, 1, 1, 2, 7, 6, 45.0, 15.0, false), -- TEST cancel this round
-(8, 1, 1, 6, 8, 6, 45.0, 15.0, false);
+(4, 1, 2, 1, 4, 6, 45.0, 15.0, false),
+(5, 1, 2, 7, 5, 6, 45.0, 15.0, false),
+(6, 1, 2, 6, 6, 6, 45.0, 15.0, false),
+(7, 1, 3, 2, 7, 6, 45.0, 15.0, false), -- TEST cancel this round
+(8, 1, 3, 6, 8, 6, 45.0, 15.0, false);
+
+-- EXPECTED vw_gathering_format
+-- id_gathering    | gathering_name    |   id_format   |   format_name     |   events
+--     1           |	DIRETORIA	    |       1   	|   Commander	    |       3
+--     1	        |   DIRETORIA	    |       2	    |   Conquest	    |       3
+--     1	        |   DIRETORIA	    |       3	    |   Tiny Leader	    |       2
 
 INSERT INTO gathering.score
 (id_round, id_player) VALUES
