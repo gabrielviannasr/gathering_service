@@ -399,6 +399,7 @@ COMMENT ON VIEW gathering.vw_gathering_format IS
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
     SELECT
         id_gathering,
+        gathering_name,
         id_player,
         player_name,
         COUNT(id_event) AS events,
@@ -410,7 +411,7 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_balance AS
     FROM
         gathering.vw_event_player_balance
     GROUP BY
-        id_gathering, id_player, player_name
+        id_gathering, gathering_name, id_player, player_name
     ORDER BY
         id_gathering, player_name;
 
