@@ -61,7 +61,7 @@ public class ResultController {
     }
     
     @GetMapping("/{idEvent}/summary")
-    public List<EventSummaryProjection> getSummaryProjection(@PathVariable Long idEvent) {
+    public EventSummaryProjection getSummaryProjection(@PathVariable Long idEvent) {
     	System.out.println("idEvent: " + idEvent);
         return service.getSummaryProjection(idEvent);
     }

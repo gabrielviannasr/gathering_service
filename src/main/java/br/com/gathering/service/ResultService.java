@@ -121,7 +121,6 @@ public class ResultService extends AbstractService<Result> {
 
 		try {
             // 1. Remove previous transactions to avoid duplicates
-//            transactionRepository.deleteByIdEvent(idEvent);
             int oldCount = transactionRepository.findByIdEvent(idEvent).size();
             if (oldCount > 0) {
             	transactionRepository.deleteByIdEvent(idEvent);
@@ -129,7 +128,6 @@ public class ResultService extends AbstractService<Result> {
             }
 
 			// 2. Remove previous results to avoid duplicates
-//			repository.deleteByIdEvent(idEvent);
             oldCount = repository.findByIdEvent(idEvent).size();
             if (oldCount > 0) {
                 repository.deleteByIdEvent(idEvent);
@@ -171,57 +169,34 @@ public class ResultService extends AbstractService<Result> {
             );
 
             // 6. Create and save transactions (via factory)
-//            Event event = eventRepository.findById(idEvent).get();
             Event event = eventRepository.findById(idEvent)
                     .orElseThrow(() -> new IllegalArgumentException("Event not found for id " + idEvent));
-
-//            LocalDateTime createdAt = event.getCreatedAt();
-//            LocalDateTime createdAt = LocalDateTime.now();
-
-//            List<Transaction> transactions = results.stream()
-//                .flatMap(result -> Stream.of(
-//                    Transaction.builder()
-//                    	.idGathering(event.getIdGathering())
-//                        .idEvent(idEvent)
-//                        .idPlayer(result.getIdPlayer())
-//                        .idTransactionType(TransactionType.INSCRICAO.getId())
-//                        .createdAt(createdAt)
-//                        .amount(-event.getConfraFee())
-//                        .description(TransactionType.INSCRICAO.getDescription())
-//                        .build(),
-//                    Transaction.builder()
-//                    	.idGathering(event.getIdGathering())
-//                        .idEvent(idEvent)
-//                        .idPlayer(result.getIdPlayer())
-//                        .idTransactionType(TransactionType.RESULTADO.getId())
-//                        .createdAt(createdAt)
-//                        .amount(result.getFinalBalance())
-//                        .description(TransactionType.RESULTADO.getDescription())
-//                        .build()
-//                ))
-//                .collect(Collectors.toList());
 
             List<Transaction> transactions = TransactionFactory.fromResults(event, results);
             transactionRepository.saveAll(transactions);
 
             // 7. Update event summary fields
-            ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
-            LoserPotProjection loserPot = repository.getLoserPot(idEvent);
-
-            event.setPlayers(confraPot.getPlayers());
-            event.setRounds(loserPot.getRounds());
-            event.setLoserPot(loserPot.getLoserPot());
-            event.setConfraPot(confraPot.getConfraPot());
-            event.setPrize(loserPot.getPrize());
+            EventSummaryProjection summary = repository.getSummaryProjection(idEvent);
+            
+            if (summary == null) {
+                log.warn("No summary data found for event {}", idEvent);
+                return savedResults;
+            }
+            
+            event.setPlayers(summary.getPlayers());
+            event.setRounds(summary.getRounds());
+            event.setLoserPot(summary.getLoserPot());
+            event.setConfraPot(summary.getConfraPot());
+            event.setPrize(summary.getPrize());
 
             eventRepository.save(event);
             log.info("Event {} updated with players={}, rounds={}, confraPot={}, loserPot={}, prize={}",
                     idEvent,
-                    confraPot.getPlayers(),
-                    loserPot.getRounds(),
-                    confraPot.getConfraPot(),
-                    loserPot.getLoserPot(),
-                    loserPot.getPrize());
+                    summary.getPlayers(),
+                    summary.getRounds(),
+                    summary.getConfraPot(),
+                    summary.getLoserPot(),
+                    summary.getPrize());
 
 		    return savedResults;
 
@@ -350,7 +325,7 @@ public class ResultService extends AbstractService<Result> {
 	    return results;
 	}
 	
-	public List<EventSummaryProjection> getSummaryProjection(Long idEvent) {
+	public EventSummaryProjection getSummaryProjection(Long idEvent) {
 		return repository.getSummaryProjection(idEvent);
 	}
 
