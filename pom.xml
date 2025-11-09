@@ -8,7 +8,7 @@
 		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.gabrielviannasr</groupId>
+	<groupId>br.com.gathering</groupId>
 	<artifactId>gathering-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gathering</name>
