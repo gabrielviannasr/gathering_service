@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gathering.entity.Result;
 import br.com.gathering.projection.event.ConfraPotProjection;
+import br.com.gathering.projection.event.EventSummaryProjection;
 import br.com.gathering.projection.event.LoserPotProjection;
 import br.com.gathering.projection.event.RankCountProjection;
 import br.com.gathering.projection.event.RankProjection;
@@ -57,5 +58,11 @@ public class ResultController {
     public List<RankProjection> getRankProjection(@PathVariable Long idEvent) {
     	System.out.println("idEvent: " + idEvent);
         return service.getRankProjection(idEvent);
+    }
+    
+    @GetMapping("/{idEvent}/summary")
+    public List<EventSummaryProjection> getSummaryProjection(@PathVariable Long idEvent) {
+    	System.out.println("idEvent: " + idEvent);
+        return service.getSummaryProjection(idEvent);
     }
 }
