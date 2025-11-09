@@ -9,6 +9,4 @@ public interface RankProjection {
     Double getPositive();
     Double getNegative();
     Double getRankBalance();
-    Double getLoserPot();
-    Double getFinalBalance();
 }
