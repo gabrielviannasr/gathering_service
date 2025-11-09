@@ -315,6 +315,7 @@ incluindo número de vitórias, rodadas, premiação, taxas e saldo resultante (
 CREATE OR REPLACE VIEW gathering.vw_event_player_rank AS
     SELECT
         id_gathering,
+        gathering_name,
         id_event,
         RANK() OVER (
             -- PARTITION BY id_event garante que o ranking é calculado dentro de cada evento individualmente.
