@@ -42,11 +42,13 @@ INSERT INTO gathering.round
 (7, 1, 3, 2, 7, 6, 45.0, 15.0, false), -- TEST cancel this round
 (8, 1, 3, 6, 8, 6, 45.0, 15.0, false);
 
--- EXPECTED vw_gathering_format
--- id_gathering    | gathering_name    |   id_format   |   format_name     |   events
---     1           |	DIRETORIA	    |       1   	|   Commander	    |       3
---     1	        |   DIRETORIA	    |       2	    |   Conquest	    |       3
---     1	        |   DIRETORIA	    |       3	    |   Tiny Leader	    |       2
+/**
+ * EXPECTED vw_gathering_format
+ * 	id_gathering    | gathering_name    |   id_format   |   format_name     |   events
+ * 		1           |	DIRETORIA	    |       1   	|   Commander	    |       3
+ * 		1	        |   DIRETORIA	    |       2	    |   Conquest	    |       3
+ * 		1	        |   DIRETORIA	    |       3	    |   Tiny Leader	    |       2
+ */
 
 INSERT INTO gathering.score
 (id_round, id_player) VALUES
