@@ -7,7 +7,7 @@ CREATE SEQUENCE gathering.sequence_result START 1;
 CREATE SEQUENCE gathering.sequence_round START 1;
 CREATE SEQUENCE gathering.sequence_score START 1;
 CREATE SEQUENCE gathering.sequence_transaction START 1;
-CREATE SEQUENCE gathering.sequence_transaction_type START 1
+CREATE SEQUENCE gathering.sequence_transaction_type START 1;
 /* CREATE SEQUENCES */
 
 /* CREATE TABLES */
@@ -33,38 +33,6 @@ CREATE TABLE gathering.gathering (
 COMMENT ON TABLE gathering.gathering IS
 'Representa uma confras (gathering), ou conjunto de eventos de um grupo de jogadores.
 Cada gathering é criada e gerenciada por um jogador responsável (id_player).';
-
--- 💰 Tipos de transações financeiras
-CREATE TABLE gathering.transaction_type (
-    id INT DEFAULT nextval('gathering.sequence_transaction_type'::regclass) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(100)
-);
-
-COMMENT ON TABLE gathering.transaction_type IS
-'Define os tipos de transações financeiras disponíveis no sistema.
-Cada tipo representa uma operação específica do jogador, como depósito, saque ou taxas de evento.';
-
--- 💸 Tabela de transações financeiras
-CREATE TABLE gathering.transaction (
-    id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
-    id_gathering INT NOT NULL,
-    id_event INT NULL,
-    id_player INT NOT NULL,    
-    id_transaction_type INT NOT NULL,    
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    amount NUMERIC(10,2) NOT NULL,
-	description VARCHAR(500),
-    CONSTRAINT fk_transaction_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
-    CONSTRAINT fk_transaction_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
-    CONSTRAINT fk_transaction_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
-    CONSTRAINT fk_transaction_transaction_type FOREIGN KEY (id_transaction_type) REFERENCES gathering.transaction_type(id)
-);
-
-COMMENT ON TABLE gathering.transaction IS 
-'Armazena todas as transações financeiras realizadas pelos jogadores.
-Um valor positivo representa crédito, enquanto um valor negativo representa débito.
-O campo id_event é opcional e indica o evento que originou a transação, se aplicável.';
 
 -- 🧩 Formatos de jogo
 CREATE TABLE gathering.format (
@@ -222,12 +190,45 @@ COMMENT ON COLUMN gathering.result.rank_balance IS 'Saldo líquido do jogador an
 COMMENT ON COLUMN gathering.result.loser_pot IS 'Parcela do pote dos derrotados recebida pelo jogador.';
 
 COMMENT ON COLUMN gathering.result.final_balance IS 'Saldo final do jogador após a distribuição do pote dos derrotados.';
+
+-- 💰 Tipos de transações financeiras
+CREATE TABLE gathering.transaction_type (
+    id INT DEFAULT nextval('gathering.sequence_transaction_type'::regclass) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(100)
+);
+
+COMMENT ON TABLE gathering.transaction_type IS
+'Define os tipos de transações financeiras disponíveis no sistema.
+Cada tipo representa uma operação específica do jogador, como depósito, saque ou taxas de evento.';
+
+-- 💸 Tabela de transações financeiras
+CREATE TABLE gathering.transaction (
+    id INT DEFAULT nextval('gathering.sequence_transaction'::regclass) PRIMARY KEY,
+    id_gathering INT NOT NULL,
+    id_event INT NULL,
+    id_player INT NOT NULL,    
+    id_transaction_type INT NOT NULL,    
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount NUMERIC(10,2) NOT NULL,
+	description VARCHAR(500),
+    CONSTRAINT fk_transaction_gathering FOREIGN KEY (id_gathering) REFERENCES gathering.gathering(id),
+    CONSTRAINT fk_transaction_event FOREIGN KEY (id_event) REFERENCES gathering.event(id),
+    CONSTRAINT fk_transaction_player FOREIGN KEY (id_player) REFERENCES gathering.player(id),
+    CONSTRAINT fk_transaction_transaction_type FOREIGN KEY (id_transaction_type) REFERENCES gathering.transaction_type(id)
+);
+
+COMMENT ON TABLE gathering.transaction IS 
+'Armazena todas as transações financeiras realizadas pelos jogadores.
+Um valor positivo representa crédito, enquanto um valor negativo representa débito.
+O campo id_event é opcional e indica o evento que originou a transação, se aplicável.';
 /* CREATE TABLES */
 
 /* CREATE VIEWS */
 CREATE OR REPLACE VIEW gathering.vw_event_confra_pot AS
     SELECT
         e.id_gathering,
+        g.name AS gathering_name,
         e.id AS id_event,
         COUNT(DISTINCT s.id_player) AS players,
         COUNT(DISTINCT s.id_player) * e.confra_fee AS confra_pot

@@ -10,24 +10,37 @@ INSERT INTO gathering.player
 (8, 'Valmir Vicente');
 
 INSERT INTO gathering.gathering
-(id, id_owner, name, year) VALUES
+(id, id_player, name, year) VALUES
 (1, 1, 'DIRETORIA', 2025);
 
 INSERT INTO gathering.event
-(id, id_gathering, id_format, created_at, players, rounds, confra_fee, round_fee, loser_fee4, loser_fee5, loser_fee6, loser_pot, confra_pot) VALUES
-(1, 1, 1, CURRENT_TIMESTAMP, 0, 0, 20.0, 10.0, 0.0, 10.0, 15.0, 0.0, 0.0);
--- (1, 1, 1, CURRENT_TIMESTAMP, 8, 8, 20.0, 10.0, 0.0, 10.0, 15.0, 120.0, 160.0); -- Expected result after finish the event
+(id, id_gathering, id_format, confra_fee, round_fee, loser_fee4, loser_fee5, loser_fee6) VALUES
+(1, 1, 1, 20.0, 0.0, 10.0, 10.0, 15.0);
+
+/**
+ * COLUMN		| INITIAL	| EXPECTED
+ * players		|	   0	|		8
+ * rounds		|	   0	|		8
+ * confra_fee	|	20.0	|	 20.0
+ * round_fee	|	10.0	|	 10.0
+ * loser_fee4	|	 0.0	|	  0.0
+ * loser_fee5	|	10.0	|	 10.0
+ * loser_fee6	|	15.0	|	 15.0
+ * loser_pot	|    0.0	|	120.0
+ * confra_pot	|    0.0	|	160.0
+ * prize		| 	 0.0	|	360.0
+ */
 
 INSERT INTO gathering.round
-(id, id_event, id_format, id_player_winner, created_at, round, players, canceled) VALUES
-(1, 1, 1, 5, CURRENT_TIMESTAMP, 1, 6, false),
-(2, 1, 1, 7, CURRENT_TIMESTAMP, 2, 6, false),
-(3, 1, 1, 8, CURRENT_TIMESTAMP, 3, 6, false),
-(4, 1, 1, 1, CURRENT_TIMESTAMP, 4, 6, false),
-(5, 1, 1, 7, CURRENT_TIMESTAMP, 5, 6, false),
-(6, 1, 1, 6, CURRENT_TIMESTAMP, 6, 6, false),
-(7, 1, 1, 2, CURRENT_TIMESTAMP, 7, 6, false), -- TEST cancel this round
-(8, 1, 1, 6, CURRENT_TIMESTAMP, 8, 6, false);
+(id, id_event, id_format, id_player_winner, round, players, canceled) VALUES
+(1, 1, 1, 5, 1, 6, false),
+(2, 1, 1, 7, 2, 6, false),
+(3, 1, 1, 8, 3, 6, false),
+(4, 1, 1, 1, 4, 6, false),
+(5, 1, 1, 7, 5, 6, false),
+(6, 1, 1, 6, 6, 6, false),
+(7, 1, 1, 2, 7, 6, false), -- TEST cancel this round
+(8, 1, 1, 6, 8, 6, false);
 
 INSERT INTO gathering.score
 (id_round, id_player) VALUES
@@ -88,10 +101,9 @@ INSERT INTO gathering.score
 (8, 7),
 (8, 8);
 
-INSERT INTO gathering.transaction
-(id_gathering, id_event, id_player, id_transaction_type, created_at, amount)
-VALUES
-(1, 1, 4, 3, CURRENT_TIMESTAMP, 35.5), -- Gabriel
-(1, 1, 5, 3, CURRENT_TIMESTAMP, 5), -- Jean
-(1, 1, 7, 4, CURRENT_TIMESTAMP, -5), -- Tobias
-(1, 1, 8, 4, CURRENT_TIMESTAMP, -5); -- Valmir
+--INSERT INTO gathering.transaction
+--(id_gathering, id_event, id_player, id_transaction_type, created_at, amount)
+--VALUES
+--(1, 1, 4, 3, CURRENT_TIMESTAMP, 35.5), -- Gabriel
+--(1, 1, 5, 3, CURRENT_TIMESTAMP, 5), -- Jean
+--(1, 1, 7, 4, CURRENT_TIMESTAMP, -5); -- Tobias
