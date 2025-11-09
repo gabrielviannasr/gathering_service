@@ -32,15 +32,15 @@ INSERT INTO gathering.event
  */
 
 INSERT INTO gathering.round
-(id, id_event, id_format, id_player_winner, round, players, canceled) VALUES
-(1, 1, 1, 5, 1, 6, false),
-(2, 1, 1, 7, 2, 6, false),
-(3, 1, 1, 8, 3, 6, false),
-(4, 1, 1, 1, 4, 6, false),
-(5, 1, 1, 7, 5, 6, false),
-(6, 1, 1, 6, 6, 6, false),
-(7, 1, 1, 2, 7, 6, false), -- TEST cancel this round
-(8, 1, 1, 6, 8, 6, false);
+(id, id_event, id_format, id_player_winner, round, players, prize, loser_pot, canceled) VALUES
+(1, 1, 1, 5, 1, 6, 45.0, 15.0, false),
+(2, 1, 1, 7, 2, 6, 45.0, 15.0, false),
+(3, 1, 1, 8, 3, 6, 45.0, 15.0, false),
+(4, 1, 1, 1, 4, 6, 45.0, 15.0, false),
+(5, 1, 1, 7, 5, 6, 45.0, 15.0, false),
+(6, 1, 1, 6, 6, 6, 45.0, 15.0, false),
+(7, 1, 1, 2, 7, 6, 45.0, 15.0, false), -- TEST cancel this round
+(8, 1, 1, 6, 8, 6, 45.0, 15.0, false);
 
 INSERT INTO gathering.score
 (id_round, id_player) VALUES
