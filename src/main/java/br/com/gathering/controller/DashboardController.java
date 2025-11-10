@@ -21,7 +21,7 @@ import br.com.gathering.util.LogHelper;
 @RequestMapping("/dashboard")
 public class DashboardController {
 
-	private static final Logger log = LogHelper.getLogger(DashboardController.class);
+	private static final Logger log = LogHelper.getLogger();
 
     @Autowired
     private DashboardService service;

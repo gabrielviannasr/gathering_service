@@ -5,6 +5,15 @@ import org.slf4j.LoggerFactory;
 
 public class LogHelper {
 
+	public static Logger getLogger() {
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();
+        try {
+            return LoggerFactory.getLogger(Class.forName(className));
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Unable to resolve logger class for " + className, e);
+        }
+    }
+	
     public static Logger getLogger(Class<?> clazz) {
         return LoggerFactory.getLogger(clazz);
     }

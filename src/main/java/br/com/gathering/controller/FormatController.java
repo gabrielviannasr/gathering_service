@@ -23,7 +23,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/format")
 public class FormatController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/format";
 	private static final String ENTITY = "Format";
 	

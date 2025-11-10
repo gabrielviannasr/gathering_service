@@ -23,7 +23,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/score")
 public class ScoreController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/score";
 	private static final String ENTITY = "Score";
 

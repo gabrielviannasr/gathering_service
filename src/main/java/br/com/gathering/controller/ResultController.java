@@ -24,7 +24,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/result")
 public class ResultController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/result";
 	@SuppressWarnings("unused")
 	private static final String ENTITY = "Result";

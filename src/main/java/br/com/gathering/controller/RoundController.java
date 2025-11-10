@@ -23,7 +23,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/round")
 public class RoundController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/round";
 	private static final String ENTITY = "Round";
 

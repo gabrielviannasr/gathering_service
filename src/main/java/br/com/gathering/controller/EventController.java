@@ -26,7 +26,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/event")
 public class EventController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/event";
 	private static final String ENTITY = "Event";
 

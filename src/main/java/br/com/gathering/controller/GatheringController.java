@@ -26,7 +26,7 @@ import br.com.gathering.util.RouteHelper;
 @RequestMapping("/gathering")
 public class GatheringController {
 
-	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final Logger log = LogHelper.getLogger();
 	private static final String PATH = "/gathering";
 	private static final String ENTITY = "Gathering";
 	
