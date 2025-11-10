@@ -20,19 +20,22 @@ import br.com.gathering.dto.EventDTO;
 import br.com.gathering.entity.Event;
 import br.com.gathering.service.EventService;
 import br.com.gathering.util.LogHelper;
+import br.com.gathering.util.RouteHelper;
 
 @RestController
 @RequestMapping("/event")
 public class EventController {
 
-	private static final Logger log = LogHelper.getLogger(DashboardController.class);
+	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final String PATH = "/event";
+	private static final String ENTITY = "Event";
 
 	@Autowired
 	private EventService service;
 
 	@GetMapping
 	public List<Event> getList(Event model) {
-		LogHelper.info(log, "GET /event", "Event", model);
+		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
@@ -41,20 +44,20 @@ public class EventController {
 			@SortDefault.SortDefaults({ @SortDefault(sort = "idGathering"), @SortDefault(sort = "createdAt") }) Sort sort,
 			@RequestParam int page,
 			@RequestParam int size) {
-		LogHelper.info(log, "GET /event/page", "page", page, "size", size);
+		LogHelper.info(log, RouteHelper.route("GET", PATH, "/page"), "page", page, "size", size);
 		return service.getPage(model, sort, page, size);
 	}
 
 	@GetMapping("/{id}")
 	public Event getById(@PathVariable Long id) {
-		LogHelper.info(log, "GET /event/{id}", "id", id);
+		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Event save(@RequestBody EventDTO dto) {
 		Event model = dto.toModel();
-		LogHelper.info(log, "POST /event", "payload", model);
+		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
 		return service.save(model);
 	}
 
@@ -62,7 +65,7 @@ public class EventController {
 	public Event update(@RequestParam Long id, @RequestBody EventDTO dto) {
 		Event model = dto.toModel();
 		model.setId(id);
-		LogHelper.info(log, "PUT /event", "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 
