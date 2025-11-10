@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.gathering</groupId>
-	<artifactId>gathering-service</artifactId>
+	<artifactId>api-gathering</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gathering-service</name>
-	<description>Gathering API</description>
+	<name>api-gathering</name>
+	<description>Gathering API - Gestão de confras e eventos de jogos em grupo</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
