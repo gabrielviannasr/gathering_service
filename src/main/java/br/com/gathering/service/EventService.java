@@ -89,4 +89,5 @@ public class EventService extends AbstractService<Event> {
 		    LogHelper.warn(log, "VALID LOSER FEE", "players", players, "loserFee", loserFee, "total", total);
 		}
 	}
+
 }
