@@ -32,13 +32,13 @@ public class ScoreController {
 
 	@GetMapping
 	public List<Score> getList(Score model) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
+		LogHelper.info(log, RouteHelper.GET(PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
 	@GetMapping("/{id}")
 	public Score getById(@PathVariable Long id) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
+		LogHelper.info(log, RouteHelper.GET(PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
@@ -46,7 +46,7 @@ public class ScoreController {
 	public Score save(@RequestBody ScoreDTO dto) {
 		Score model = dto.toModel();
 		model.init();
-		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
+		LogHelper.info(log, RouteHelper.POST(PATH), "payload", model);
 		return service.save(model);
 	}
 
@@ -55,7 +55,7 @@ public class ScoreController {
 		Score model = dto.toModel();
 		model.setId(id);
 		model.init();
-		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.PUT(PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 

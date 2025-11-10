@@ -35,43 +35,43 @@ public class ResultController {
     @GetMapping("/{idEvent}")
     public List<Result> getResult(@PathVariable Long idEvent) {
     	System.out.println("idEvent: " + idEvent);
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}"), "idEvent", idEvent);
         return service.getResult(idEvent);
     }
 
     @PostMapping("/{idEvent}")
     public List<Result> saveResult(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("POST", PATH, "/{idEvent}"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.POST(PATH, "/{idEvent}"), "idEvent", idEvent);
         return service.saveResult(idEvent);
     }
 
     @GetMapping("/{idEvent}/confra-pot")
     public ConfraPotProjection getConfraPot(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}/confra-pot"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/confra-pot"), "idEvent", idEvent);
         return service.getConfraPot(idEvent);
     }
 
     @GetMapping("/{idEvent}/loser-pot")
     public LoserPotProjection getLoserPot(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}/loser-pot"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/loser-pot"), "idEvent", idEvent);
         return service.getLoserPot(idEvent);
     }
 
     @GetMapping("/{idEvent}/rank-count")
     public List<RankCountProjection> getRankCount(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}/rank-count"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/rank-count"), "idEvent", idEvent);
         return service.getRankCount(idEvent);
     }
 
     @GetMapping("/{idEvent}/rank")
     public List<RankProjection> getRankProjection(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}/rank"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/rank"), "idEvent", idEvent);
         return service.getRankProjection(idEvent);
     }
     
     @GetMapping("/{idEvent}/summary")
     public EventSummaryProjection getSummaryProjection(@PathVariable Long idEvent) {
-    	LogHelper.info(log, RouteHelper.route("GET", PATH, "/{idEvent}/summary"), "idEvent", idEvent);
+    	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/summary"), "idEvent", idEvent);
         return service.getSummaryProjection(idEvent);
     }
 }

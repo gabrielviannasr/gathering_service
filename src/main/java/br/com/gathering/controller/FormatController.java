@@ -32,20 +32,20 @@ public class FormatController {
 
 	@GetMapping
 	public List<Format> getList(Format model) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
+		LogHelper.info(log, RouteHelper.GET(PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
 	@GetMapping("/{id}")
 	public Format getById(@PathVariable Long id) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
+		LogHelper.info(log, RouteHelper.GET(PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Format save(@RequestBody FormatDTO dto) {
 		Format model = dto.toModel();
-		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
+		LogHelper.info(log, RouteHelper.POST(PATH), "payload", model);
 		return service.save(model);
 	}
 
@@ -53,7 +53,7 @@ public class FormatController {
 	public Format update(@RequestParam Long id, @RequestBody FormatDTO dto) {
 		Format model = dto.toModel();
 		model.setId(id);
-		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.PUT(PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 

@@ -32,20 +32,20 @@ public class RoundController {
 
 	@GetMapping
 	public List<Round> getList(Round model) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
+		LogHelper.info(log, RouteHelper.GET(PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
 	@GetMapping("/{id}")
 	public Round getById(@PathVariable Long id) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
+		LogHelper.info(log, RouteHelper.GET(PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Round save(@RequestBody RoundDTO dto) {
 		Round model = dto.toModel();
-		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
+		LogHelper.info(log, RouteHelper.POST(PATH), "payload", model);
 		return service.save(model);
 	}
 
@@ -53,7 +53,7 @@ public class RoundController {
 	public Round update(@RequestParam Long id, @RequestBody RoundDTO dto) {
 		Round model = dto.toModel();
 		model.setId(id);
-		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.PUT(PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 

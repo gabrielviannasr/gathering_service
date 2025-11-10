@@ -35,7 +35,7 @@ public class TransactionController {
 
 	@GetMapping
 	public List<Transaction> getList(Transaction model) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
+		LogHelper.info(log, RouteHelper.GET(PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
@@ -44,20 +44,20 @@ public class TransactionController {
 			@SortDefault.SortDefaults({ @SortDefault(sort = "idPlayer"), @SortDefault(sort = "idGathering"), @SortDefault(sort = "idTransactionType"), @SortDefault(sort = "createdAt") }) Sort sort,
 			@RequestParam int page,
 			@RequestParam int size) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH, "/page"), "page", page, "size", size);
+		LogHelper.info(log, RouteHelper.GET(PATH, "/page"), "page", page, "size", size);
 		return service.getPage(model, sort, page, size);
 	}
 
 	@GetMapping("/{id}")
 	public Transaction getById(@PathVariable Long id) {
-		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
+		LogHelper.info(log, RouteHelper.GET(PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Transaction save(@RequestBody TransactionDTO dto) {
 		Transaction model = dto.toModel();
-		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
+		LogHelper.info(log, RouteHelper.POST(PATH), "payload", model);
 		return service.save(model);
 	}
 
@@ -65,7 +65,7 @@ public class TransactionController {
 	public Transaction update(@RequestParam Long id, @RequestBody TransactionDTO dto) {
 		Transaction model = dto.toModel();
 		model.setId(id);
-		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.PUT(PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 
