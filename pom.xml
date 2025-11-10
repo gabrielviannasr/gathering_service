@@ -70,6 +70,10 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+
+					<additionalProperties>
+	                    <description>${project.description}</description>
+	                </additionalProperties>
 				</configuration>
 
 				<executions>
