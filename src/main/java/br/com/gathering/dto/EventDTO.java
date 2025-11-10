@@ -55,7 +55,7 @@ public class EventDTO {
         event.setRounds(this.rounds);
         event.setConfraFee(this.confraFee);
         event.setRoundFee(this.roundFee);
-        event.setLoserFee5(this.loserFee4);
+        event.setLoserFee4(this.loserFee4);
         event.setLoserFee5(this.loserFee5);
         event.setLoserFee6(this.loserFee6);
         event.setLoserPot(this.loserPot);
