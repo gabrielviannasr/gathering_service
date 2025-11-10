@@ -28,32 +28,32 @@ public class DashboardController {
 
     @GetMapping("/{idGathering}/wallet-balance")
     public List<PlayerWalletProjection> getWalletBalance(@PathVariable Long idGathering) {
-    	LogHelper.info(log, "DashboardController", "GET /wallet-balance", "idGathering", idGathering);
+    	LogHelper.info(log, "GET /wallet-balance", "idGathering", idGathering);
         return service.getWalletBalance(idGathering);
     }
 
     @GetMapping("/{idGathering}/transaction")
     public List<PlayerTransactionProjection> getPlayerTransaciton(@PathVariable Long idGathering) {
-    	LogHelper.info(log, "DashboardController", "GET /transaction", "idGathering", idGathering);
+    	LogHelper.info(log, "GET /transaction", "idGathering", idGathering);
         return service.getPlayerTransaciton(idGathering);
     }
 
     @GetMapping("/{idGathering}/format")
     public List<FormatProjection> getFormatProjection(@PathVariable Long idGathering) {
-    	LogHelper.info(log, "DashboardController", "GET /format", "idGathering", idGathering);
+    	LogHelper.info(log, "GET /format", "idGathering", idGathering);
         return service.getFormatProjection(idGathering);
     }
 
     @GetMapping("/{idGathering}/summary")
     public GatheringSummaryProjection getSummaryProjection(@PathVariable Long idGathering) {
-    	LogHelper.info(log, "DashboardController", "GET /summary", "idGathering", idGathering);
+    	LogHelper.info(log, "GET /summary", "idGathering", idGathering);
         return service.getSummaryProjection(idGathering);
     }
 
     @GetMapping("/{idGathering}/rank")
     public List<RankProjection> getRankProjection(@PathVariable Long idGathering) {
     	System.out.println("idGathering: " + idGathering);
-    	LogHelper.info(log, "DashboardController", "GET /rank", "idGathering", idGathering);
+    	LogHelper.info(log, "GET /rank", "idGathering", idGathering);
         return service.getRankProjection(idGathering);
     }
 

@@ -1,4 +1,3 @@
-
 package br.com.gathering.util;
 
 import org.slf4j.Logger;
@@ -10,16 +9,22 @@ public class LogHelper {
         return LoggerFactory.getLogger(clazz);
     }
 
-    public static void info(Logger log, String context, String action, Object... details) {
-        log.info("[{}] {} | {}", context, action, formatDetails(details));
+    public static void info(Logger log, String action, Object... details) {
+        log.info("[{}] {} | {}", getContext(log), action, formatDetails(details));
     }
 
-    public static void warn(Logger log, String context, String action, Object... details) {
-        log.warn("[{}] {} | {}", context, action, formatDetails(details));
+    public static void warn(Logger log, String action, Object... details) {
+        log.warn("[{}] {} | {}", getContext(log), action, formatDetails(details));
     }
 
-    public static void error(Logger log, String context, String action, Throwable ex, Object... details) {
-        log.error("[{}] {} | {} | error={}", context, action, formatDetails(details), ex.getMessage(), ex);
+    public static void error(Logger log, String action, Throwable ex, Object... details) {
+        log.error("[{}] {} | {} | error={}", getContext(log), action, formatDetails(details), ex.getMessage(), ex);
+    }
+
+    private static String getContext(Logger log) {
+        String name = log.getName();
+        int lastDot = name.lastIndexOf('.');
+        return lastDot != -1 ? name.substring(lastDot + 1) : name;
     }
 
     private static String formatDetails(Object... details) {
