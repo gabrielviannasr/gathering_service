@@ -2,6 +2,7 @@ package br.com.gathering.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -18,17 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gathering.dto.TransactionDTO;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.service.TransactionService;
+import br.com.gathering.util.LogHelper;
+import br.com.gathering.util.RouteHelper;
 
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
+
+	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final String PATH = "/transaction";
+	private static final String ENTITY = "Transaction";
 
 	@Autowired
 	private TransactionService service;
 
 	@GetMapping
 	public List<Transaction> getList(Transaction model) {
-		System.out.println(model);
+		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
@@ -37,29 +44,28 @@ public class TransactionController {
 			@SortDefault.SortDefaults({ @SortDefault(sort = "idPlayer"), @SortDefault(sort = "idGathering"), @SortDefault(sort = "idTransactionType"), @SortDefault(sort = "createdAt") }) Sort sort,
 			@RequestParam int page,
 			@RequestParam int size) {
+		LogHelper.info(log, RouteHelper.route("GET", PATH, "/page"), "page", page, "size", size);
 		return service.getPage(model, sort, page, size);
 	}
 
 	@GetMapping("/{id}")
 	public Transaction getById(@PathVariable Long id) {
-		System.out.println("id: " + id);
+		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Transaction save(@RequestBody TransactionDTO dto) {
-		System.out.println(dto);
 		Transaction model = dto.toModel();
-		System.out.println(model);
+		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
 		return service.save(model);
 	}
 
 	@PutMapping
 	public Transaction update(@RequestParam Long id, @RequestBody TransactionDTO dto) {
-		System.out.println(dto);
 		Transaction model = dto.toModel();
 		model.setId(id);
-		System.out.println(model);
+		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 

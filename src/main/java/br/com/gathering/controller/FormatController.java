@@ -17,41 +17,43 @@ import br.com.gathering.dto.FormatDTO;
 import br.com.gathering.entity.Format;
 import br.com.gathering.service.FormatService;
 import br.com.gathering.util.LogHelper;
+import br.com.gathering.util.RouteHelper;
 
 @RestController
 @RequestMapping("/format")
 public class FormatController {
 
-	private static final Logger log = LogHelper.getLogger(FormatController.class);
+	private static final Logger log = LogHelper.getLogger(GatheringController.class);
+	private static final String PATH = "/format";
+	private static final String ENTITY = "Format";
 	
 	@Autowired
 	private FormatService service;
 
 	@GetMapping
 	public List<Format> getList(Format model) {
-		LogHelper.info(log, "GET /format", "Format", model);
+		LogHelper.info(log, RouteHelper.route("GET", PATH), ENTITY, model);
 		return service.getList(model);
 	}
 
 	@GetMapping("/{id}")
 	public Format getById(@PathVariable Long id) {
-		LogHelper.info(log, "GET /format/{id}", "id", id);
+		LogHelper.info(log, RouteHelper.route("GET", PATH, "/{id}"), "id", id);
 		return service.getById(id);
 	}
 
 	@PostMapping
 	public Format save(@RequestBody FormatDTO dto) {
 		Format model = dto.toModel();
-		LogHelper.info(log, "POST /format", "payload", model);
+		LogHelper.info(log, RouteHelper.route("POST", PATH), "payload", model);
 		return service.save(model);
 	}
 
 	@PutMapping
 	public Format update(@RequestParam Long id, @RequestBody FormatDTO dto) {
-		System.out.println(dto);
 		Format model = dto.toModel();
 		model.setId(id);
-		LogHelper.info(log, "PUT /format", "id", id, "payload", model);
+		LogHelper.info(log, RouteHelper.route("PUT", PATH), "id", id, "payload", model);
 		return service.save(model);
 	}
 
