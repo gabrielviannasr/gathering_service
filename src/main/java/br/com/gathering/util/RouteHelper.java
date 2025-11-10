@@ -11,15 +11,15 @@ public class RouteHelper {
     }
 
 	public static String GET(String path, String suffix) { return route("GET", path, suffix); }
-	
+
 	public static String GET(String path) { return GET(path, ""); }
 
 	public static String POST(String path, String suffix) { return route("POST", path, suffix); }
-	
+
 	public static String POST(String path) { return POST(path, ""); }
 
  	public static String PUT(String path, String suffix) { return route("PUT", path, suffix); }
- 	
+
  	public static String PUT(String path) { return PUT(path, ""); }
 
 }
