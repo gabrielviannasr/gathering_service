@@ -56,7 +56,7 @@ public class EventFee {
 
 	@Override
 	public String toString() {
-	    return "Event: {\n"
+	    return "EventFee: {\n"
 	            + "\tid: " + this.id + ",\n"
 	            + "\tidEvent: " + this.idEvent + ",\n"
 	            + "\tplayers: " + this.players + ",\n"
