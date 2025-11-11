@@ -14,8 +14,8 @@ INSERT INTO gathering.gathering
 (1, 1, 'DIRETORIA', 2025);
 
 INSERT INTO gathering.event
-(id, id_gathering, id_format, confra_fee, round_fee, loser_fee4, loser_fee5, loser_fee6) VALUES
-(1, 1, 1, 20.0, 10.0, 0.0, 10.0, 15.0);
+(id, id_gathering, id_format, confra_fee, round_fee) VALUES
+(1, 1, 1, 20.0, 10.0);
 
 /**
  * COLUMN		| INITIAL	| EXPECTED
@@ -23,12 +23,20 @@ INSERT INTO gathering.event
  * rounds		|	   0	|		8
  * confra_fee	|	20.0	|	 20.0
  * round_fee	|	10.0	|	 10.0
- * loser_fee4	|	 0.0	|	  0.0
- * loser_fee5	|	10.0	|	 10.0
- * loser_fee6	|	15.0	|	 15.0
  * loser_pot	|    0.0	|	120.0
  * confra_pot	|    0.0	|	160.0
  * prize		| 	 0.0	|	360.0
+ */
+
+INSERT INTO gathering.event_fee
+(id, id_event, players, prize_fee, loser_fee) VALUES
+(1, 1, 5, 40.0, 10.0),
+(2, 1, 6, 45.0, 15.0);
+
+/**
+ *   PLAYERS	| PRIZE	FEE | LOSER FEE
+ *      5		|	40.0	|	10.0
+ *      6   	|	45.0	|	15.0
  */
 
 INSERT INTO gathering.round
