@@ -3,6 +3,7 @@ package br.com.gathering.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Gathering;
 import br.com.gathering.repository.GatheringRepository;
+import br.com.gathering.util.LogHelper;
 
 @Service
 public class GatheringService extends AbstractService<Gathering> {
+
+	private static final Logger log = LogHelper.getLogger();
 
 	@Autowired
 	private GatheringRepository repository;
@@ -26,22 +30,37 @@ public class GatheringService extends AbstractService<Gathering> {
 	}
 
 	public List<Gathering> getList(Gathering model) {
-		return repository.findAll(getExample(model), getSort());
+		List<Gathering> result = repository.findAll(getExample(model), getSort());
+        LogHelper.info(log, "Fetched list", "count", result.size());
+        return result;
 	}
 
 	public Page<Gathering> getPage(Gathering model, Sort sort, int page, int size) {
-		return repository.findAll(getExample(model), PageRequest.of(page, size, sort));
+		LogHelper.info(log, "Fetching paged list", "page", page, "size", size);
+        Page<Gathering> result = repository.findAll(getExample(model), PageRequest.of(page, size, sort));
+        LogHelper.info(log, "Fetched paged list", "totalElements", result.getTotalElements());
+        return result;
 	}
 
 	public Gathering getById(Long id) {
-		Optional<Gathering> optional = repository.findById(id);
-		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		LogHelper.info(log, "Fetching by ID", "id", id);
+        Optional<Gathering> optional = repository.findById(id);
+        if (optional.isEmpty()) {
+            LogHelper.warn(log, "Not found", "id", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Gathering event = optional.get();
+        LogHelper.info(log, "Found", "id", event.getId());
+        return event;
 	}
 
 	public Gathering save(Gathering model) {
 		model.init();
 //		validate(model);
-		return repository.save(model);
+		LogHelper.info(log, "Saving", "payload", model);
+		Gathering saved = repository.save(model);
+        LogHelper.info(log, "Saved", "id", saved.getId());
+        return saved;
 	}
 
 }

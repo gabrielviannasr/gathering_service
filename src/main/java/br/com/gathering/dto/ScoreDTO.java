@@ -36,7 +36,7 @@ public class ScoreDTO {
     private Integer infectCount;
 
     private Integer lifeCount;
-    
+
     public Score toModel() {
         Score roundPlayer = new Score();
 //        roundPlayer.setId(this.id);
@@ -50,7 +50,7 @@ public class ScoreDTO {
 //        roundPlayer.setSecondaryCommanderCount(this.secondaryCommanderCount);
 //        roundPlayer.setInfectCount(this.infectCount);
 //        roundPlayer.setLifeCount(this.lifeCount);
-       
+
         return roundPlayer;
     }
 

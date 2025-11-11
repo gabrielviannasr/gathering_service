@@ -26,7 +26,7 @@ public class PlayerDTO {
     private String password;
 
     private Double wallet;
-	
+
 	public Player toModel() {
 	    Player player = new Player();
 //	    player.setId(this.id);

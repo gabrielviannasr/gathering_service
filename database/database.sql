@@ -447,9 +447,10 @@ com base no desempenho e saldo acumulado, derivado da view vw_gathering_player_b
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
     SELECT
-        g.id AS id_gathering,
+        t.id_gathering,
         g.name AS gathering_name,
-        p.id AS id_player,
+        t.id_event,
+        t.id_player,
         p.name AS player_name,
         t.id AS id_transaction,
         t.created_at,
@@ -466,10 +467,6 @@ CREATE OR REPLACE VIEW gathering.vw_gathering_player_transaction AS
         gathering.transaction_type tt ON tt.id = t.id_transaction_type
     ORDER BY
         g.name, p.name, t.created_at, t.id_transaction_type;
-
-COMMENT ON VIEW gathering.vw_gathering_player_transaction IS
-'Exibe as transações de cada jogador em suas respectivas confraternizações, incluindo tipo, valor e descrição. 
-A ordenação segue a sequência natural do fluxo: Inscrição → Resultado → Depósito → Saque.';
 
 CREATE OR REPLACE VIEW gathering.vw_gathering_player_wallet AS
     SELECT
@@ -518,11 +515,103 @@ além do total de premiações.
 
 Os dados são derivados das views de evento, garantindo consistência
 e cálculos sempre atualizados.';
+
+CREATE OR REPLACE VIEW gathering.vw_gathering_result AS
+WITH player_final_balance AS(
+	SELECT
+		g.id AS id_gathering,
+	    g.name AS gathering_name,
+		p.id AS id_player,
+		p.name AS player_name,
+		COUNT(r.id) AS events,
+		COALESCE(SUM(r.wins), 0) AS wins,
+	 	COALESCE(SUM(r.rounds), 0) AS rounds,
+	    COALESCE(SUM(r.positive), 0) AS positive,
+	    COALESCE(SUM(r.negative), 0) AS negative,
+	    COALESCE(SUM(r.rank_balance), 0) AS rank_balance,
+	    COALESCE(SUM(r.loser_pot), 0) AS loser_pot,
+	    -COALESCE(SUM(e.confra_fee), 0) AS confra_pot
+--	    ,COALESCE(SUM(r.final_balance), 0) AS final_balance
+	FROM
+		gathering.result r
+		INNER JOIN gathering.event e ON e.id = r.id_event
+		INNER JOIN gathering.gathering g ON g.id = e.id_gathering
+		INNER JOIN gathering.player p ON p.id = r.id_player
+	GROUP BY
+		g.id, p.id
+)
+SELECT
+	id_gathering,
+	gathering_name,
+	id_player,
+	player_name,
+	RANK() OVER (
+        PARTITION BY id_gathering
+        ORDER BY (rank_balance + loser_pot + confra_pot) DESC, rounds ASC
+    ) AS rank,
+	events,
+	wins,
+	rounds,
+	positive,
+	negative,
+	rank_balance,
+	loser_pot,
+	confra_pot,
+	rank_balance + loser_pot + confra_pot AS final_balance
+FROM
+	player_final_balance
+ORDER BY
+	gathering_name, rank, player_name;
+
+COMMENT ON VIEW gathering.vw_gathering_result IS
+'Apresenta o resultado consolidado de cada jogador em toda a confra (gathering).
+
+A view soma os desempenhos individuais de cada jogador em todos os eventos da confra,
+incluindo vitórias, rodadas jogadas, prêmios ganhos e taxas pagas.
+
+O campo final_balance representa o saldo líquido final do jogador,
+calculado como a soma do rank_balance com os valores recebidos do loser_pot
+e descontadas as taxas de confra (confra_pot / confra_fee).
+
+O ranking é calculado por confra (id_gathering), ordenando pelo saldo final (final_balance)
+em ordem decrescente e, em caso de empate, pela menor quantidade de rodadas jogadas.';
 /* CREATE VIEWS */
 
--- CREATE INDEXES
--- CREATE INDEX IF NOT EXISTS idx_gathering_format_name ON gathering.format(name);
+/* CREATE INDEXES */
+-- 🧱 Tabela gathering.event
+-- 🔹 Usadas em joins de praticamente todas as views (vw_event_*, vw_gathering_*).
+CREATE INDEX IF NOT EXISTS idx_event_id_gathering ON gathering.event(id_gathering);
+CREATE INDEX IF NOT EXISTS idx_event_id_format ON gathering.event(id_format);
+
+-- 🧱 Tabela gathering.round
+-- 🔹 Importantes para relacionar rounds → events e rounds → winners nas views de performance.
+CREATE INDEX IF NOT EXISTS idx_round_id_event ON gathering.round(id_event);
+CREATE INDEX IF NOT EXISTS idx_round_id_player_winner ON gathering.round(id_player_winner);
+
+-- 🧱 Tabela gathering.score
+-- 🔹 Usadas em vw_event_player_balance, base do ranking e do resumo.
+CREATE INDEX IF NOT EXISTS idx_score_id_round ON gathering.score(id_round);
+CREATE INDEX IF NOT EXISTS idx_score_id_player ON gathering.score(id_player);
+
+-- 🧱 Tabela gathering.transaction
+-- 🔹 Essencial para as views de saldo (vw_gathering_player_wallet) e consultas de movimentação.
+CREATE INDEX IF NOT EXISTS idx_transaction_id_gathering ON gathering.transaction(id_gathering);
+CREATE INDEX IF NOT EXISTS idx_transaction_id_event ON gathering.transaction(id_event);
+CREATE INDEX IF NOT EXISTS idx_transaction_id_player ON gathering.transaction(id_player);
+CREATE INDEX IF NOT EXISTS idx_transaction_type ON gathering.transaction(id_transaction_type);
+-- 🔹 (Opcional) índice composto para carteiras (melhor em joins por gathering + player).
+-- Isso substitui os dois índices separados (id_gathering, id_player) em alguns casos,
+-- então se quiser ser minimalista, pode manter só o composto.
+CREATE INDEX IF NOT EXISTS idx_transaction_gathering_player ON gathering.transaction (id_gathering, id_player);
+
+-- 🧱 Tabela gathering.result
+CREATE INDEX IF NOT EXISTS idx_result_event_player ON gathering.result(id_event, id_player);
+
+-- 🧱 Tabela gathering.player
+-- Opcional — só crie se:
+--  🔹você faz busca de jogadores por nome (WHERE name ILIKE 'gabriel%');
+--  🔹ou ordena listas grandes de jogadores por nome com frequência.
+CREATE INDEX IF NOT EXISTS idx_gathering_player_name ON gathering.player(name);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_email ON gathering.player(email);
--- CREATE INDEX IF NOT EXISTS idx_gathering_player_name ON gathering.player(name);
 -- CREATE INDEX IF NOT EXISTS idx_gathering_player_username ON gathering.player(username);
-CREATE INDEX idx_rank_event_player ON gathering.rank(event_id, player_id);
+/* CREATE INDEXES */

@@ -15,10 +15,11 @@ import br.com.gathering.entity.Event;
 import br.com.gathering.entity.Result;
 import br.com.gathering.entity.Transaction;
 import br.com.gathering.factory.TransactionFactory;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.projection.event.ConfraPotProjection;
+import br.com.gathering.projection.event.EventSummaryProjection;
 import br.com.gathering.projection.event.LoserPotProjection;
 import br.com.gathering.projection.event.RankCountProjection;
-import br.com.gathering.projection.event.RankProjection;
 import br.com.gathering.repository.EventRepository;
 import br.com.gathering.repository.ResultRepository;
 import br.com.gathering.repository.TransactionRepository;
@@ -120,7 +121,6 @@ public class ResultService extends AbstractService<Result> {
 
 		try {
             // 1. Remove previous transactions to avoid duplicates
-//            transactionRepository.deleteByIdEvent(idEvent);
             int oldCount = transactionRepository.findByIdEvent(idEvent).size();
             if (oldCount > 0) {
             	transactionRepository.deleteByIdEvent(idEvent);
@@ -128,7 +128,6 @@ public class ResultService extends AbstractService<Result> {
             }
 
 			// 2. Remove previous results to avoid duplicates
-//			repository.deleteByIdEvent(idEvent);
             oldCount = repository.findByIdEvent(idEvent).size();
             if (oldCount > 0) {
                 repository.deleteByIdEvent(idEvent);
@@ -170,57 +169,34 @@ public class ResultService extends AbstractService<Result> {
             );
 
             // 6. Create and save transactions (via factory)
-//            Event event = eventRepository.findById(idEvent).get();
             Event event = eventRepository.findById(idEvent)
                     .orElseThrow(() -> new IllegalArgumentException("Event not found for id " + idEvent));
-
-//            LocalDateTime createdAt = event.getCreatedAt();
-//            LocalDateTime createdAt = LocalDateTime.now();
-
-//            List<Transaction> transactions = results.stream()
-//                .flatMap(result -> Stream.of(
-//                    Transaction.builder()
-//                    	.idGathering(event.getIdGathering())
-//                        .idEvent(idEvent)
-//                        .idPlayer(result.getIdPlayer())
-//                        .idTransactionType(TransactionType.INSCRICAO.getId())
-//                        .createdAt(createdAt)
-//                        .amount(-event.getConfraFee())
-//                        .description(TransactionType.INSCRICAO.getDescription())
-//                        .build(),
-//                    Transaction.builder()
-//                    	.idGathering(event.getIdGathering())
-//                        .idEvent(idEvent)
-//                        .idPlayer(result.getIdPlayer())
-//                        .idTransactionType(TransactionType.RESULTADO.getId())
-//                        .createdAt(createdAt)
-//                        .amount(result.getFinalBalance())
-//                        .description(TransactionType.RESULTADO.getDescription())
-//                        .build()
-//                ))
-//                .collect(Collectors.toList());
 
             List<Transaction> transactions = TransactionFactory.fromResults(event, results);
             transactionRepository.saveAll(transactions);
 
             // 7. Update event summary fields
-            ConfraPotProjection confraPot = repository.getConfraPot(idEvent);
-            LoserPotProjection loserPot = repository.getLoserPot(idEvent);
-
-            event.setPlayers(confraPot.getPlayers());
-            event.setRounds(loserPot.getRounds());
-            event.setLoserPot(loserPot.getLoserPot());
-            event.setConfraPot(confraPot.getConfraPot());
-            event.setPrize(loserPot.getPrize());
+            EventSummaryProjection summary = repository.getSummaryProjection(idEvent);
+            
+            if (summary == null) {
+                log.warn("No summary data found for event {}", idEvent);
+                return savedResults;
+            }
+            
+            event.setPlayers(summary.getPlayers());
+            event.setRounds(summary.getRounds());
+            event.setLoserPot(summary.getLoserPot());
+            event.setConfraPot(summary.getConfraPot());
+            event.setPrize(summary.getPrize());
 
             eventRepository.save(event);
             log.info("Event {} updated with players={}, rounds={}, confraPot={}, loserPot={}, prize={}",
                     idEvent,
-                    confraPot.getPlayers(),
-                    loserPot.getRounds(),
-                    confraPot.getConfraPot(),
-                    loserPot.getLoserPot(),
-                    loserPot.getPrize());
+                    summary.getPlayers(),
+                    summary.getRounds(),
+                    summary.getConfraPot(),
+                    summary.getLoserPot(),
+                    summary.getPrize());
 
 		    return savedResults;
 
@@ -228,6 +204,59 @@ public class ResultService extends AbstractService<Result> {
             log.error("Error while calculating/saving results for event {}: {}", idEvent, ex.getMessage(), ex);
             throw ex; // Auto rollback by Spring
         }
+	}
+
+	// Helper method to distribute loserPot equally
+	private void distributeLoserPotEqually(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
+	    // LoserPot equally divided among the worst-ranked players
+	    Double percentage = 1.0 / rankCount.get(0).getCount();
+
+	    // Loop to update loserPot and finalBalance
+	    results.forEach(item -> {
+	        // Non-worst-ranked players take 0% of loserPot
+	        Double pot = 0.0;
+
+	        // If player rank is the (1st) worst rank, update finalBalance
+	        if (item.getRank() == rankCount.get(0).getRank()) {
+	            pot = percentage * loserPot;
+	            item.setFinalBalance(item.getFinalBalance() + pot);
+	        }
+
+	        // Update loserPot
+	        item.setLoserPot(pot);
+
+	        // Update idEvent
+	        item.setIdEvent(idEvent);
+	    });
+	}
+
+	// Helper method to distribute loserPot unequally
+	private void distributeLoserPotUnequally(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
+		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
+	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
+
+	    // Loop to update loserPot and finalBalance
+	    results.forEach(item -> {
+	        // Non-worst-ranked players take 0% of loserPot
+	        Double pot = 0.0;
+
+	        // If player rank is the (1st) worst rank, update finalBalance
+	        if (item.getRank() == rankCount.get(0).getRank()) {
+	            pot = WORST_RANK_LOSER_POT_PERCENTAGE * loserPot;
+	            item.setFinalBalance(item.getFinalBalance() + pot);
+	        }
+	        // If player rank is the 2nd worst rank, update finalBalance
+	        else if (item.getRank() == rankCount.get(1).getRank()) {
+	            pot = percentage * loserPot;
+	            item.setFinalBalance(item.getFinalBalance() + pot);
+	        }
+
+	        // Update loserPot
+	        item.setLoserPot(pot);
+
+	        // Update idEvent
+	        item.setIdEvent(idEvent);
+	    });
 	}
 
 	public List<Result> getResult(Long idEvent) {
@@ -295,57 +324,9 @@ public class ResultService extends AbstractService<Result> {
 
 	    return results;
 	}
-
-	// Helper method to distribute loserPot equally
-	private void distributeLoserPotEqually(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
-	    // LoserPot equally divided among the worst-ranked players
-	    Double percentage = 1.0 / rankCount.get(0).getCount();
-
-	    // Loop to update loserPot and finalBalance
-	    results.forEach(item -> {
-	        // Non-worst-ranked players take 0% of loserPot
-	        Double pot = 0.0;
-
-	        // If player rank is the (1st) worst rank, update finalBalance
-	        if (item.getRank() == rankCount.get(0).getRank()) {
-	            pot = percentage * loserPot;
-	            item.setFinalBalance(item.getFinalBalance() + pot);
-	        }
-
-	        // Update loserPot
-	        item.setLoserPot(pot);
-
-	        // Update idEvent
-	        item.setIdEvent(idEvent);
-	    });
+	
+	public EventSummaryProjection getSummaryProjection(Long idEvent) {
+		return repository.getSummaryProjection(idEvent);
 	}
 
-	// Helper method to distribute loserPot unequally
-	private void distributeLoserPotUnequally(Long idEvent, List<Result> results, Double loserPot, List<RankCountProjection> rankCount) {
-		// Smallest piece of loserPot equally divided among the 2nd worst-ranked players
-	    Double percentage = SECOND_WORST_RANK_LOSER_POT_PERCENTAGE / rankCount.get(1).getCount();
-
-	    // Loop to update loserPot and finalBalance
-	    results.forEach(item -> {
-	        // Non-worst-ranked players take 0% of loserPot
-	        Double pot = 0.0;
-
-	        // If player rank is the (1st) worst rank, update finalBalance
-	        if (item.getRank() == rankCount.get(0).getRank()) {
-	            pot = WORST_RANK_LOSER_POT_PERCENTAGE * loserPot;
-	            item.setFinalBalance(item.getFinalBalance() + pot);
-	        }
-	        // If player rank is the 2nd worst rank, update finalBalance
-	        else if (item.getRank() == rankCount.get(1).getRank()) {
-	            pot = percentage * loserPot;
-	            item.setFinalBalance(item.getFinalBalance() + pot);
-	        }
-
-	        // Update loserPot
-	        item.setLoserPot(pot);
-
-	        // Update idEvent
-	        item.setIdEvent(idEvent);
-	    });
-	}
 }

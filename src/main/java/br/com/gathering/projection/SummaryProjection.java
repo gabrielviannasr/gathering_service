@@ -1,7 +1,9 @@
-package br.com.gathering.projection.gathering;
+package br.com.gathering.projection;
 
 public interface SummaryProjection {
-	Integer getEvents();
+	Long getIdGathering();
+	String getGatheringName();
+	Integer getPlayers();
 	Integer getRounds();
 	Double getLoserPot();
 	Double getConfraPot();

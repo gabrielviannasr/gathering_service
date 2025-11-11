@@ -35,6 +35,10 @@ public class Format {
 	@Column(name = "life_count", nullable = false)
     private Integer lifeCount;
 
+	public void init() {
+		this.lifeCount = (this.lifeCount == null) ? 0 : this.lifeCount;
+	}
+
     @Override
     public String toString() {
 		return "Format: {\n"

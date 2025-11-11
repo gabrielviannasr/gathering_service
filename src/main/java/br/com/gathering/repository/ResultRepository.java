@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.gathering.entity.Result;
+import br.com.gathering.projection.RankProjection;
 import br.com.gathering.projection.event.ConfraPotProjection;
+import br.com.gathering.projection.event.EventSummaryProjection;
 import br.com.gathering.projection.event.LoserPotProjection;
 import br.com.gathering.projection.event.RankCountProjection;
-import br.com.gathering.projection.event.RankProjection;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
@@ -75,4 +76,20 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 			""")
 	List<RankProjection> getRankProjection(@Param("idEvent") Long idEvent);
 
+	@Query(nativeQuery = true, value = """
+			SELECT
+				id_gathering AS idGathering,
+				gathering_name AS gatheringName,
+				id_event AS idEvent,
+				players,
+				rounds,
+				loser_pot AS loserPot,
+				confra_pot AS confraPot,
+				prize
+			FROM
+				gathering.vw_event_summary
+			WHERE
+				id_event = :idEvent
+			""")
+	EventSummaryProjection getSummaryProjection(@Param("idEvent") Long idEvent);
 }

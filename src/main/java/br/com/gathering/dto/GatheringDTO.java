@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GatheringDTO {
-	
+
 	// Not needed in post method
 	// private Long id;
 
@@ -34,7 +34,7 @@ public class GatheringDTO {
 
 		return gathering;
 	}
-	
+
     @Override
     public String toString() {
 		return "GatheringDTO: {\n"

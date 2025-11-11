@@ -3,6 +3,7 @@ package br.com.gathering.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Player;
 import br.com.gathering.repository.PlayerRepository;
+import br.com.gathering.util.LogHelper;
 
 @Service
 public class PlayerService extends AbstractService<Player> {
+
+	private static final Logger log = LogHelper.getLogger();
 
 	@Autowired
 	private PlayerRepository repository;
@@ -26,22 +30,37 @@ public class PlayerService extends AbstractService<Player> {
 	}
 
 	public List<Player> getList(Player model) {
-		return repository.findAll(getExample(model), getSort());
+		List<Player> result = repository.findAll(getExample(model), getSort());
+        LogHelper.info(log, "Fetched list", "count", result.size());
+        return result;
 	}
 
 	public Page<Player> getPage(Player model, Sort sort, int page, int size) {
-		return repository.findAll(getExample(model), PageRequest.of(page, size, sort));
+		LogHelper.info(log, "Fetching paged list", "page", page, "size", size);
+        Page<Player> result = repository.findAll(getExample(model), PageRequest.of(page, size, sort));
+        LogHelper.info(log, "Fetched paged list", "totalElements", result.getTotalElements());
+        return result;
 	}
 
 	public Player getById(Long id) {
-		Optional<Player> optional = repository.findById(id);
-		return optional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		LogHelper.info(log, "Fetching by ID", "id", id);
+        Optional<Player> optional = repository.findById(id);
+        if (optional.isEmpty()) {
+            LogHelper.warn(log, "Not found", "id", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Player event = optional.get();
+        LogHelper.info(log, "Found", "id", event.getId());
+        return event;
 	}
 
 	public Player save(Player model) {
 		model.init();
 //		validate(model);
-		return repository.save(model);
+		LogHelper.info(log, "Saving", "payload", model);
+		Player saved = repository.save(model);
+        LogHelper.info(log, "Saved", "id", saved.getId());
+        return saved;
 	}
 
 }

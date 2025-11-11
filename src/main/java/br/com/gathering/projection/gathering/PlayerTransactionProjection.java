@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public interface PlayerTransactionProjection {
 //	Long getIdGathering();
 //	String getGatheringName();
+	Long getIdEvent();
 	Long getIdPlayer();
 	String getPlayerName();
 	Long getIdTransaction();
