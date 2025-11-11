@@ -6,17 +6,33 @@ e este projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/
 
 ---
 
+## 🗓️ Planejado para a próxima versão (0.3.0-BETA)
+- Adicionar autenticação de usuários (login e controle por JWT).
+- Implementar controle de planos de assinatura (Básico / Premium).
+- Início do **frontend** (Quasar ou Flutter, decisão pendente).
+- Exibição visual do dashboard e ranking em tempo real.
+
+---
+
+## [0.2.1-ALPHA] - 2025-11-11
+### 🔧 Correções
+- Validação aprimorada de transações: impede que depósitos e saques sejam vinculados a eventos  
+  *(Evita deleção indevida ao salvar resultados de evento)*.
+- Pequenas melhorias de log e consistência de regras no `TransactionService`.
+
+---
+
 ## [0.2.0-ALPHA] - 2025-11-11
-### Added
+### 🆕 Adicionado
 - Nova tabela `gathering.event_fee` para armazenar taxas dinâmicas por quantidade de jogadores.
 - Entidade `EventFee` com relacionamento `OneToMany` em `Event`.
 - Validação automática de configuração de potes (`loser_fee` e `prize_fee`) no `EventService`.
 
-### Changed
+#### ⚙️ Alterado
 - Removidas as colunas `loserFee4`, `loserFee5` e `loserFee6` da tabela `gathering.event`.
 - Atualizado o DTO `EventDTO` e o método `validate()` para refletir o novo modelo.
 
-### Fixed
+### 🔧 Correções
 - Corrigido erro de serialização JSON circular entre `Event` e `EventFee` com `@JsonIgnore`.
 
 ---
@@ -68,14 +84,6 @@ lógica de cálculo de resultados e dashboards consolidados.
 - Todos os endpoints do `DashboardController` testados manualmente via Swagger.
 - Log detalhado em cada requisição para rastreabilidade de execuções.
 - Teste do endpoint `/actuator/info` confirmando exibição correta dos metadados da build.
-
----
-
-## 🗓️ Planejado para a próxima versão (0.2.0-BETA)
-- Adicionar autenticação de usuários (login e controle por JWT).
-- Implementar controle de planos de assinatura (Básico / Premium).
-- Início do **frontend** (Quasar ou Flutter, decisão pendente).
-- Exibição visual do dashboard e ranking em tempo real.
 
 ---
 
