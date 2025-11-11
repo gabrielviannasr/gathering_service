@@ -43,7 +43,7 @@ public class Transaction {
 	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
 	private Gathering gathering;
 	
-	@Column(name = "id_event", nullable = false)
+	@Column(name = "id_event", nullable = true)
 	private Long idEvent;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)

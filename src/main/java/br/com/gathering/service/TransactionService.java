@@ -71,6 +71,7 @@ public class TransactionService extends AbstractService<Transaction> {
         return saved;
     }
 
+	@SuppressWarnings("incomplete-switch")
 	private void validate(Transaction model) {
 
 	    if (model.getIdGathering() == null)
@@ -105,11 +106,23 @@ public class TransactionService extends AbstractService<Transaction> {
 //		          "O jogador não pertence à gathering da transação");
 //		  }
 
+	    // 🔒 Garante consistência de relacionamento entre tipo e evento
 	    switch (type) {
 	        case INSCRICAO, RESULTADO -> {
 	            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
 	                "Transações de inscrição e resultado são geradas automaticamente pelo sistema");
 	        }
+	        case DEPOSITO, SAQUE -> {
+	            // 🔸 Evita vínculo indevido com evento
+	            if (model.getIdEvent() != null) {
+	                LogHelper.warn(log, "Removendo id_event de transação manual", "idEvent", model.getIdEvent(), "type", type);
+	                model.setIdEvent(null);
+	            }
+	        }
+	    }
+
+	    // 💰 Regras específicas de valor
+	    switch (type) {
 	        case DEPOSITO -> {
 	            if (model.getAmount() == null || model.getAmount() <= 0)
 	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor do depósito deve ser positivo");
