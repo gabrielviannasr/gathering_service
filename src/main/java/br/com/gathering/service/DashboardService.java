@@ -15,6 +15,7 @@ import br.com.gathering.projection.gathering.FormatProjection;
 import br.com.gathering.projection.gathering.GatheringSummaryProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
+import br.com.gathering.projection.gathering.ResultProjection;
 import br.com.gathering.repository.DashboardRepository;
 import br.com.gathering.util.LogHelper;
 
@@ -65,17 +66,6 @@ public class DashboardService {
         return list;
     }
 
-    public GatheringSummaryProjection getSummaryProjection(Long idGathering) {
-        LogHelper.info(log, "Fetching summary", "idGathering", idGathering);
-        GatheringSummaryProjection summary = repository.getSummaryProjection(idGathering);
-        if (summary == null) {
-            LogHelper.warn(log, "No summary found for gathering", "idGathering", idGathering);
-        } else {
-            LogHelper.info(log, "Fetched summary successfully", "idGathering", idGathering);
-        }
-        return summary;
-    }
-
     public List<RankProjection> getRankProjection(Long idGathering) {
         LogHelper.info(log, "Fetching player ranking", "idGathering", idGathering);
         List<RankProjection> list = repository.getRankProjection(idGathering);
@@ -101,6 +91,44 @@ public class DashboardService {
         );
 
         return list;
+    }
+
+    public List<ResultProjection> getResultProjection(Long idGathering) {
+        LogHelper.info(log, "Fetching result ranking", "idGathering", idGathering);
+        List<ResultProjection> list = repository.getResultProjection(idGathering);
+
+        int maxNameLength = list.stream()
+            .map(RankProjection::getPlayerName)
+            .filter(Objects::nonNull)
+            .mapToInt(String::length)
+            .max()
+            .orElse(Player.NAME_LENGTH);
+
+        LogHelper.info(log, "Fetched result ranking", "count", list.size(), "maxNameLength", maxNameLength);
+
+        // Logging details in formatted table style
+        String format = "{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f }";
+        list.forEach(item -> 
+            log.info(String.format(
+                format,
+                item.getRank(),
+                item.getPlayerName(),
+                item.getFinalBalance()
+            ))
+        );
+
+        return list;
+    }
+
+    public GatheringSummaryProjection getSummaryProjection(Long idGathering) {
+        LogHelper.info(log, "Fetching summary", "idGathering", idGathering);
+        GatheringSummaryProjection summary = repository.getSummaryProjection(idGathering);
+        if (summary == null) {
+            LogHelper.warn(log, "No summary found for gathering", "idGathering", idGathering);
+        } else {
+            LogHelper.info(log, "Fetched summary successfully", "idGathering", idGathering);
+        }
+        return summary;
     }
 
 }

@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import br.com.gathering.projection.RankProjection;
 import br.com.gathering.projection.gathering.FormatProjection;
+import br.com.gathering.projection.gathering.GatheringSummaryProjection;
 import br.com.gathering.projection.gathering.PlayerTransactionProjection;
 import br.com.gathering.projection.gathering.PlayerWalletProjection;
-import br.com.gathering.projection.gathering.GatheringSummaryProjection;
+import br.com.gathering.projection.gathering.ResultProjection;
 
 @Repository
 public interface DashboardRepository extends ViewRepository {
@@ -82,6 +83,29 @@ public interface DashboardRepository extends ViewRepository {
 				id_gathering = :idGathering
 			""")
 	List<FormatProjection> getFormatProjection(@Param("idGathering") Long idGathering);
+
+    @Query(nativeQuery = true, value = """
+    		SELECT
+				id_gathering AS idGathering,
+				gathering_name AS gatheringName,
+				id_player AS idPlayer,
+				player_name AS playerName,
+				rank,
+				events,
+				wins,
+				rounds,
+				positive,
+				negative,
+				rank_balance AS rankBalance,
+				loser_pot AS loserPot,
+				confra_pot AS confraPot,
+				final_balance AS finalBalance
+			FROM
+				gathering.vw_gathering_result
+			WHERE
+				id_gathering = :idGathering
+	""")
+    List<ResultProjection> getResultProjection(@Param("idGathering") Long idGathering);
 
     @Query(nativeQuery = true, value = """
 			SELECT
