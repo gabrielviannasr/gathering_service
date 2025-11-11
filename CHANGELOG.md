@@ -6,6 +6,21 @@ e este projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/
 
 ---
 
+## [0.2.0-ALPHA] - 2025-11-11
+### Added
+- Nova tabela `gathering.event_fee` para armazenar taxas dinâmicas por quantidade de jogadores.
+- Entidade `EventFee` com relacionamento `OneToMany` em `Event`.
+- Validação automática de configuração de potes (`loser_fee` e `prize_fee`) no `EventService`.
+
+### Changed
+- Removidas as colunas `loserFee4`, `loserFee5` e `loserFee6` da tabela `gathering.event`.
+- Atualizado o DTO `EventDTO` e o método `validate()` para refletir o novo modelo.
+
+### Fixed
+- Corrigido erro de serialização JSON circular entre `Event` e `EventFee` com `@JsonIgnore`.
+
+---
+
 ## [0.1.0-ALPHA] - 2025-11-11
 ### 🚀 Primeira versão funcional da Gathering API
 

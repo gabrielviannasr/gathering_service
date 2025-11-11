@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.gathering.entity.Event;
+import br.com.gathering.entity.EventFee;
 import br.com.gathering.repository.EventRepository;
 import br.com.gathering.util.LogHelper;
 
@@ -68,26 +69,24 @@ public class EventService extends AbstractService<Event> {
 	}
 
 	private void validate(Event model) {
+	    if (model.getFees() == null || model.getFees().isEmpty()) return;
 
-		for (int players = 4; players <= 6; players++) {
-		    Double total = players * model.getRoundFee();
-		    Double loserFee = switch (players) {
-		        case 4 -> model.getLoserFee4();
-		        case 5 -> model.getLoserFee5();
-		        case 6 -> model.getLoserFee6();
-		        default -> 0.0;
-		    };
-		    if (loserFee > total) {
-		    	LogHelper.warn(log, "INVALID LOSER FEE", "players", players, "loserFee", loserFee, "total", total);
+	    for (EventFee fee : model.getFees()) {
+	        double totalArrecadado = model.getRoundFee() * fee.getPlayers();
+	        double totalDistribuido = fee.getPrizeFee() + fee.getLoserFee();
 
-		        throw new ResponseStatusException(
-		            HttpStatus.BAD_REQUEST,
-		            String.format("LoserFee%d (%.2f) exceeds total amount available for a %d-player round (%.2f)",
-		                players, loserFee, players, total)
-		        );
-		    }
-		    LogHelper.warn(log, "VALID LOSER FEE", "players", players, "loserFee", loserFee, "total", total);
-		}
+	        if (Math.abs(totalArrecadado - totalDistribuido) > 0.001) {
+	        	LogHelper.warn(log, "Invalid fee configuration", "roundFee", model.getRoundFee(), "players", fee.getPlayers(), "loserFee", fee.getLoserFee(), "prizeFee", fee.getPrizeFee());
+	            throw new ResponseStatusException(
+	                HttpStatus.BAD_REQUEST,
+	                String.format(
+	                    "Distribuição inválida para %d jogadores: arrecadado = %.2f, distribuído = %.2f (diferença = %.2f)",
+	                    fee.getPlayers(), totalArrecadado, totalDistribuido, totalArrecadado - totalDistribuido
+	                )
+	            );
+	        }
+	        LogHelper.info(log, "Valid fee configuration", "roundFee", model.getRoundFee(), "players", fee.getPlayers(), "loserFee", fee.getLoserFee(), "prizeFee", fee.getPrizeFee());
+	    }
 	}
 
 }
