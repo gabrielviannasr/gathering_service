@@ -29,29 +29,29 @@ public class RoundService extends AbstractService<Round> {
 
 	public List<Round> getList(Round model) {
 		List<Round> result = repository.findAll(getExample(model), getSort());
-        LogHelper.info(log, "Fetched list", "count", result.size());
-        return result;
+		LogHelper.info(log, "Fetched list", "count", result.size());
+		return result;
 	}
 
 	public Round getById(Long id) {
 		LogHelper.info(log, "Fetching by ID", "id", id);
-        Optional<Round> optional = repository.findById(id);
-        if (optional.isEmpty()) {
-            LogHelper.warn(log, "Not found", "id", id);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        Round event = optional.get();
-        LogHelper.info(log, "Found", "id", event.getId());
-        return event;
+		Optional<Round> optional = repository.findById(id);
+		if (optional.isEmpty()) {
+			LogHelper.warn(log, "Not found", "id", id);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		Round event = optional.get();
+		LogHelper.info(log, "Found", "id", event.getId());
+		return event;
 	}
 
 	public Round save(Round model) {
 		model.init();
-//		validate(model);
+		// validate(model);
 		LogHelper.info(log, "Saving", "payload", model);
 		Round saved = repository.save(model);
-        LogHelper.info(log, "Saved", "id", saved.getId());
-        return saved;
+		LogHelper.info(log, "Saved", "id", saved.getId());
+		return saved;
 	}
 
 }

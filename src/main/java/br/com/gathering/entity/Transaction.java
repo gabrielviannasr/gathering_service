@@ -58,7 +58,7 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
-	
+
 	@Column(name = "id_transaction_type", nullable = false)
 	private Long idTransactionType;
 

@@ -74,4 +74,5 @@ public class ResultController {
     	LogHelper.info(log, RouteHelper.GET(PATH, "/{idEvent}/summary"), "idEvent", idEvent);
         return service.getSummaryProjection(idEvent);
     }
+
 }
