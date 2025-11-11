@@ -107,7 +107,7 @@ public class DashboardService {
         LogHelper.info(log, "Fetched result ranking", "count", list.size(), "maxNameLength", maxNameLength);
 
         // Logging details in formatted table style
-        String format = "{ rank: %-2d | name: %-" + maxNameLength + "s | rankBalance: %8.2f }";
+        String format = "{ rank: %-2d | name: %-" + maxNameLength + "s | finalBalance: %8.2f }";
         list.forEach(item -> 
             log.info(String.format(
                 format,
