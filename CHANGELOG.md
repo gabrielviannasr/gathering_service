@@ -14,6 +14,14 @@ e este projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/
 
 ---
 
+## [0.2.2-ALPHA] - 2025-11-12
+### ♻️ Refatorações
+- Simplificação do retorno JSON da entidade Transaction
+  - Removidos objetos aninhados (Gathering, Event, Player) via @JsonIgnore.
+  - Retorno mais limpo, reduzido e sem risco de ciclos de serialização.
+
+---
+
 ## [0.2.1-ALPHA] - 2025-11-11
 ### 🔧 Correções
 - Validação aprimorada de transações: impede que depósitos e saques sejam vinculados a eventos  

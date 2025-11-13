@@ -2,6 +2,7 @@ package br.com.gathering.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,15 +40,15 @@ public class Transaction {
 	@Column(name = "id_gathering", nullable = false)
 	private Long idGathering;
 
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_gathering", nullable = true, insertable = false, updatable = false)
 	private Gathering gathering;
-	
+
 	@Column(name = "id_event", nullable = true)
 	private Long idEvent;
 
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_event", nullable = true, insertable = false, updatable = false)
 	private Event event;
@@ -54,7 +56,7 @@ public class Transaction {
 	@Column(name = "id_player", nullable = false)
 	private Long idPlayer;
 
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_player", nullable = true, insertable = false, updatable = false)
 	private Player player;
@@ -74,15 +76,25 @@ public class Transaction {
 	private Double amount;
 
 	@Column(length = DESCRIPTION_LENGTH)
-    private String description;
+	private String description;
+
+	@Transient
+	public String getGatheringName() {
+		return this.gathering.getName();
+	}
+
+	@Transient
+	public String getPlayerName() {
+		return this.player.getName();
+	}
 
 	public void init() {
-	    this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
-	    this.amount = (this.amount == null) ? 0 : this.amount;
+		this.createdAt = (this.createdAt == null) ? LocalDateTime.now() : this.createdAt;
+		this.amount = (this.amount == null) ? 0 : this.amount;
 	}
 
 	@Override
-    public String toString() {
+	public String toString() {
 		return "Transaction: {\n"
 				+ "\tid: " + this.id + ",\n"
 				+ "\tidGathering: " + this.idGathering + ",\n"
@@ -93,5 +105,6 @@ public class Transaction {
 				+ "\tamount: " + this.amount + ",\n"
 				+ "\tdescription: " + this.description + ",\n"
 				+ "}";
-    }
+	}
+
 }
